@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบข้อสอบกฎหมายอาญาทหาร ๒๕๖๘ (แบบสุ่ม)</title>
+    <title>ระบบข้อสอบกฎหมายอาญาทหาร ๒๕๖๘ (Advanced)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap');
         
@@ -29,16 +29,18 @@
         h1 { color: #c0392b; margin: 0; font-size: 24px; }
         
         #login-screen { text-align: center; padding: 40px 0; }
-        input[type="text"] { 
-            width: 80%; padding: 15px; margin: 20px 0; border: 2px solid #ddd; 
+        input[type="text"], textarea { 
+            width: 80%; padding: 15px; margin: 10px 0; border: 2px solid #ddd; 
             border-radius: 10px; font-size: 18px; text-align: center;
+            font-family: 'Sarabun', sans-serif;
         }
+        textarea { height: 100px; width: 90%; text-align: left; resize: none; }
         
         .quiz-item { 
             background: #f9f9f9; padding: 20px; border-radius: 10px; 
             margin-bottom: 25px; border-left: 6px solid #2980b9;
         }
-        .question-text { font-weight: bold; font-size: 17px; color: #34495e; margin-bottom: 15px; }
+        .question-text { font-weight: bold; font-size: 17px; color: #34495e; margin-bottom: 15px; line-height: 1.6; }
         .options-group label { 
             display: block; padding: 10px; margin: 5px 0; background: white; 
             border: 1px solid #ddd; border-radius: 5px; cursor: pointer; transition: 0.2s;
@@ -48,7 +50,7 @@
         button { 
             background: #27ae60; color: white; padding: 15px 40px; border: none; 
             border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; 
-            width: 100%; transition: 0.3s;
+            width: 100%; transition: 0.3s; margin-top: 10px;
         }
         button:hover { background: #219150; transform: translateY(-2px); }
         
@@ -61,6 +63,7 @@
             background: #c0392b; color: white; font-size: 40px; font-weight: bold; 
             margin: 20px auto; border: 5px solid #ecf0f1;
         }
+        .type-tag { font-size: 12px; color: #e67e22; font-weight: bold; margin-bottom: 5px; display: block; }
     </style>
 </head>
 <body>
@@ -68,7 +71,7 @@
 <div class="container">
     <div id="login-screen">
         <div class="header">
-            <h1>⚖️ ระบบทดสอบความรู้สุ่ม ๓๐ ข้อ</h1>
+            <h1>⚖️ ระบบทดสอบความรู้สุ่ม (Advanced)</h1>
             <p>ประมวลกฎหมายอาญาทหาร พ.ศ. ๒๕๖๘</p>
         </div>
         <p>กรุณากรอกชื่อผู้เข้าสอบเพื่อตรวจสอบสิทธิ์</p>
@@ -79,28 +82,61 @@
     <div id="quiz-screen" class="hidden">
         <div class="user-tag" id="display-name"></div>
         <div class="header">
-            <h1>แบบทดสอบระบบสุ่มโจทย์</h1>
+            <h1>แบบทดสอบ (สุ่มผสมข้อเขียน ๕ ข้อ)</h1>
         </div>
         <div id="quiz-container"></div>
-        <button onclick="calculateScore()">ส่งคำตอบทั้งหมด</button>
+        <button onclick="calculateScore()">ส่งคำตอบและคำวินิจฉัย</button>
     </div>
 
     <div id="result-screen" class="hidden">
-        <h1>สรุปผลการทดสอบ</h1>
+        <h1>สรุปผลการวินิจฉัย</h1>
         <div id="user-result-name" style="font-size: 20px; margin-top: 10px;"></div>
         <div class="score-circle" id="score-display">0/30</div>
         <p id="feedback-msg" style="font-size: 18px; font-weight: bold;"></p>
-        <p style="color: #7f8c8d;">(ระบบบันทึกคะแนนเรียบร้อยแล้ว ไม่มีการแสดงเฉลยคำตอบ)</p>
+        <p style="color: #7f8c8d;">(ระบบประเมินผลอัตโนมัติ ๘๐% จากคีย์เวิร์ดเฉลย)</p>
         <button onclick="location.reload()" style="background: #7f8c8d; margin-top: 20px;">กลับหน้าแรก</button>
     </div>
 </div>
 
 <script>
-    // รายชื่อผู้ที่มีสิทธิ์เข้าสอบ
     const allowedUsers = ["mininbird", "ruok555sf"]; 
 
-    // คลังข้อสอบทั้งหมด 100 ข้อ
-    const allQuestions = [
+    // คลังข้อเขียน (อัตนัย) 30 ข้อ
+    const essayQuestions = [
+        { q: "พันโท ก. สั่งให้ สิบเอก ข. แอบนำ 'ภาพถ่ายแผนผังคลังแสง' ไปขายให้สายลับต่างชาติ แต่สิบเอก ข. ทำภาพหลุดลงโซเชียลแทนจนเกิดความปั่นป่วน วินิจฉัยความผิดของสิบเอก ข.", keys: ["๓๖", "กบฏ", "๒๕", "สถานหนัก", "ภาพลักษณ์"] },
+        { q: "พลทหาร เอ ใช้ 'ไอดีรอง' ปลอมเป็นนายทหารชั้นผู้ใหญ่เพื่อสั่งให้สารวัตรทหารปล่อยตัวเพื่อนที่ถูกคุมขังอยู่ วินิจฉัยพฤติการณ์นี้ตามมาตรา ๓๐, ๓๕ และ ๔๑", keys: ["๓๐", "๓๕", "แอบอ้าง", "ไอดีรอง", "สถานหนัก"] },
+        { q: "จ่าสิบเอก ค. ประมาททำปืนลั่นใส่ถังน้ำมันจนเกิดระเบิดและจลาจลย่อมๆ ในค่าย ทหารในค่ายบางส่วนถือโอกาสนั้นยักยอกเสบียงหนีไป วินิจฉัยความรับผิดของจ่าสิบเอก ค.", keys: ["๔๐", "๒๗", "ประมาท", "จลาจล", "ความมั่นคง"] },
+        { q: "สิบตรี ง. ถูกยืนยันว่ากระทำความผิดยักยอกทรัพย์ แต่อยู่ในระหว่างการรอขึ้นศาลในวันที่ ๑๐ ธันวาคม ๒๕๖๘ สถานะของสิบตรี ง. คืออะไร และศาลสั่งลดชั้นยศได้หรือไม่?", keys: ["จำเลย", "ไม่สามารถ", "๑๐", "๑๑", "สิบเอก"] },
+        { q: "ทหารนายหนึ่งใช้อำนาจตามเอกสิทธิ์กฎหมายสั่งปิดค่ายเพื่อ 'ซ้อมรบส่วนตัว' จนทหารในสังกัดบาดเจ็บและเกิดความแตกแยก วินิจฉัยตามมาตรา ๒๑, ๒๔ และ ๑๙", keys: ["๒๔", "๑๙", "เอกสิทธิ์", "แตกแยก", "สถานหนัก"] },
+        { q: "พลทหาร ซี แอบติดตั้ง 'โปรแกรมช่วยเล่น' ในคอมพิวเตอร์ส่วนกลางเพื่อปั๊มคะแนนฝึกออนไลน์จนระบบรวนและภาพลักษณ์หน่วยเสียหาย วินิจฉัยโทษ?", keys: ["๓๑", "๓๖", "กบฏ", "สถานหนัก", "ช่วยเล่น"] },
+        { q: "หากมีคดี 'ทหารฆ่าตำรวจ' โดยประมาทในที่สาธารณะหน้าค่ายทหาร วินิจฉัยมาตราที่เกี่ยวข้องและสถานะของคู่กรณี", keys: ["๔๐", "๓๙", "ทหาร", "ตำรวจ", "ประมาท"] },
+        { q: "สิบเอก ว. จงใจไม่รายงานว่าเครื่องบินฝึกมีปัญหา เพราะอยากให้ศัตรูทางการเมืองของตนที่เป็นคนขับเกิดอุบัติเหตุ วินิจฉัยความผิด?", keys: ["๑๒", "๒๒", "ละเว้น", "เจตนาฆ่า", "นิ่งเฉย"] },
+        { q: "การปลอมแปลง 'หลักสูตรการฝึก' (มาตรา ๒๙) เพื่อเรียกรับเงินจากพลทหารที่อยากสอบผ่าน (มาตรา ๒๘) วินิจฉัยระดับโทษ?", keys: ["๒๙", "๒๘", "ทุจริต", "สถานหนัก", "หลายกรรม"] },
+        { q: "พลเรือนคนหนึ่งแอบอ้างเป็นทหาร (มาตรา ๓๐) เพื่อเข้าไปแฮ็กระบบข้อมูลของกองทัพ (มาตรา ๓๑) ศาลทหารมีอำนาจตัดสินหรือไม่?", keys: ["ไม่", "๗", "๕", "จารีต", "รัฐธรรมนูญ"] },
+        { q: "การ 'เนรเทศ' ตามมาตรา ๑๑(๔) สามารถสั่งใช้กับจำเลยที่กระทำผิดฐาน 'กบฏ' ตามมาตรา ๓๖ ได้หรือไม่?", keys: ["ได้", "๓๖", "สถานหนัก", "๑๑"] },
+        { q: "สิบเอก จ. ขับรถจี๊ปหลวงไปรับแฟนโดย 'ไม่ได้รับอนุญาต' และ 'ไม่มีใบขับขี่' ทั้งยังขับป่วนเมือง วินิจฉัยมาตรา ๓๓, ๓๔ และ ๔๒", keys: ["๓๓", "๓๔", "๔๒", "กรรมเดียว", "หนักที่สุด"] },
+        { q: "หากศาลทหารพิพากษาประหารชีวิตทหารนายหนึ่ง คำพิพากษานี้ชอบด้วยกฎหมายฉบับนี้หรือไม่?", keys: ["ไม่ชอบ", "๙", "๑๐", "๑๑", "ไม่มีประหาร"] },
+        { q: "คำนิยาม 'โดยทุจริต' ในมาตรา ๗ ครอบคลุมถึงการช่วยเหลือให้เพื่อนไม่ต้องถูกขังหรือไม่?", keys: ["ครอบคลุม", "ประโยชน์", "มิควรได้", "ผู้อื่น"] },
+        { q: "จ่าสิบเอกแก้คะแนนให้พลทหารโดยอ้างว่า 'สงสาร' ไม่ได้รับเงิน วินิจฉัยความผิด?", keys: ["๑๕", "๑๘", "มิชอบ", "ทุจริต", "๗"] },
+        { q: "ทหารสารวัตรพยายามจับกุมสิบเอกคนหนึ่ง แต่สิบเอกคนนั้นสั่งให้ลูกน้องในสังกัดมาล้อมสารวัตรไว้ วินิจฉัยพฤติการณ์สิบเอก?", keys: ["๒๑", "๔๔", "ขัดขวาง", "มิชอบ"] },
+        { q: "การก่อจลาจลตามมาตรา ๒๗ หากมีผู้เสียชีวิต ศาลจะลงโทษอย่างไร?", keys: ["๒๗", "๒๒", "สถานหนัก", "ฆาตกรรม"] },
+        { q: "สิบเอก ค. แอบแก้ไข 'คำสั่งย้าย' ของตนเองให้ไปอยู่ในหน่วยที่สบายขึ้น วินิจฉัยมาตรา?", keys: ["๒๙", "๑๕", "ปลอม", "มิชอบ"] },
+        { q: "หากจำเลยเบิกความเท็จ (มาตรา ๔๓) จนทำให้เพื่อนทหารต้องถูกเนรเทศ (มาตรา ๑๑) วินิจฉัยโทษจำเลย?", keys: ["๔๓", "สถานหนัก", "เนรเทศ"] },
+        { q: "สถานะ 'ผู้ต้องหา' จะเปลี่ยนเป็น 'จำเลย' เมื่อใด?", keys: ["พิจารณา", "ศาล", "ฟ้อง", "รับฟ้อง", "๗"] },
+        { q: "ทหารประมาท (มาตรา ๔๐) ทำฐานข้อมูลรั่วไหล แต่ข้อมูลนั้นไม่ใช่ความลับร้ายแรง วินิจฉัยโทษ?", keys: ["๔๐", "สถานเบา", "ประมาท"] },
+        { q: "สิบเอก เอ ใช้ไอดีรองไปหมิ่นประมาทพันโท ก. วินิจฉัยระดับโทษ?", keys: ["๑๓", "๓๕", "สถานหนัก", "ไอดีรอง"] },
+        { q: "การ 'คุมขัง' ในมาตรา ๗ หากทหารถูกขังเกิน ๗๒ ชั่วโมงโดยไม่มีคำสั่งศาล ผิดมาตราใด?", keys: ["๑๕", "๒๑", "มิชอบ", "เกิน"] },
+        { q: "หากจำเลยทำผิดฐานกบฏ (มาตรา ๒๕) แต่ศาลเห็นว่าทำไปเพราะความประมาท (มาตรา ๔๐) ศาลควรวินิจฉัยอย่างไร?", keys: ["ยกฟ้อง", "๒๕", "๔๐", "เจตนา"] },
+        { q: "ทหารใช้เอกสิทธิ์ (มาตรา ๒๔) แอบอ้างเป็นบุคคลอื่น (มาตรา ๓๐) เพื่อทำธุรกรรม วินิจฉัยกรรม?", keys: ["หลายบท", "หนักที่สุด", "สถานหนัก", "๒๔", "๓๐"] },
+        { q: "การละเลยหน้าที่ (มาตรา ๒๖) กับ ละเว้นการปฏิบัติหน้าที่ (มาตรา ๑๒) ต่างกันอย่างไรในเชิงวินิจฉัย?", keys: ["๒๖", "๑๒", "ไม่ทำตามงาน", "จงใจ", "ผลบางอย่าง"] },
+        { q: "ทหารสารวัตรสั่งให้รถหยุด แต่คนขับตะโกนด่าแล้วขับหนีไปเฉยๆ โดยไม่มีการต่อสู้ วินิจฉัย?", keys: ["๔๑", "๒๐", "ไม่หยุด", "หลบหนี"] },
+        { q: "หากทหารนายหนึ่งกระทำผิดฐาน 'ชำเราศพ' ซึ่งกฎหมายนี้ไม่ได้เขียนไว้ ต้องทำอย่างไร?", keys: ["๕", "จารีต", "รัฐธรรมนูญ", "ดุลพินิจ"] },
+        { q: "การลงโทษจำคุก ๒๔ ชั่วโมง ตามมาตรา ๙ ต้องทำอย่างไร?", keys: ["๙", "เหมาะสม", "สถานเบา", "บันทึก"] },
+        { q: "คำพิพากษาถือเป็นที่สิ้นสุด ตามมาตรา ๖ หากภายหลังพบว่าพยานหลักฐานโดนแฮ็ก (มาตรา ๓๑) ศาลจะทำอย่างไร?", keys: ["เปลี่ยนแปลง", "๖", "รูปคดี", "ข้อยกเว้น"] }
+    ];
+
+    // คลังข้อสอบปรนัย 100 ข้อ
+    const choiceQuestions = [
         { q: "๑. หากศาลตัดสินว่าทหารนายหนึ่งมีความผิดและสั่ง 'ขึ้นบัญชีวินัยเลว' เพียงอย่างเดียว การลงโทษนี้ถือเป็นโทษระดับใด?", a: "ค", options: ["ก. โทษสถานเบา", "ข. โทษสถานกลาง", "ค. โทษสถานเบา หรือ โทษสถานกลาง", "ง. โทษสถานหนัก"] },
         { q: "๒. นายทหารสัญญาบัตรผู้หนึ่งถูกตัดสินว่าทำผิด 'ฐานขัดคำสั่งผู้บังคับบัญชา' (มาตรา ๑๑) เขาจะได้รับโทษสูงสุดในระดับใดตามที่มาตรานี้ระบุ?", a: "ก", options: ["ก. โทษสถานเบา", "ข. โทษสถานกลาง", "ค. โทษสถานหนัก", "ง. ลดอัตราชั้นยศ"] },
         { q: "๓. ตามมาตรา ๗ บุคคลที่ถูกยืนยันว่ากระทำความผิดแล้ว 'แต่ยังมิได้เข้าสู่กระบวนการพิจารณาคดี' มีสถานะทางกฎหมายว่าอย่างไร?", a: "ข", options: ["ก. ผู้ต้องสงสัย", "ข. ผู้ต้องหา", "ค. จำเลย", "ง. นักโทษ"] },
@@ -204,12 +240,12 @@
     ];
 
     let userName = "";
-    let selectedQuestions = []; // ข้อสอบที่สุ่มมา 30 ข้อ
+    let selectedQuestions = []; 
 
     // ฟังก์ชันสำหรับสุ่มข้อสอบ
-    function getRandomQuestions(num) {
-        let shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, num);
+    function getRandomElements(array, count) {
+        let shuffled = [...array].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, count);
     }
 
     function startQuiz() {
@@ -227,8 +263,13 @@
             return;
         }
 
-        // สุ่มข้อสอบ 30 ข้อใหม่ทุกครั้งที่กดเริ่ม
-        selectedQuestions = getRandomQuestions(30);
+        // --- ระบบสุ่มโจทย์ ---
+        // 1. สุ่มข้อเขียน 5 ข้อจาก 30 ข้อ
+        const essaySelected = getRandomElements(essayQuestions, 5).map(q => ({...q, type: 'essay'}));
+        // 2. สุ่มปรนัย 25 ข้อจาก 100 ข้อ
+        const choiceSelected = getRandomElements(choiceQuestions, 25).map(q => ({...q, type: 'choice'}));
+        // 3. รวมกันแล้วสุ่มลำดับอีกครั้ง
+        selectedQuestions = getRandomElements([...essaySelected, ...choiceSelected], 30);
 
         document.getElementById('login-screen').classList.add('hidden');
         document.getElementById('quiz-screen').classList.remove('hidden');
@@ -240,17 +281,25 @@
         const container = document.getElementById('quiz-container');
         let html = '';
         selectedQuestions.forEach((item, index) => {
-            html += `<div class="quiz-item">
-                <div class="question-text">${index + 1}. ${item.q}</div>
-                <div class="options-group">`;
-            item.options.forEach((opt, i) => {
-                const val = ["ก", "ข", "ค", "ง"][i];
-                html += `<label><input type="radio" name="q${index}" value="${val}"> ${opt}</label>`;
-            });
-            html += `</div></div>`;
+            html += `<div class="quiz-item">`;
+            if (item.type === 'essay') {
+                html += `<span class="type-tag">[ข้อเขียนวินิจฉัย]</span>`;
+                html += `<div class="question-text">${index + 1}. ${item.q}</div>`;
+                html += `<textarea id="ans${index}" placeholder="พิมพ์คำวินิจฉัยของคุณที่นี่..."></textarea>`;
+            } else {
+                html += `<span class="type-tag">[ตัวเลือก]</span>`;
+                html += `<div class="question-text">${index + 1}. ${item.q}</div>`;
+                html += `<div class="options-group">`;
+                item.options.forEach((opt, i) => {
+                    const val = ["ก", "ข", "ค", "ง"][i];
+                    html += `<label><input type="radio" name="q${index}" value="${val}"> ${opt}</label>`;
+                });
+                html += `</div>`;
+            }
+            html += `</div>`;
         });
         container.innerHTML = html;
-        window.scrollTo(0, 0); // เลื่อนขึ้นบนสุด
+        window.scrollTo(0, 0);
     }
 
     function calculateScore() {
@@ -258,18 +307,33 @@
         let unanswered = [];
 
         for(let i=0; i<selectedQuestions.length; i++) {
-            const selected = document.querySelector(`input[name="q${i}"]:checked`);
-            if (!selected) {
-                unanswered.push(i + 1);
-            } else {
-                if (selected.value === selectedQuestions[i].a) {
+            const item = selectedQuestions[i];
+            if (item.type === 'choice') {
+                const sel = document.querySelector(`input[name="q${i}"]:checked`);
+                if (!sel) {
+                    unanswered.push(i + 1);
+                } else if (sel.value === item.a) {
                     score++;
+                }
+            } else {
+                const textAns = document.getElementById(`ans${i}`).value.trim();
+                if (textAns === "") {
+                    unanswered.push(i + 1);
+                } else {
+                    // ตรวจ Keyword 80%
+                    let matchCount = 0;
+                    item.keys.forEach(key => {
+                        if (textAns.includes(key)) matchCount++;
+                    });
+                    if ((matchCount / item.keys.length) >= 0.8) {
+                        score++;
+                    }
                 }
             }
         }
 
         if (unanswered.length > 0) {
-            alert("⚠️ คุณยังไม่ได้ทำข้อ: " + unanswered.join(", "));
+            alert("⚠️ คุณยังทำข้อสอบไม่ครบ (ข้อที่: " + unanswered.join(", ") + ")");
             return;
         }
 
@@ -281,7 +345,7 @@
         document.getElementById('score-display').innerText = score + "/30";
         
         const feedback = document.getElementById('feedback-msg');
-        if (score >= 24) feedback.innerText = "ระดับความรู้: ยอดเยี่ยม";
+        if (score >= 24) feedback.innerText = "ระดับความรู้: ยอดเยี่ยม (ตุลาการ)";
         else if (score >= 15) feedback.innerText = "ระดับความรู้: ผ่านเกณฑ์";
         else feedback.innerText = "ระดับความรู้: ควรปรับปรุง";
     }
