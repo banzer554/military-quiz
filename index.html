@@ -54,9 +54,9 @@
         h1 { color: var(--court-red); margin: 0; font-size: 28px; font-weight: 700; }
         .sub-header { color: var(--court-gold); font-size: 18px; margin-top: 10px; font-weight: bold; }
 
-        /* Login Screen Centering */
+        /* Login Centering Control */
         #login-screen { display: flex; flex-direction: column; align-items: center; width: 100%; }
-        #login-screen p { font-size: 18px; color: #666; font-weight: bold; margin-bottom: 5px; text-align: center; }
+        #login-screen p { font-size: 18px; color: #666; font-weight: bold; margin-bottom: 10px; text-align: center; }
 
         input[type="text"], textarea { 
             width: 100%; max-width: 450px; padding: 15px; margin: 10px 0; 
@@ -70,26 +70,11 @@
         
         .quiz-item { background: #f9f7f2; padding: 35px; border-radius: 2px; margin-bottom: 40px; border: 1px solid #eee; border-left: 8px solid var(--court-red); text-align: left; }
         .question-text { font-weight: bold; font-size: 20px; color: var(--court-dark); margin-bottom: 25px; line-height: 1.7; }
-        
         .options-group label { display: block; padding: 16px; margin: 12px 0; background: #fff; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; transition: 0.2s; }
         .options-group label:hover { background: #fff5f5; border-color: var(--court-red); }
-        .options-group input[type="radio"] { margin-right: 12px; transform: scale(1.3); }
 
-        .btn-main { 
-            background: var(--court-red); color: white; padding: 18px 45px; border: none; 
-            border-radius: 4px; font-size: 20px; font-weight: bold; cursor: pointer; 
-            width: 100%; max-width: 450px; transition: 0.3s; 
-            border-bottom: 4px solid var(--court-dark); margin-top: 15px;
-        }
-        .btn-main:hover { background: #a00000; transform: translateY(-2px); }
-
-        /* Admin Styles */
-        #admin-panel-modal { background: #fff; border: 2px solid var(--court-red); padding: 25px; border-radius: 8px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .admin-table th { background: var(--court-red); color: white; padding: 12px; text-align: left; }
-        .admin-table td { padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
-        .pulse { display: inline-block; width: 10px; height: 10px; background: #2ecc71; border-radius: 50%; margin-right: 5px; animation: pulse-green 1s infinite; }
-        @keyframes pulse-green { 0% { transform: scale(0.95); opacity: 1; } 70% { transform: scale(1.2); opacity: 0.4; } 100% { transform: scale(0.95); opacity: 1; } }
+        .btn-action { background: var(--court-red); color: white; padding: 18px 45px; border: none; border-radius: 4px; font-size: 20px; font-weight: bold; cursor: pointer; width: 100%; max-width: 450px; transition: 0.3s; border-bottom: 4px solid var(--court-dark); }
+        .btn-action:hover { background: #a00000; transform: translateY(-2px); }
 
         .hidden { display: none !important; }
         .user-tag { color: var(--court-red); font-weight: bold; text-align: right; margin-bottom: 25px; font-size: 18px; }
@@ -99,33 +84,17 @@
 </head>
 <body>
 
-<div id="timer-bar">⏱️ เวลาทำข้อสอบคงเหลือ: <span id="timer-display">50:00</span></div>
-
-<div id="admin-container" class="container hidden" style="position:absolute; top:20px; z-index:2000;">
-    <div id="admin-panel-modal">
-        <h2 style="color: var(--court-red); margin-top:0;">📊 ตรวจสอบสถานะการสอบ Real-time</h2>
-        <table class="admin-table">
-            <thead>
-                <tr><th>ชื่อผู้สอบ</th><th>สถานะ</th><th>คะแนน</th><th>จัดการ</th></tr>
-            </thead>
-            <tbody id="admin-list"></tbody>
-        </table>
-        <button class="btn-main" style="max-width:200px; padding:10px; margin-top:15px;" onclick="document.getElementById('admin-container').classList.add('hidden')">ปิด</button>
-    </div>
-</div>
+<div id="timer-bar">🏛️ เวลาทำข้อสอบคงเหลือ: <span id="timer-display">50:00</span></div>
 
 <div class="container" id="main-frame">
     <div id="login-screen">
         <div class="header">
-            <h1>📝 ระบบทดสอบความรู้กฎหมายอาญา</h1>
+            <h1>⚖️ ระบบทดสอบความรู้กฎหมายอาญา</h1>
             <div class="sub-header">ประจำพุทธศักราช ๒๕๖๘ (Examination)</div>
         </div>
         <p>กรุณาระบุชื่อเพื่อยืนยันสิทธิ์ในการทำข้อสอบ</p>
-        <input type="text" id="username" placeholder="พิมพ์ชื่อของท่านที่นี่..." oninput="checkAdminRole()">
-        <button class="btn-main" onclick="startQuiz()">เริ่มทำข้อสอบ</button>
-        <div id="admin-entry" class="hidden" style="margin-top:20px;">
-            <button onclick="document.getElementById('admin-container').classList.remove('hidden')" style="background:#333; color:gold; border:none; padding:10px 20px; cursor:pointer; font-weight:bold; border-radius:4px;">⚙️ แผงควบคุมประธานศาล (Admin)</button>
-        </div>
+        <input type="text" id="username" placeholder="พิมพ์ชื่อผู้เข้าสอบที่นี่...">
+        <button class="btn-action" onclick="startQuiz()">เริ่มทำข้อสอบ</button>
     </div>
 
     <div id="quiz-screen" class="hidden">
@@ -134,76 +103,30 @@
             <h2 style="color: var(--court-red); margin: 0;">ชุดข้อสอบวัดระดับกฎหมาย (สุ่มผสม ๓๐ ข้อ)</h2>
         </div>
         <div id="quiz-container"></div>
-        <button class="btn-main" style="max-width:100%" onclick="confirmSubmit()">ส่งข้อสอบและบันทึกคะแนน</button>
+        <button class="btn-action" style="max-width:100%" onclick="confirmSubmit()">ส่งคำตอบและสรุปผลคะแนน</button>
     </div>
 
     <div id="result-screen" class="hidden">
         <div class="header"><h1>สรุปผลคะแนนการทดสอบ</h1></div>
-        <div id="score-display-circle" class="score-circle">0/30</div>
+        <div id="user-result-name" style="text-align:center; font-size:22px; color:#555;"></div>
+        <div class="score-circle" id="score-display">0/30</div>
         <p id="feedback-msg" style="text-align: center; font-size: 26px; color: var(--court-red); font-weight: bold;"></p>
-        <div id="wrong-answers-container" class="wrong-list-box hidden">
-            <h3 style="color: var(--court-red); margin-top:0;">❌ รายการข้อที่มีการวินิจฉัยคลาดเคลื่อน:</h3>
+        <div id="wrong-container" class="wrong-list-box hidden">
+            <h3 style="color: var(--court-red); margin-top: 0;">❌ รายการข้อที่มีการวินิจฉัยคลาดเคลื่อน:</h3>
             <p id="wrong-list-text" style="font-size: 18px; line-height: 1.8;"></p>
-            <p style="font-size: 14px; color: #888; margin-top:10px;">* ระบบไม่แสดงเฉลยเพื่อส่งเสริมการค้นคว้าและวินิจฉัยด้วยตนเองอีกครั้ง</p>
         </div>
-        <button class="btn-main" style="background:#555; border-bottom-color:#333; margin:30px auto; display:block;" onclick="location.reload()">กลับสู่หน้าแรก</button>
+        <button class="btn-action" style="background:#555; border-bottom-color:#333; margin:40px auto; display:block;" onclick="location.reload()">กลับสู่หน้าแรก</button>
     </div>
 </div>
 
 <script>
     const allowedUsers = ["mininbird", "ruok555sf"];
-    const channel = new BroadcastChannel('exam_master_sync');
     let timeLeft = 50 * 60; 
     let timerInterval;
     let userName = "";
     let selectedQuestions = [];
-    let activeUsers = {};
 
-    // --- Admin & Real-time Sync ---
-    function checkAdminRole() {
-        const val = document.getElementById('username').value.trim();
-        if (val === "MininBird") { document.getElementById('admin-entry').classList.remove('hidden'); refreshAdminList(); }
-        else { document.getElementById('admin-entry').classList.add('hidden'); }
-    }
-
-    channel.onmessage = (e) => {
-        const { type, user, data } = e.data;
-        if (type === 'STATUS_UPDATE') { activeUsers[user] = data; refreshAdminList(); }
-        if (type === 'FORCE_RESET_SIGNAL' && userName.toLowerCase() === user) {
-            localStorage.clear();
-            alert("ประวัติการสอบถูกรีเซ็ตโดยแอดมิน ระบบจะนำท่านกลับไปหน้าแรก...");
-            location.reload();
-        }
-    };
-
-    function refreshAdminList() {
-        const listBody = document.getElementById('admin-list');
-        if (!listBody) return;
-        listBody.innerHTML = "";
-        allowedUsers.forEach(u => {
-            if (u === "mininbird") return;
-            const status = activeUsers[u] || { state: 'Offline', score: localStorage.getItem("score_"+u) || '-' };
-            const isDone = localStorage.getItem("done_" + u.toLowerCase());
-            listBody.innerHTML += `<tr>
-                <td>${u}</td>
-                <td>${isDone ? '✅ เสร็จสิ้น' : (status.state === 'Online' ? '<span class="pulse"></span> กำลังทำ' : '⚪ Offline')}</td>
-                <td>${status.score}/30</td>
-                <td><button onclick="forceReset('${u.toLowerCase()}')" style="background:orange; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:4px; font-weight:bold;">รีเซ็ตสิทธิ์</button></td>
-            </tr>`;
-        });
-    }
-
-    function forceReset(user) {
-        if(confirm(`ล้างประวัติและส่งสัญญาณรีเซ็ตไปยังเครื่องของ ${user}?`)) {
-            localStorage.removeItem("done_" + user);
-            localStorage.removeItem("score_" + user);
-            channel.postMessage({ type: 'FORCE_RESET_SIGNAL', user: user });
-            refreshAdminList();
-            alert("ส่งสัญญาณรีเซ็ตสำเร็จ!");
-        }
-    }
-
-    // --- Database (30 Essay + 100 Choice Samples) ---
+    // --- ข้อมูลข้อสอบ ---
     const essayQuestions = [
         { q: "พันโท ก. สั่งให้ สิบเอก ข. แอบนำ 'ภาพถ่ายแผนผังคลังแสง' ไปขายให้สายลับต่างชาติ แต่สิบเอก ข. ทำภาพหลุดลงโซเชียลแทนจนเกิดความปั่นป่วน วินิจฉัยความผิดของสิบเอก ข.", keys: ["๓๖", "กบฏ", "๒๕", "สถานหนัก", "ภาพลักษณ์"] },
         { q: "พลทหาร เอ ใช้ 'ไอดีรอง' ปลอมเป็นนายทหารชั้นผู้ใหญ่เพื่อสั่งให้สารวัตรทหารปล่อยตัวเพื่อนที่ถูกคุมขังอยู่ วินิจฉัยพฤติการณ์นี้ตามมาตรา ๓๐, ๓๕ และ ๔๑", keys: ["๓๐", "๓๕", "แอบอ้าง", "ไอดีรอง", "สถานหนัก"] },
@@ -342,23 +265,17 @@
 
     function getRandom(arr, n) { return [...arr].sort(() => 0.5 - Math.random()).slice(0, n); }
 
-    // --- Core Logic ---
     function startQuiz() {
-        let inputName = document.getElementById('username').value.trim();
+        userName = document.getElementById('username').value.trim();
+        const lowName = userName.toLowerCase();
         
-        // Master Key Logic
-        if (inputName.startsWith("MininBird-Unlock-")) {
-            const target = inputName.replace("MininBird-Unlock-", "").toLowerCase();
-            localStorage.removeItem("done_" + target);
-            alert("ปลดล็อคชื่อ " + target + " สำเร็จ! กรุณาเข้าสอบตามปกติ");
-            location.reload(); return;
+        // ตรวจสอบรายชื่อผู้มีสิทธิ์
+        if (!allowedUsers.includes(lowName)) {
+            alert("❌ ชื่อของท่านไม่มีในระบบผู้ได้รับสิทธิ์เข้าสอบ");
+            return;
         }
 
-        userName = inputName;
-        const lowName = userName.toLowerCase();
-        if (!allowedUsers.includes(lowName)) { alert("❌ ชื่อของท่านไม่มีสิทธิ์ในระบบ"); return; }
-        if (localStorage.getItem("done_" + lowName) && lowName !== "mininbird") { alert("❌ ท่านทำข้อสอบไปแล้ว"); return; }
-
+        // ลบระบบล็อคประวัติเดิมเพื่อให้เข้าสอบได้ไม่จำกัดครั้ง
         selectedQuestions = [
             ...getRandom(essayQuestions, 5).map(q=>({...q, type:'essay'})),
             ...getRandom(choiceQuestions, 25).map(q=>({...q, type:'choice'}))
@@ -376,12 +293,9 @@
             timeLeft--;
             let mins = Math.floor(timeLeft / 60);
             let secs = timeLeft % 60;
-            const timeStr = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-            document.getElementById('timer-display').innerText = timeStr;
+            document.getElementById('timer-display').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
             if (timeLeft <= 300) document.getElementById('timer-display').classList.add('warning');
-            
-            channel.postMessage({ type: 'STATUS_UPDATE', user: userName.toLowerCase(), data: { state: 'Online', score: '-' } });
-            if (timeLeft <= 0) calculateScore(true);
+            if (timeLeft <= 0) calculateScore();
         }, 1000);
     }
 
@@ -390,15 +304,15 @@
         container.innerHTML = selectedQuestions.map((item, i) => `
             <div class="quiz-item">
                 <div class="question-text">${i + 1}. ${item.q}</div>
-                ${item.type === 'essay' ? `<textarea id="ans${i}" placeholder="เขียนคำวินิจฉัย..."></textarea>` : 
+                ${item.type === 'essay' ? `<textarea id="ans${i}" placeholder="พิมพ์คำสรุปวินิจฉัยและระบุมาตรากฎหมาย..."></textarea>` : 
                 `<div class="options-group">${item.options.map((opt, j) => `<label><input type="radio" name="q${i}" value="${['ก','ข','ค','ง'][j]}"> ${opt}</label>`).join('')}</div>`}
             </div>
         `).join('');
     }
 
-    function confirmSubmit() { if (confirm("ยืนยันส่งข้อสอบ?")) calculateScore(); }
+    function confirmSubmit() { if(confirm("ท่านมั่นใจในการส่งคำตอบ?")) calculateScore(); }
 
-    function calculateScore(isAuto = false) {
+    function calculateScore() {
         clearInterval(timerInterval);
         document.getElementById('timer-bar').style.display = 'none';
         let score = 0; let wrongs = [];
@@ -412,22 +326,25 @@
                 const ans = document.getElementById(`ans${i}`).value.trim();
                 let match = 0;
                 item.keys.forEach(k => { if (ans.includes(k)) match++; });
-                if ((match / item.keys.length) >= 0.7) correct = true; // 70%
+                if ((match / item.keys.length) >= 0.7) correct = true; // เกณฑ์ 70%
             }
             if (correct) score++; else wrongs.push(i + 1);
         });
 
-        localStorage.setItem("done_" + userName.toLowerCase(), "true");
-        localStorage.setItem("score_" + userName.toLowerCase(), score);
-        
         document.getElementById('quiz-screen').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
-        document.getElementById('score-display-circle').innerText = score + "/30";
+        document.getElementById('score-display').innerText = score + "/30";
+        document.getElementById('user-result-name').innerText = "ชื่อผู้เข้าสอบ: " + userName;
+        
         if (wrongs.length > 0) {
-            document.getElementById('wrong-answers-container').classList.remove('hidden');
+            document.getElementById('wrong-container').classList.remove('hidden');
             document.getElementById('wrong-list-text').innerText = wrongs.join(", ");
         }
-        channel.postMessage({ type: 'STATUS_UPDATE', user: userName.toLowerCase(), data: { state: 'Done', score: score } });
+
+        const msg = document.getElementById('feedback-msg');
+        if (score >= 26) msg.innerText = "ระดับผลการสอบ: ดีเยี่ยม";
+        else if (score >= 18) msg.innerText = "ระดับผลการสอบ: ผ่านเกณฑ์";
+        else msg.innerText = "ระดับผลการสอบ: ควรศึกษาเพิ่มเติม";
     }
 </script>
 </body>
