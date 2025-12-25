@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบทดสอบความรู้กฎหมายอาญา ๒๕๖๘ (Supreme Cloud Command)</title>
+    <title>ระบบทดสอบกฎหมายอาญา ๒๕๖๘ (Supreme Master Shield)</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
@@ -14,190 +14,140 @@
         :root {
             --court-red: #8B0000;
             --court-gold: #D4AF37;
-            --court-gold-light: #f1d377;
             --court-dark: #1a0202;
             --paper-white: rgba(255, 255, 255, 0.98);
             --admin-dark: #121212;
+            --danger: #e74c3c;
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
 
         body, html { 
             margin: 0; padding: 0; min-height: 100vh;
             font-family: 'Sarabun', sans-serif;
-            background: #050505;
             background: radial-gradient(circle at center, #2c0505 0%, #050505 100%);
-            color: #fff;
-            display: flex; justify-content: center; align-items: center;
-            overflow-x: hidden;
+            color: #fff; display: flex; justify-content: center; align-items: center; overflow-x: hidden;
         }
 
         #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; }
 
         /* --- Admin UI (Responsive) --- */
-        #admin-panel {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--admin-dark); z-index: 9999; padding: 15px;
-            display: none; overflow-y: auto; color: #fff;
-        }
-
-        .admin-header { border-bottom: 2px solid var(--court-gold); padding-bottom: 15px; margin-bottom: 25px; display: flex; flex-direction: column; gap: 10px; }
+        #admin-panel { position: fixed; inset: 0; background: var(--admin-dark); z-index: 9999; padding: 15px; display: none; overflow-y: auto; color: #fff; }
+        .admin-header { border-bottom: 2px solid var(--court-gold); padding-bottom: 10px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; }
         @media (min-width: 768px) { .admin-header { flex-direction: row; justify-content: space-between; align-items: center; } }
-
         .admin-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
         @media (min-width: 1024px) { .admin-grid { grid-template-columns: 1fr 2fr; } }
-
-        .admin-card { background: #1e1e1e; border: 1px solid #333; border-radius: 12px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .admin-card { background: #1e1e1e; border: 1px solid #333; border-radius: 12px; padding: 15px; }
         
-        .user-status-item { 
-            background: #252525; padding: 12px; border-radius: 8px; margin-bottom: 10px;
-            border-left: 5px solid var(--court-gold); display: flex; flex-direction: column; gap: 10px;
-        }
+        .user-status-item { background: #252525; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid var(--court-gold); display: flex; flex-direction: column; gap: 8px; }
         @media (min-width: 480px) { .user-status-item { flex-direction: row; justify-content: space-between; align-items: center; } }
-        
-        .status-badge { padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-        .badge-online { background: #2ecc71; color: #000; }
-        .badge-paused { background: #f39c12; color: #000; animation: flash 1s infinite; }
-
-        .admin-btn { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-family: 'Sarabun'; font-size: 14px; }
-        .btn-kick { background: #e74c3c; color: #fff; }
-        .btn-resume { background: #2ecc71; color: #000; }
+        .cheat-warning { color: var(--danger); font-weight: bold; font-size: 13px; background: rgba(231, 76, 60, 0.1); padding: 5px; border-radius: 4px; }
 
         /* --- User Container (Responsive) --- */
         .container { 
-            background: var(--paper-white); color: #333; 
-            padding: 25px 15px; border-radius: 15px; 
-            box-shadow: 0 0 50px rgba(139, 0, 0, 0.4); 
-            border: 2px solid var(--court-gold); 
-            width: 95%; max-width: 850px; 
-            text-align: center; position: relative; 
-            backdrop-filter: blur(15px); 
-            margin: 20px auto;
+            background: var(--paper-white); color: #333; padding: 20px; border-radius: 15px; 
+            box-shadow: 0 0 50px rgba(139, 0, 0, 0.4); border: 2px solid var(--court-gold); 
+            width: 95%; max-width: 850px; text-align: center; position: relative; backdrop-filter: blur(15px); margin: 20px auto;
         }
-        @media (min-width: 768px) { .container { padding: 50px; border-radius: 20px; } }
+        @media (min-width: 768px) { .container { padding: 40px; border-radius: 20px; } }
 
-        #timer-bar {
-            position: fixed; top: 0; left: 0; width: 100%;
-            background: linear-gradient(90deg, var(--court-red), var(--court-dark));
-            color: #fff; text-align: center; padding: 10px 0; font-size: 18px; font-weight: bold;
-            z-index: 1000; border-bottom: 3px solid var(--court-gold); display: none;
-        }
-        @media (min-width: 768px) { #timer-bar { font-size: 26px; padding: 15px 0; } }
+        #timer-bar { position: fixed; top: 0; width: 100%; background: linear-gradient(90deg, var(--court-red), var(--court-dark)); color: #fff; text-align: center; padding: 8px 0; font-size: 16px; font-weight: bold; z-index: 1000; border-bottom: 3px solid var(--court-gold); display: none; }
+        @media (min-width: 768px) { #timer-bar { font-size: 24px; padding: 12px 0; } }
 
-        .header h1 { color: var(--court-red); margin: 0; font-size: 24px; font-weight: 700; }
-        @media (min-width: 768px) { .header h1 { font-size: 36px; } }
+        .progress-container { width: 100%; height: 6px; background: rgba(0,0,0,0.1); position: fixed; top: 35px; left: 0; z-index: 1001; display: none; }
+        @media (min-width: 768px) { .progress-container { top: 52px; } }
+        #progress-bar { width: 0%; height: 100%; background: var(--court-gold); transition: 0.5s; }
 
-        input[type="text"], textarea { width: 100%; max-width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #ddd; border-radius: 12px; font-size: 18px; text-align: center; font-family: 'Sarabun'; }
-        @media (min-width: 768px) { input[type="text"] { max-width: 450px; font-size: 22px; } }
-        
-        .btn-main { background: linear-gradient(135deg, var(--court-red) 0%, #4a0000 100%); color: white; padding: 15px 30px; border: 1px solid var(--court-gold); border-radius: 60px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; max-width: 100%; box-shadow: 0 10px 25px rgba(139, 0, 0, 0.4); }
-        @media (min-width: 768px) { .btn-main { padding: 22px 60px; font-size: 24px; max-width: 450px; } }
+        .quiz-item { background: #fff; padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left; border-left: 6px solid var(--court-red); border: 1px solid #eee; }
+        .question-text { font-size: 18px; font-weight: bold; color: #1a1a1a; line-height: 1.4; margin-bottom: 15px; }
+        @media (min-width: 768px) { .question-text { font-size: 22px; } }
 
-        /* --- Quiz Content (Mobile Optimized) --- */
-        .quiz-item { background: #fff; padding: 20px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); text-align: left; border-left: 6px solid var(--court-red); border: 1px solid #eee; }
-        @media (min-width: 768px) { .quiz-item { padding: 40px; border-radius: 15px; border-left: 10px solid var(--court-red); } }
+        .option-label { display: flex; align-items: center; padding: 12px; margin: 8px 0; background: #fdfdfd; border: 1px solid #f0f0f0; border-radius: 8px; cursor: pointer; font-size: 16px; transition: 0.2s; }
+        .option-label:hover { background: #fff9e6; border-color: var(--court-gold); }
+        input[type="radio"] { width: 22px; height: 22px; margin-right: 12px; flex-shrink: 0; }
 
-        .question-text { font-size: 18px; font-weight: bold; color: var(--court-dark); line-height: 1.4; }
-        @media (min-width: 768px) { .question-text { font-size: 24px; } }
-
-        .option-label { display: flex; align-items: center; padding: 15px; margin: 10px 0; background: #fdfdfd; border: 2px solid #f0f0f0; border-radius: 10px; cursor: pointer; font-size: 16px; }
-        @media (min-width: 768px) { .option-label { padding: 20px; font-size: 20px; } }
-
-        input[type="radio"] { width: 20px; height: 20px; margin-right: 12px; accent-color: var(--court-red); flex-shrink: 0; }
-
-        /* --- Pause Overlay --- */
-        #pause-lock {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); border-radius: 15px; z-index: 500;
-            display: none; flex-direction: column; justify-content: center; align-items: center; color: var(--court-gold); padding: 20px; text-align: center;
-        }
-
-        .score-display-circle { width: 180px; height: 180px; line-height: 180px; border-radius: 50%; background: #fff; color: var(--court-red); font-size: 60px; font-weight: 900; margin: 20px auto; border: 8px double var(--court-gold); text-align: center; }
-        @media (min-width: 768px) { .score-display-circle { width: 250px; height: 250px; line-height: 250px; font-size: 90px; border-width: 15px; } }
+        #pause-lock { position: absolute; inset: 0; background: rgba(0,0,0,0.95); border-radius: 15px; z-index: 500; display: none; flex-direction: column; justify-content: center; align-items: center; color: var(--court-gold); padding: 20px; }
+        .btn-main { background: linear-gradient(135deg, var(--court-red) 0%, #4a0000 100%); color: white; padding: 15px 30px; border: 1px solid var(--court-gold); border-radius: 60px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; max-width: 400px; }
 
         .hidden { display: none !important; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false" onselectstart="return false">
 
 <div id="particles-js"></div>
 <audio id="notify-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
 
 <div id="admin-panel">
     <div class="admin-header">
-        <h1 style="color: var(--court-gold); margin:0; font-size: 20px;">🏛️ Supreme Command Center: Minin_Bird</h1>
-        <button class="admin-btn" onclick="location.reload()" style="background:#555; color:white;">ออกจากระบบแอดมิน</button>
+        <h1 style="color: var(--court-gold); margin:0; font-size: 22px;">🏛️ Command Center: Minin_Bird</h1>
+        <button class="admin-btn" onclick="location.reload()" style="background:#555; color:white;">Logout</button>
     </div>
     <div class="admin-grid">
         <div class="admin-card">
-            <h3 style="color:var(--court-gold); border-bottom: 1px solid #444; padding-bottom: 10px; font-size: 16px;">🔑 สัญญาณ OTP</h3>
+            <h3 style="color:var(--court-gold); border-bottom: 1px solid #444; padding-bottom: 10px;">🔑 Signals</h3>
             <div id="admin-otp-list"></div>
-            <button onclick="db.ref('otp_requests').remove()" style="margin-top:20px; background:none; border:1px dashed #555; color:#777; cursor:pointer; width:100%; padding: 10px;">ล้างประวัติคำขอ</button>
         </div>
         <div class="admin-card">
-            <h3 style="color:var(--court-gold); border-bottom: 1px solid #444; padding-bottom: 10px; font-size: 16px;">📊 สถานะผู้เข้าสอบ Live</h3>
+            <h3 style="color:var(--court-gold); border-bottom: 1px solid #444; padding-bottom: 10px;">📊 LIVE Tracking & Anti-Cheat</h3>
             <div id="admin-user-list"></div>
         </div>
     </div>
 </div>
 
-<div id="timer-bar">⏱️ เวลาคงเหลือ: <span id="timer-display">50:00</span></div>
+<div id="timer-bar">⏱️ เวลาที่เหลือ: <span id="timer-display">50:00</span></div>
 <div class="progress-container"><div id="progress-bar"></div></div>
 
 <div class="container" id="main-frame">
     <div id="pause-lock">
         <div style="font-size: 60px;">⏸️</div>
-        <h2 style="font-size: 22px;">การทำข้อสอบถูกระงับชั่วคราว</h2>
-        <p style="font-size: 16px; color:#fff;">กรุณารอการพิจารณาอนุญาตจาก <strong>Minin_Bird</strong></p>
+        <h2>ระบบหยุดสอบชั่วคราว</h2>
+        <p>กรุณารอแอดมินอนุญาตให้ดำเนินการต่อ</p>
     </div>
 
     <div id="step-name">
-        <div class="header">
-            <div style="font-size: 40px; margin-bottom: 10px;">⚖️</div>
-            <h1>ระบบทดสอบความรู้กฎหมาย</h1>
-            <div class="header-sub" style="font-size: 16px;">พุทธศักราช ๒๕๖๘</div>
-        </div>
-        <p style="font-size: 16px; font-weight:bold; color:#555; margin-bottom: 20px;">ระบุตัวตนเพื่อขอรับรหัสผ่าน (OTP)</p>
-        <input type="text" id="username" placeholder="ระบุUsername" autocomplete="off">
+        <div style="font-size: 40px; margin-bottom: 10px;">⚖️</div>
+        <h1>ระบบทดสอบกฎหมาย</h1>
+        <div style="color:var(--court-gold); font-weight: bold; margin-bottom: 20px;">พุทธศักราช ๒๕๖๘</div>
+        <input type="text" id="username" placeholder="กรอก Username ของท่าน" autocomplete="off">
         <br><br>
-        <button class="btn-main" onclick="requestOTP()">ขอรับรหัสผ่านเข้าสู่ระบบ</button>
+        <button class="btn-main" onclick="requestOTP()">ขอรหัสผ่านจากแอดมิน</button>
     </div>
 
     <div id="step-otp" class="hidden">
-        <div class="header"><h1>🔐 ยืนยันการเข้าสู่ระบบ</h1></div>
-        <p style="font-size: 16px;">กรุณาระบุรหัสที่ได้รับจาก <strong>Minin_Bird</strong></p>
-        <input type="text" id="otp-input" maxlength="4" placeholder="รหัส ๔ หลัก" style="font-size: 40px; letter-spacing: 15px; font-weight: bold; width: 100%; max-width: 280px;">
+        <h1>🔐 ยืนยันความปลอดภัย</h1>
+        <p style="color: #666;">ห้ามสลับหน้าจอ หรือคัดลอกโจทย์เด็ดขาด</p>
+        <input type="text" id="otp-input" maxlength="4" placeholder="รหัส ๔ หลัก" style="font-size: 35px; letter-spacing: 10px; width: 250px;">
         <br><br>
-        <button class="btn-main" onclick="verifyOTP()">เริ่มทำข้อสอบ</button>
+        <button class="btn-main" onclick="verifyOTP()">ยืนยันและเริ่มสอบ</button>
     </div>
 
     <div id="quiz-screen" class="hidden">
-        <div style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; font-size: 14px;">
-             <div style="font-weight: bold; color: var(--court-red);">บัตรสอบ: <span id="exam-id"></span></div>
-             <div id="display-user" style="font-weight:bold; color:#444;"></div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+            <div id="display-user" style="font-weight:bold; color:var(--court-red);"></div>
+            <div id="strike-display" style="color:var(--danger); font-weight:bold;">สิทธิ์สลับจอ: 3/3</div>
         </div>
         <div id="quiz-container"></div>
         <hr>
-        <button class="btn-main" style="background:#e67e22; font-size: 16px; margin-bottom: 10px;" onclick="requestPause()">🚩 ร้องขอหยุดสอบชั่วคราว</button>
+        <button class="btn-main" style="background:#e67e22; font-size: 16px; margin-bottom: 10px;" onclick="requestPause()">🚩 ร้องขอหยุดสอบ</button>
         <br>
-        <button class="btn-main" onclick="confirmSubmit()">ส่งกระดาษคำตอบ</button>
+        <button class="btn-main" onclick="confirmSubmit()">ส่งคำพิพากษา (ส่งข้อสอบ)</button>
     </div>
 
     <div id="result-screen" class="hidden">
-        <div class="header"><h1>📜 ผลการวินิจฉัย</h1></div>
+        <h1>📜 ผลการสอบ</h1>
         <div class="score-display-circle" id="score-display-val">0/30</div>
-        <div id="feedback-text" style="font-size: 20px; font-weight: bold; color: var(--court-red); margin-bottom: 20px;"></div>
-        <button class="btn-main" style="background:var(--court-dark); margin-top:20px;" onclick="location.reload()">เสร็จสิ้น</button>
+        <div id="feedback-text" style="font-size: 22px; font-weight: bold; color: var(--court-red);"></div>
+        <br>
+        <button class="btn-main" onclick="location.reload()">สิ้นสุดการสอบ</button>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
 <script>
-    /* --- Particles --- */
-    particlesJS("particles-js", { "particles": { "number": { "value": 60 }, "color": { "value": ["#ffffff", "#D4AF37", "#8B0000"] }, "opacity": { "value": 0.3 }, "size": { "value": 2 }, "line_linked": { "enable": false }, "move": { "enable": true, "speed": 1 } } });
-
-    /* --- Firebase Config --- */
+    /* --- Particles & Firebase Config --- */
+    particlesJS("particles-js", { "particles": { "number": { "value": 40 }, "color": { "value": "#D4AF37" }, "opacity": { "value": 0.3 }, "size": { "value": 2 }, "move": { "enable": true, "speed": 1 } } });
+    
     const firebaseConfig = {
         apiKey: "AIzaSyDzPAYTMlmbIVBR5U862o5vlleDDIz5GEc",
         authDomain: "legal-exam.firebaseapp.com",
@@ -205,111 +155,126 @@
         projectId: "legal-exam",
         storageBucket: "legal-exam.firebasestorage.app",
         messagingSenderId: "850182543166",
-        appId: "1:850182543166:web:b84851c5124d6576f33e6f",
-        measurementId: "G-DGKKSFCBEX"
+        appId: "1:850182543166:web:b84851c5124d6576f33e6f"
     };
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     
     const allowedUsers = ["minin_bird", "ruok555sf"];
-    let timeLeft = 50 * 60;
-    let otpInterval, examInterval;
-    let userName = "", correctOTP = "", selectedQuestions = [];
-    let isPaused = false;
+    let timeLeft = 50 * 60, otpInterval, examInterval, isPaused = false;
+    let userName = "", correctOTP = "", selectedQuestions = [], strikeCount = 0;
 
-    /* --- Logic แอดมิน --- */
+    /* --- [ Anti-Cheat Logic ] --- */
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden && userName !== "" && !isPaused && !document.getElementById('quiz-screen').classList.contains('hidden')) {
+            strikeCount++;
+            let remaining = 3 - strikeCount;
+            db.ref(`live_status/${userName}`).update({ cheat_log: `สลับหน้าจอครั้งที่ ${strikeCount}` });
+            
+            if (strikeCount >= 3) {
+                alert("🛑 ท่านทำผิดกฎการสอบเกินกำหนด ระบบส่งข้อสอบให้ทันที");
+                calculateScore();
+            } else {
+                alert(`⚠️ ห้ามสลับหน้าจอ! ท่านเหลือสิทธิ์อีก ${remaining} ครั้งเท่านั้น`);
+                document.getElementById('strike-display').innerText = `สิทธิ์สลับจอ: ${remaining}/3`;
+            }
+        }
+    });
+
+    /* --- [ Admin Cmd Logic ] --- */
     function openAdminPanel() {
         document.getElementById('main-frame').classList.add('hidden');
         document.getElementById('admin-panel').style.display = 'block';
-        db.ref('otp_requests').on('value', (snap) => {
-            const list = document.getElementById('admin-otp-list'); list.innerHTML = "";
-            snap.forEach((child) => {
-                const d = child.val();
-                list.innerHTML += `<div style="background:#222; padding:10px; margin-bottom:5px; border-radius:5px; font-size:14px;"><b style="color:var(--court-gold)">${child.key.toUpperCase()}</b>: <span style="color:lime; font-family:monospace; font-size:16px;">${d.otp}</span></div>`;
-            });
+        db.ref('otp_requests').on('value', snap => {
+            let list = document.getElementById('admin-otp-list'); list.innerHTML = "";
+            snap.forEach(c => { list.innerHTML += `<div style='padding:8px; border-bottom:1px solid #333;'><b>${c.key}</b>: <span style='color:lime'>${c.val().otp}</span></div>`; });
         });
-        db.ref('live_status').on('value', (snap) => {
-            const list = document.getElementById('admin-user-list'); list.innerHTML = "";
-            snap.forEach((child) => {
-                const u = child.val();
-                const bClass = u.state === 'Paused' ? 'badge-paused' : 'badge-online';
-                list.innerHTML += `
-                    <div class="user-status-item">
-                        <div><b>${u.name}</b> <span class="status-badge ${bClass}">${u.state}</span><br><small>คืบหน้า: ${u.progress || 0}%</small></div>
-                        <div style="display:flex; gap:5px;">
-                            ${u.state === 'Paused' ? `<button class="admin-btn btn-resume" onclick="adminCmd('${child.key}', 'RESUME')">ต่อ</button>` : ''}
-                            <button class="admin-btn btn-kick" onclick="adminCmd('${child.key}', 'KICK')">เตะ</button>
-                        </div>
-                    </div>`;
+        db.ref('live_status').on('value', snap => {
+            let list = document.getElementById('admin-user-list'); list.innerHTML = "";
+            snap.forEach(c => {
+                let u = c.val();
+                list.innerHTML += `<div class='user-status-item'>
+                    <div><b>${u.name}</b> <span class='status-badge'>${u.state}</span><br>
+                    <small>Prog: ${u.progress}% | <span class='cheat-warning'>${u.cheat_log || 'ไม่มีประวัติโกง'}</span></small></div>
+                    <div>
+                        ${u.state === 'Paused' ? `<button class='admin-btn btn-resume' onclick="adminCmd('${c.key}', 'RESUME')">ต่อ</button>` : ''}
+                        <button class='admin-btn btn-kick' onclick="adminCmd('${c.key}', 'KICK')">เตะ</button>
+                    </div></div>`;
             });
         });
     }
     function adminCmd(user, cmd) { db.ref(`live_status/${user}/command`).set(cmd); }
 
-    /* --- Logic ผู้สอบ --- */
+    /* --- [ User Logic ] --- */
     function requestOTP() {
-        userName = document.getElementById('username').value.trim();
-        const lowName = userName.toLowerCase();
-        if (!allowedUsers.includes(lowName)) return alert("❌ ไม่มีรายชื่อในระบบ");
-        if (lowName === "minin_bird") return openAdminPanel();
+        userName = document.getElementById('username').value.trim().toLowerCase();
+        if (!allowedUsers.includes(userName)) return alert("❌ ไม่มีรายชื่อในระบบ");
+        if (userName === "minin_bird") return openAdminPanel();
         correctOTP = Math.floor(1000 + Math.random() * 9000).toString();
-        db.ref('otp_requests/' + lowName).set({ otp: correctOTP, timestamp: Date.now(), time: new Date().toLocaleTimeString() });
+        db.ref('otp_requests/' + userName).set({ otp: correctOTP, time: new Date().toLocaleTimeString() });
         document.getElementById('step-name').classList.add('hidden');
         document.getElementById('step-otp').classList.remove('hidden');
     }
 
     function verifyOTP() {
         if (document.getElementById('otp-input').value === correctOTP) startQuiz();
-        else alert("รหัสผิด");
+        else alert("รหัสผ่านไม่ถูกต้อง");
     }
 
     function startQuiz() {
         db.ref(`live_status/${userName}`).set({ name: userName, state: 'Online', progress: 0, command: 'NONE' });
-        db.ref(`live_status/${userName}/command`).on('value', (snap) => {
-            const cmd = snap.val();
-            if(cmd === 'KICK') location.reload();
-            if(cmd === 'RESUME') { isPaused = false; document.getElementById('pause-lock').style.display = 'none'; db.ref(`live_status/${userName}`).update({ state: 'Online' }); }
+        db.ref(`live_status/${userName}/command`).on('value', snap => {
+            if(snap.val() === 'KICK') location.reload();
+            if(snap.val() === 'RESUME') { isPaused = false; document.getElementById('pause-lock').style.display = 'none'; }
         });
         document.getElementById('step-otp').classList.add('hidden');
         document.getElementById('quiz-screen').classList.remove('hidden');
         document.getElementById('timer-bar').style.display = 'block';
         document.querySelector('.progress-container').style.display = 'block';
-        document.getElementById('display-user').innerText = "👤 ผู้สอบ: " + userName;
-        document.getElementById('exam-id').innerText = Math.random().toString(36).substr(2, 6).toUpperCase();
+        document.getElementById('display-user').innerText = `ผู้สอบ: ${userName.toUpperCase()}`;
+        document.getElementById('exam-id').innerText = Math.random().toString(36).substr(2, 5).toUpperCase();
         document.body.style.alignItems = "flex-start";
-        
+
         const essays = [...essayQuestions].sort(()=>0.5-Math.random()).slice(0,5).map(q=>({...q, type:'essay'}));
         const choices = [...choiceQuestions].sort(()=>0.5-Math.random()).slice(0,25).map(q=>({...q, type:'choice'}));
         selectedQuestions = [...essays, ...choices].sort(()=>0.5-Math.random());
         renderQuiz();
+
         examInterval = setInterval(() => {
             if(!isPaused) {
                 timeLeft--;
-                document.getElementById('timer-display').innerText = `${Math.floor(timeLeft/60)}:${timeLeft%60 < 10 ? '0' : ''}${timeLeft%60}`;
+                let m = Math.floor(timeLeft/60), s = timeLeft%60;
+                document.getElementById('timer-display').innerText = `${m}:${s<10?'0':''}${s}`;
                 if(timeLeft <= 0) calculateScore();
             }
         }, 1000);
     }
 
     function renderQuiz() {
-        document.getElementById('quiz-container').innerHTML = selectedQuestions.map((item, i) => `
-            <div class="quiz-item">
+        document.getElementById('quiz-container').innerHTML = selectedQuestions.map((item, i) => {
+            let optsHTML = "";
+            if (item.type === 'choice') {
+                // สุ่มลำดับตัวเลือก ก-ง ภายในข้อ
+                const shuffledOpts = [...item.options].sort(() => 0.5 - Math.random());
+                optsHTML = shuffledOpts.map(opt => `<label class="option-label"><input type="radio" name="q${i}" value="${opt[0]}" onchange="updateProg()"> ${opt}</label>`).join('');
+            }
+            return `<div class="quiz-item">
                 <div class="question-text">${i+1}. ${item.q}</div>
-                ${item.type==='essay' ? `<textarea id="ans${i}" oninput="updateLiveProgress()"></textarea>` : 
-                `<div>${[...item.options].map(opt => `<label class="option-label"><input type="radio" name="q${i}" value="${opt[0]}" onchange="updateLiveProgress()"> ${opt}</label>`).join('')}</div>`}
-            </div>`).join('');
+                ${item.type==='essay' ? `<textarea id="ans${i}" oninput="updateProg()"></textarea>` : `<div>${optsHTML}</div>`}
+            </div>`;
+        }).join('');
     }
 
     function requestPause() {
-        if(confirm("ยืนยันการขอหยุดสอบชั่วคราว? โจทย์จะถูกซ่อนจนกว่าแอดมินจะอนุญาต")) {
+        if(confirm("ส่งคำร้องหยุดสอบ? โจทย์จะถูกซ่อนจนกว่าแอดมินจะอนุญาต")) {
             isPaused = true;
             document.getElementById('pause-lock').style.display = 'flex';
             db.ref(`live_status/${userName}`).update({ state: 'Paused' });
         }
     }
 
-    function updateLiveProgress() {
+    function updateProg() {
         let done = 0;
         selectedQuestions.forEach((item, i) => {
             if(item.type==='choice' && document.querySelector(`input[name="q${i}"]:checked`)) done++;
@@ -320,7 +285,7 @@
         db.ref(`live_status/${userName}`).update({ progress: p });
     }
 
-    function confirmSubmit() { if(confirm("ต้องการส่งข้อสอบ?")) calculateScore(); }
+    function confirmSubmit() { if(confirm("ยืนยันการส่งข้อสอบ?")) calculateScore(); }
 
     function calculateScore() {
         clearInterval(examInterval);
@@ -341,10 +306,11 @@
         document.getElementById('quiz-screen').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
         document.getElementById('score-display-val').innerText = score + "/30";
+        document.getElementById('feedback-text').innerText = score >= 18 ? "📜 ผ่านการทดสอบ" : "⚖️ ควรศึกษาเพิ่มเติม";
         document.body.style.alignItems = "center";
     }
 
-    // --- โจทย์คงเดิม ---
+    // --- โจทย์คงเดิม (10 อัตนัย + ปรนัย) ---
     const essayQuestions = [
         { q: "พันโท ก. สั่งให้ สิบเอก ข. แอบนำ 'ภาพถ่ายแผนผังคลังแสง' ไปขายให้สายลับต่างชาติ แต่สิบเอก ข. ทำภาพหลุดลงโซเชียลแทนจนเกิดความปั่นป่วน วินิจฉัยความผิดของสิบเอก ข.", keys: ["๓๖", "กบฏ", "๒๕", "สถานหนัก", "ภาพลักษณ์"] },
         { q: "พลทหาร เอ ใช้ 'ไอดีรอง' ปลอมเป็นนายทหารชั้นผู้ใหญ่เพื่อสั่งให้สารวัตรทหารปล่อยตัวเพื่อนที่ถูกคุมขังอยู่ วินิจฉัยพฤติการณ์นี้ตามมาตรา ๓๐, ๓๕ และ ๔๑", keys: ["๓๐", "๓๕", "แอบอ้าง", "ไอดีรอง", "สถานหนัก"] },
@@ -480,7 +446,6 @@
         { q: "มาตรา ๓๕ กำหนดให้การใช้ไอดีรองทำผิดมาตราใดบ้างรับโทษหนัก?", a: "ข", options: ["ก. มาตรา ๒๐-๒๑", "ก. มาตรา ๒๗ และ ๓๒", "ก. มาตรา ๓๖-๓๗", "ก. มาตรา ๔๓-๔๔"] },
         { q: "ชื่อประมวลกฎหมายนี้คือ พ.ศ. ใด?", a: "ง", options: ["ก. ๒๕๖๕", "ข. ๒๕๖๖", "ค. ๒๕๖๗", "ง. ๒๕๖๘"] }
     ];
-
 </script>
 </body>
 </html>
