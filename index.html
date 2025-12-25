@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบทดสอบความรู้กฎหมายอาญา ๒๕๖๘ (Supreme Cloud Edition)</title>
+    <title>ระบบทดสอบความรู้กฎหมายอาญา ๒๕๖๘ (The Supreme Commander)</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
@@ -12,13 +12,12 @@
         @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap');
         
         :root {
+            --gold: #D4AF37;
+            --gold-glow: #f1d377;
             --court-red: #8B0000;
-            --court-gold: #D4AF37;
-            --court-gold-light: #f1d377;
-            --court-dark: #1a0202;
-            --paper-white: rgba(255, 255, 255, 0.98);
-            --glass: rgba(255, 255, 255, 0.1);
-            --text-gold: #ffdf80;
+            --dark-bg: #0a0a0b;
+            --glass-white: rgba(255, 255, 255, 0.95);
+            --admin-glass: rgba(15, 15, 15, 0.9);
         }
 
         * { box-sizing: border-box; }
@@ -26,121 +25,90 @@
         body, html { 
             margin: 0; padding: 0; min-height: 100vh;
             font-family: 'Sarabun', sans-serif;
-            background: #050505;
-            background: radial-gradient(circle at center, #2c0505 0%, #050505 100%);
-            color: #fff;
-            display: flex; justify-content: center; align-items: center;
-            overflow-x: hidden;
+            background: var(--dark-bg);
+            background: radial-gradient(circle at center, #1a0202 0%, #050505 100%);
+            color: #333; overflow-x: hidden; display: flex; justify-content: center; align-items: center;
         }
 
         #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; }
 
-        /* --- Header & Timer --- */
+        /* --- Global Header & Progress --- */
         #timer-bar {
             position: fixed; top: 0; left: 0; width: 100%;
-            background: linear-gradient(90deg, var(--court-red), var(--court-dark));
-            color: #fff; text-align: center; padding: 15px 0; font-size: 26px; font-weight: bold;
-            z-index: 1000; border-bottom: 3px solid var(--court-gold);
-            box-shadow: 0 4px 30px rgba(0,0,0,0.8); display: none;
-            letter-spacing: 2px;
+            background: linear-gradient(90deg, var(--court-red), #300);
+            color: #fff; text-align: center; padding: 15px 0; font-size: 24px; font-weight: bold;
+            z-index: 1000; border-bottom: 3px solid var(--gold); display: none;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.8);
         }
 
-        .progress-container { 
-            width: 100%; height: 6px; background: rgba(255,255,255,0.1); 
-            position: fixed; top: 60px; left: 0; z-index: 1001; display: none; 
+        .progress-bar-fixed { 
+            width: 100%; height: 5px; background: rgba(255,255,255,0.1); 
+            position: fixed; top: 57px; left: 0; z-index: 1001; display: none; 
         }
-        #progress-bar { 
-            width: 0%; height: 100%; background: linear-gradient(90deg, var(--court-gold), #fff); 
-            box-shadow: 0 0 15px var(--court-gold); transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
+        #progress-val { width: 0%; height: 100%; background: var(--gold); transition: 0.5s; }
 
-        /* --- Main Container --- */
+        /* --- Main UI Container --- */
         .container { 
-            background: var(--paper-white); color: #333; padding: 50px; border-radius: 20px; 
-            box-shadow: 0 0 50px rgba(139, 0, 0, 0.4), inset 0 0 20px rgba(212, 175, 55, 0.2); 
-            border: 2px solid var(--court-gold);
-            width: 95%; max-width: 900px;
-            text-align: center; position: relative;
-            backdrop-filter: blur(15px);
-            animation: fadeIn 1s ease-out;
+            background: var(--glass-white); padding: 50px; border-radius: 25px; 
+            box-shadow: 0 0 60px rgba(139, 0, 0, 0.5); border: 2px solid var(--gold);
+            width: 95%; max-width: 850px; text-align: center; position: relative;
+            animation: fadeIn 0.8s ease-out; backdrop-filter: blur(10px);
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } }
 
-        .header h1 { 
-            color: var(--court-red); margin: 0; font-size: 36px; font-weight: 700;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-        .header-sub { color: var(--court-gold); font-weight: bold; font-size: 22px; margin-top: 5px; }
+        h1 { color: var(--court-red); font-size: 36px; margin: 0; letter-spacing: 1px; }
 
-        /* --- Inputs & Buttons --- */
         input[type="text"], textarea { 
-            width: 100%; max-width: 450px; padding: 18px; margin: 15px 0; 
+            width: 100%; max-width: 400px; padding: 18px; margin: 15px 0; 
             border: 2px solid #ddd; border-radius: 12px; font-size: 22px; 
-            text-align: center; transition: all 0.3s ease; font-family: 'Sarabun';
-            background: #fff; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            text-align: center; transition: 0.3s; font-family: 'Sarabun';
         }
-        input:focus { border-color: var(--court-gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); outline: none; }
-        
+        input:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(212,175,55,0.4); outline: none; }
+
         .btn-main { 
             background: linear-gradient(135deg, var(--court-red) 0%, #4a0000 100%);
-            color: white; padding: 22px 60px; border: 1px solid var(--court-gold); 
-            border-radius: 60px; font-size: 24px; font-weight: bold; cursor: pointer;
-            width: 100%; max-width: 450px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 25px rgba(139, 0, 0, 0.4);
-            text-transform: uppercase; letter-spacing: 1px;
+            color: white; padding: 20px 50px; border: 1px solid var(--gold); 
+            border-radius: 60px; font-size: 22px; font-weight: bold; cursor: pointer;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(139, 0, 0, 0.4);
         }
-        .btn-main:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 35px rgba(139, 0, 0, 0.6); }
+        .btn-main:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(139, 0, 0, 0.6); }
 
-        /* --- Admin Monitor --- */
-        #admin-monitor {
-            position: fixed; top: 100px; right: 30px; width: 350px;
-            background: rgba(10, 10, 10, 0.95); color: #fff; padding: 25px; border-radius: 15px;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.8); z-index: 5000; text-align: left;
-            border: 2px solid var(--court-gold); backdrop-filter: blur(20px);
-        }
-        .otp-card {
-            background: rgba(255,255,255,0.05); border-radius: 10px; padding: 15px; margin-bottom: 10px;
-            border-left: 5px solid var(--court-gold); animation: slideLeft 0.5s ease-out;
-        }
-        @keyframes slideLeft { from { opacity: 0; transform: translateX(20px); } }
-
-        /* --- Quiz Content --- */
-        .quiz-item { 
-            background: #fff; padding: 40px; border-radius: 15px; margin-bottom: 40px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); text-align: left;
-            border: 1px solid #eee; position: relative; overflow: hidden;
-            transition: 0.3s;
-        }
-        .quiz-item:hover { border-color: var(--court-gold); transform: translateY(-3px); }
-        .quiz-item::before {
-            content: ""; position: absolute; left: 0; top: 0; height: 100%; width: 8px;
-            background: var(--court-red);
-        }
-        .question-text { font-size: 24px; font-weight: bold; color: var(--court-dark); line-height: 1.4; }
-
-        .option-label {
-            display: flex; align-items: center; padding: 20px; margin: 12px 0; background: #fdfdfd;
-            border: 2px solid #f0f0f0; border-radius: 12px; cursor: pointer; transition: 0.2s;
-            font-size: 20px;
-        }
-        .option-label:hover { background: #fff9e6; border-color: var(--court-gold); }
-        input[type="radio"] { width: 22px; height: 22px; margin-right: 15px; accent-color: var(--court-red); }
-
-        /* --- Result --- */
-        .score-display-circle { 
-            width: 250px; height: 250px; line-height: 250px; border-radius: 50%; 
-            background: #fff; color: var(--court-red); font-size: 90px; font-weight: 900; 
-            margin: 40px auto; border: 15px double var(--court-gold); text-align: center;
-            box-shadow: 0 0 40px rgba(212, 175, 55, 0.5);
+        /* --- Admin Command Center Window --- */
+        #admin-panel {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--admin-glass); color: #fff; z-index: 9999;
+            padding: 40px; display: none; overflow-y: auto; backdrop-filter: blur(15px);
         }
 
+        .admin-grid { display: grid; grid-template-columns: 350px 1fr; gap: 30px; margin-top: 30px; }
+        
+        .admin-card {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .user-monitor-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px; background: rgba(255,255,255,0.05); border-radius: 15px; margin-bottom: 10px;
+            border-left: 6px solid var(--gold);
+        }
+
+        .status-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .online { background: #0f0; box-shadow: 0 0 10px #0f0; }
+        .offline { background: #f00; }
+
+        .cmd-btn { padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; margin-left: 5px; }
+        .btn-kick { background: #e67e22; color: white; }
+        .btn-stop { background: #c0392b; color: white; }
+        .btn-kick:hover, .btn-stop:hover { filter: brightness(1.2); }
+
+        /* --- Quiz Styles --- */
+        .quiz-card { background: #fff; padding: 40px; border-radius: 15px; margin-bottom: 40px; text-align: left; border: 1px solid #eee; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .opt-label { display: block; padding: 18px; margin: 10px 0; background: #f8f9fa; border: 2px solid #f0f0f0; border-radius: 12px; cursor: pointer; font-size: 18px; }
+        .opt-label:hover { background: #fff9e6; border-color: var(--gold); }
         .hidden { display: none !important; }
-        .otp-expiry { color: #d35400; font-weight: bold; margin-top: 20px; font-size: 18px; }
-        .wrong-badge { 
-            background: var(--court-red); color: #fff; padding: 8px 16px; border-radius: 8px; 
-            font-weight: bold; margin: 6px; display: inline-block; font-size: 14px;
-        }
     </style>
 </head>
 <body>
@@ -148,84 +116,71 @@
 <div id="particles-js"></div>
 <audio id="notify-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
 
-<div id="timer-bar">⏱️ กระบวนการทดสอบคงเหลือ: <span id="timer-display">50:00</span></div>
-<div class="progress-container"><div id="progress-bar"></div></div>
-
-<div id="admin-monitor" class="hidden">
+<div id="admin-panel">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-        <strong style="color:var(--court-gold); font-size: 20px;">📜 บัญชีรหัสผ่าน Cloud</strong>
-        <button onclick="document.getElementById('admin-monitor').classList.add('hidden')" style="background:none; border:none; color:white; cursor:pointer; font-size: 24px;">×</button>
+        <h1 style="color: var(--gold); margin: 0;">🏛️ Supreme Command: Minin_Bird</h1>
+        <div>
+            <button class="btn-main" onclick="sendGlobalAlert()" style="padding: 10px 25px; font-size: 14px; background: #333; margin-right: 10px;">ประกาศข้อความ</button>
+            <button class="btn-main" onclick="location.reload()" style="padding: 10px 25px; font-size: 14px;">ออกจากระบบ</button>
+        </div>
     </div>
-    <hr style="border-color:var(--court-gold); margin: 15px 0; opacity: 0.3;">
-    <div id="otp-log" style="font-size: 15px; max-height: 350px; overflow-y: auto;">
-        <span style="color:#888; font-style: italic;">รอสัญญาณจากระบบส่วนกลาง...</span>
+
+    <div class="admin-grid">
+        <div class="admin-card">
+            <h3 style="color:var(--gold); border-bottom: 1px solid #444; padding-bottom:10px;">🔑 สัญญาณรหัส OTP</h3>
+            <div id="admin-otp-list" style="max-height: 500px; overflow-y: auto;"></div>
+            <button onclick="db.ref('otp_requests').remove()" style="width:100%; margin-top:20px; background:none; border:1px dashed #555; color:#777; cursor:pointer;">ล้างประวัติ</button>
+        </div>
+
+        <div class="admin-card">
+            <h3 style="color:var(--gold); border-bottom: 1px solid #444; padding-bottom:10px;">📊 การติดตามผู้สอบแบบเรียลไทม์</h3>
+            <div id="user-live-list"></div>
+        </div>
     </div>
-    <button onclick="clearCloudData()" style="width:100%; margin-top:15px; background:rgba(255,0,0,0.2); color:white; border:1px solid red; padding:5px; border-radius:5px; cursor:pointer; font-size:11px;">ล้างข้อมูลทั้งหมด</button>
 </div>
+
+<div id="timer-bar">⏱️ เวลาทดสอบ: <span id="timer-display">50:00</span></div>
+<div class="progress-bar-fixed"><div id="progress-val"></div></div>
 
 <div class="container" id="main-frame">
     <div id="step-name">
-        <div class="header">
-            <div style="font-size: 60px; margin-bottom: 10px;">⚖️</div>
-            <h1>ระบบทดสอบความรู้กฎหมาย</h1>
-            <div class="header-sub">พุทธศักราช ๒๕๖๘</div>
-        </div>
-        <p style="font-size: 22px; font-weight:bold; color:#555; margin-bottom: 30px;">ระบุตัวตนของท่านเพื่อขอรับรหัสผ่าน (OTP)</p>
-        <input type="text" id="username" placeholder="ระบุUsername" autocomplete="off">
+        <h1 style="margin-bottom:10px;">⚖️ ระบบทดสอบความรู้กฎหมาย</h1>
+        <div style="color:var(--gold); font-weight:bold; font-size: 20px; margin-bottom: 30px;">ศาลอาญา พุทธศักราช ๒๕๖๘</div>
+        <p style="font-size: 18px; font-weight:bold; color:#666;">กรุณาระบุ Username เพื่อขอรับสิทธิ์เข้าสอบ</p>
+        <input type="text" id="username" placeholder="ระบุUsernameของท่าน..." autocomplete="off">
         <br><br>
-        <button class="btn-main" onclick="requestOTP()">ขอรับรหัสผ่านเข้าสู่ระบบ</button>
+        <button class="btn-main" onclick="requestOTP()">ขอรับรหัสผ่านจาก Minin_Bird</button>
     </div>
 
     <div id="step-otp" class="hidden">
-        <div class="header">
-            <div style="font-size: 60px; margin-bottom: 10px;">🔐</div>
-            <h1>การยืนยันการเข้าสู่ระบบ</h1>
-        </div>
-        <p style="font-size: 20px;">กรุณาระบุรหัส ๔ หลักที่ได้รับจาก <strong>Examination supervisor</strong></p>
-        <input type="text" id="otp-input" maxlength="4" placeholder="รหัส ๔ หลัก" style="font-size: 50px; letter-spacing: 20px; font-weight: bold; width: 300px;">
-        <div id="otp-timer-ui" class="otp-expiry">⌛ รหัสจะหมดอายุภายใน: 05:00</div>
-        <br>
-        <button class="btn-main" onclick="verifyOTP()">ยืนยันตัวตนและเริ่มทำข้อสอบ</button>
-        <p style="font-size:16px; color:#e74c3c; cursor:pointer; margin-top:30px; font-weight: bold;" onclick="location.reload()">← กลับไปแก้ไขชื่อผู้สอบ</p>
+        <h1>🔐 ยืนยันรหัสความปลอดภัย</h1>
+        <p>กรุณาระบุรหัสผ่าน ๔ หลักที่ส่งไปยัง <strong>Minin_Bird</strong></p>
+        <input type="text" id="otp-input" maxlength="4" placeholder="••••" style="font-size: 45px; letter-spacing: 15px; font-weight: bold; width: 300px;">
+        <br><br>
+        <button class="btn-main" onclick="verifyOTP()">เข้าสู่กระบวนการทดสอบ</button>
     </div>
 
     <div id="quiz-screen" class="hidden">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 15px;">
-             <div style="font-weight: bold; color: var(--court-red); font-size: 20px;">บัตรสอบเลขที่: <span id="exam-id"></span></div>
-             <div id="display-user" style="font-weight:bold; color:#444; font-size: 20px;"></div>
+        <div style="display: flex; justify-content: space-between; font-weight: bold; color: var(--court-red); margin-bottom: 20px;">
+            <span id="exam-id-show"></span>
+            <span id="user-show"></span>
         </div>
         <div id="quiz-container"></div>
-        <button class="btn-main" style="max-width:100%; margin-top: 50px;" onclick="confirmSubmit()">ส่งคำพิพากษา (ส่งข้อสอบ)</button>
+        <button class="btn-main" style="width: 100%; margin-top: 40px;" onclick="confirmSubmit()">ส่งคำพิพากษา (ส่งข้อสอบ)</button>
     </div>
 
     <div id="result-screen" class="hidden">
-        <div class="header"><h1>📜 ผลการวินิจฉัยของท่าน</h1></div>
-        <div class="score-display-circle" id="score-display-val">0/30</div>
-        <div id="feedback-text" style="font-size: 28px; font-weight: bold; color: var(--court-red); margin-bottom: 20px;"></div>
-        <div id="wrong-container" class="hidden" style="background:#fffcf0; padding:35px; border:2px solid var(--court-gold); text-align:left; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-            <strong style="color:var(--court-red); font-size: 20px; border-bottom: 2px solid var(--court-red); padding-bottom: 5px;">❌ ข้อที่การวินิจฉัยคลาดเคลื่อนจากหลักกฎหมาย:</strong>
-            <div id="wrong-list" style="margin-top: 25px; display: flex; flex-wrap: wrap;"></div>
-        </div>
-        <button class="btn-main" style="background:var(--court-dark); margin-top:40px; max-width: 300px;" onclick="location.reload()">สิ้นสุดการทำข้อสอบ</button>
+        <h1 id="result-title">ประมวลผลการทดสอบ</h1>
+        <div id="final-score-circle" style="width:200px; height:200px; line-height:200px; border-radius:50%; background:#fff; color:var(--court-red); font-size: 60px; font-weight:900; margin: 30px auto; border: 10px double var(--gold);"></div>
+        <div id="feedback-msg" style="font-size: 24px; font-weight: bold; margin-bottom: 20px;"></div>
+        <button class="btn-main" onclick="location.reload()">กลับสู่หน้าหลัก</button>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
 <script>
-    /* --- Particles --- */
-    particlesJS("particles-js", {
-        "particles": {
-            "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
-            "color": { "value": ["#ffffff", "#D4AF37", "#8B0000"] },
-            "opacity": { "value": 0.4, "random": true },
-            "size": { "value": 2, "random": true },
-            "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.1, "width": 1 },
-            "move": { "enable": true, "speed": 1.5, "direction": "top", "random": true }
-        }
-    });
-
-    /* --- Firebase Initialization --- */
+    // --- Config เชื่อมต่อ Firebase (ใช้ค่าของคุณ) ---
     const firebaseConfig = {
         apiKey: "AIzaSyDzPAYTMlmbIVBR5U862o5vlleDDIz5GEc",
         authDomain: "legal-exam.firebaseapp.com",
@@ -233,87 +188,106 @@
         projectId: "legal-exam",
         storageBucket: "legal-exam.firebasestorage.app",
         messagingSenderId: "850182543166",
-        appId: "1:850182543166:web:b84851c5124d6576f33e6f",
-        measurementId: "G-DGKKSFCBEX"
+        appId: "1:850182543166:web:b84851c5124d6576f33e6f"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    
+
     const allowedUsers = ["minin_bird", "ruok555sf"];
-    let timeLeft = 50 * 60;
-    let otpTimeLeft = 300;
-    let otpInterval, examInterval;
     let userName = "", correctOTP = "", selectedQuestions = [];
+    let examInterval;
 
-    // --- OTP System ---
+    /* --- ADMIN LOGIC --- */
+    function initAdmin() {
+        document.getElementById('admin-panel').style.display = 'block';
+        document.getElementById('main-frame').style.display = 'none';
+
+        // ฟังคำขอรหัส
+        db.ref('otp_requests').on('value', snap => {
+            const list = document.getElementById('admin-otp-list');
+            list.innerHTML = "";
+            snap.forEach(child => {
+                const d = child.val();
+                list.innerHTML += `<div style="padding:15px; border-bottom:1px solid #333;">
+                    <b style="color:var(--gold)">${child.key.toUpperCase()}</b> ขอรหัสเมื่อ ${d.time}<br>
+                    <span style="font-size:24px; color:lime; font-family:monospace;">${d.otp}</span>
+                </div>`;
+            });
+        });
+
+        // ติดตามผู้สอบเรียลไทม์
+        db.ref('live_status').on('value', snap => {
+            const list = document.getElementById('user-live-list');
+            list.innerHTML = "";
+            snap.forEach(child => {
+                const u = child.val();
+                list.innerHTML += `
+                    <div class="user-monitor-row">
+                        <div>
+                            <span class="status-dot ${u.status === 'Online' ? 'online' : 'offline'}"></span>
+                            <b style="font-size:18px;">${u.name.toUpperCase()}</b><br>
+                            <small style="color:#aaa;">ความคืบหน้า: ${u.progress || 0}% | คะแนน: ${u.score || '--'}</small>
+                        </div>
+                        <div>
+                            <button class="cmd-btn btn-stop" onclick="remoteControl('${child.key}', 'stop')">หยุดสอบ</button>
+                            <button class="cmd-btn btn-kick" onclick="remoteControl('${child.key}', 'kick')">เตะออก</button>
+                        </div>
+                    </div>`;
+            });
+        });
+    }
+
+    function remoteControl(target, cmd) { db.ref(`live_status/${target}/command`).set(cmd); }
+    function sendGlobalAlert() { let msg = prompt("ระบุข้อความแจ้งเตือน:"); if(msg) db.ref('global_alert').set({ msg: msg, time: Date.now() }); }
+
+    /* --- USER LOGIC --- */
     function requestOTP() {
-        userName = document.getElementById('username').value.trim();
-        const lowName = userName.toLowerCase();
-        if (!allowedUsers.includes(lowName)) { alert("❌ ท่านไม่มีรายชื่อในฐานข้อมูลผู้ได้รับอนุญาตให้เข้าสอบ"); return; }
-
-        if (lowName === "minin_bird") {
-            document.getElementById('admin-monitor').classList.remove('hidden');
-            alert("ยินดีต้อนรับท่านประธาน Minin_Bird เข้าสู่ระบบควบคุมส่วนกลาง");
-            startQuiz(); return;
-        }
+        userName = document.getElementById('username').value.trim().toLowerCase();
+        if (!allowedUsers.includes(userName)) { alert("❌ ไม่มีรายชื่อในระบบ"); return; }
+        if (userName === "minin_bird") { initAdmin(); return; }
 
         correctOTP = Math.floor(1000 + Math.random() * 9000).toString();
-        
-        db.ref('otp_requests/' + lowName).set({
-            otp: correctOTP,
-            timestamp: Date.now(),
-            time: new Date().toLocaleTimeString()
-        });
+        db.ref('otp_requests/' + userName).set({ otp: correctOTP, time: new Date().toLocaleTimeString(), timestamp: Date.now() });
 
         document.getElementById('step-name').classList.add('hidden');
         document.getElementById('step-otp').classList.remove('hidden');
-        startOTPCountdown();
     }
 
-    function startOTPCountdown() {
-        otpTimeLeft = 300;
-        otpInterval = setInterval(() => {
-            otpTimeLeft--;
-            let m = Math.floor(otpTimeLeft/60), s = otpTimeLeft%60;
-            document.getElementById('otp-timer-ui').innerText = `⌛ รหัสจะหมดอายุภายใน: ${m}:${s<10?'0':''}${s}`;
-            if (otpTimeLeft <= 0) {
-                clearInterval(otpInterval);
-                correctOTP = "EXPIRED";
-                document.getElementById('otp-timer-ui').innerText = "❌ รหัสผ่านหมดอายุความ โปรดขอรับรหัสใหม่อีกครั้ง";
-            }
+    function verifyOTP() {
+        if (document.getElementById('otp-input').value === correctOTP) { startQuiz(); }
+        else { alert("❌ รหัสไม่ถูกต้อง"); }
+    }
+
+    function startQuiz() {
+        // ลงทะเบียน Online
+        db.ref('live_status/' + userName).set({ name: userName, status: 'Online', progress: 0, command: 'none' });
+        
+        // ฟังคำสั่งแอดมิน & ข้อความประกาศ
+        db.ref(`live_status/${userName}/command`).on('value', snap => {
+            if(snap.val() === 'stop') { alert("🛑 แอดมินสั่งหยุดการสอบทันที!"); confirmSubmit(); }
+            if(snap.val() === 'kick') { location.reload(); }
+        });
+        db.ref('global_alert').on('value', snap => { if(snap.val()) alert("📢 ประกาศจากแอดมิน: " + snap.val().msg); });
+
+        document.getElementById('step-otp').classList.add('hidden');
+        document.getElementById('quiz-screen').classList.remove('hidden');
+        document.getElementById('timer-bar').style.display = 'block';
+        document.querySelector('.progress-bar-fixed').style.display = 'block';
+        document.getElementById('user-show').innerText = "👤 ผู้สอบ: " + userName.toUpperCase();
+        document.getElementById('exam-id-show').innerText = "ID: " + Math.random().toString(36).substr(2, 6).toUpperCase();
+        document.body.style.alignItems = "flex-start"; document.body.style.paddingTop = "120px";
+
+        renderQuestions();
+        let timeLeft = 50 * 60;
+        examInterval = setInterval(() => {
+            timeLeft--;
+            let m=Math.floor(timeLeft/60), s=timeLeft%60;
+            document.getElementById('timer-display').innerText = `${m}:${s<10?'0':''}${s}`;
+            if(timeLeft <= 0) confirmSubmit();
         }, 1000);
     }
 
-    // Admin Listener
-    db.ref('otp_requests').on('child_added', (snap) => {
-        const data = snap.val();
-        if (Date.now() - data.timestamp < 300000) {
-            document.getElementById('notify-sound').play();
-            const log = document.getElementById('otp-log');
-            if(log.innerText.includes("รอสัญญาณ")) log.innerHTML = "";
-            log.innerHTML = `
-                <div class="otp-card">
-                    <div style="font-weight:bold; color:var(--court-gold); margin-bottom:5px;">👤 ${snap.key.toUpperCase()}</div>
-                    <div style="font-size:26px; color:lime; font-family:monospace; font-weight:bold;">${data.otp}</div>
-                    <div style="font-size:11px; color:#aaa; margin-top:5px;">เวลาที่ขอ: ${data.time}</div>
-                </div>` + log.innerHTML;
-        }
-    });
-
-    function verifyOTP() {
-        if (correctOTP === "EXPIRED") { alert("รหัสผ่านของท่านหมดเวลาใช้งานแล้ว"); return; }
-        if (document.getElementById('otp-input').value === correctOTP) {
-            clearInterval(otpInterval);
-            startQuiz();
-        } else { alert("รหัสผ่านไม่ถูกต้อง โปรดตรวจสอบอีกครั้ง"); }
-    }
-
-    function clearCloudData() {
-        if(confirm("ต้องการล้างประวัติคำขอทั้งหมดหรือไม่?")) db.ref('otp_requests').remove();
-    }
-
-    // --- Question Data (Full) ---
+    // --- โจทย์ข้อสอบ ---
     const essayQuestions = [
         { q: "พันโท ก. สั่งให้ สิบเอก ข. แอบนำ 'ภาพถ่ายแผนผังคลังแสง' ไปขายให้สายลับต่างชาติ แต่สิบเอก ข. ทำภาพหลุดลงโซเชียลแทนจนเกิดความปั่นป่วน วินิจฉัยความผิดของสิบเอก ข.", keys: ["๓๖", "กบฏ", "๒๕", "สถานหนัก", "ภาพลักษณ์"] },
         { q: "พลทหาร เอ ใช้ 'ไอดีรอง' ปลอมเป็นนายทหารชั้นผู้ใหญ่เพื่อสั่งให้สารวัตรทหารปล่อยตัวเพื่อนที่ถูกคุมขังอยู่ วินิจฉัยพฤติการณ์นี้ตามมาตรา ๓๐, ๓๕ และ ๔๑", keys: ["๓๐", "๓๕", "แอบอ้าง", "ไอดีรอง", "สถานหนัก"] },
@@ -451,104 +425,58 @@
     ];
 
 
-    function startQuiz() {
-        const essays = [...essayQuestions].sort(()=>0.5-Math.random()).slice(0,5).map(q=>({...q, type:'essay'}));
-        const choices = [...choiceQuestions].sort(()=>0.5-Math.random()).slice(0,25).map(q=>({...q, type:'choice'}));
-        selectedQuestions = [...essays, ...choices].sort(()=>0.5-Math.random());
-
-        document.getElementById('step-otp').classList.add('hidden');
-        document.getElementById('step-name').classList.add('hidden');
-        document.getElementById('quiz-screen').classList.remove('hidden');
-        document.getElementById('timer-bar').style.display = 'block';
-        document.querySelector('.progress-container').style.display = 'block';
-        document.getElementById('display-user').innerText = "👤 ผู้เข้าสอบ: " + userName;
-        document.getElementById('exam-id').innerText = Math.random().toString(36).substr(2, 9).toUpperCase();
-        document.body.style.alignItems = "flex-start"; document.body.style.paddingTop = "120px";
-
-        renderQuiz();
-        examInterval = setInterval(() => {
-            timeLeft--;
-            let m = Math.floor(timeLeft/60), s = timeLeft%60;
-            document.getElementById('timer-display').innerText = `${m}:${s<10?'0':''}${s}`;
-            if(timeLeft <= 0) calculateScore();
-        }, 1000);
+    function renderQuestions() {
+        selectedQuestions = [...essayDB.map(q=>({...q, type:'essay'})), ...choiceDB.map(q=>({...q, type:'choice'}))].sort(()=>0.5-Math.random());
+        const cont = document.getElementById('quiz-container');
+        cont.innerHTML = selectedQuestions.map((item, i) => `
+            <div class="quiz-card">
+                <div style="font-weight:bold; color:var(--gold); margin-bottom:10px;">ข้อที่ ${i+1} [${item.type==='essay'?'วินิจฉัย':'ปรนัย'}]</div>
+                <div style="font-size:22px; font-weight:bold; margin-bottom:20px;">${item.q}</div>
+                ${item.type==='essay' ? `<textarea id="ans${i}" oninput="updateLiveProgress()"></textarea>` : 
+                item.options.map((opt, j) => `<label class="opt-label"><input type="radio" name="q${i}" value="${opt[0]}" onchange="updateLiveProgress()"> ${opt}</label>`).join('')}
+            </div>
+        `).join('');
     }
 
-    function renderQuiz() {
-        const container = document.getElementById('quiz-container');
-        container.innerHTML = selectedQuestions.map((item, i) => {
-            // Shuffle choices inside
-            let optionsHTML = "";
-            if(item.type === 'choice') {
-                const opts = [...item.options].sort(()=>0.5-Math.random());
-                optionsHTML = `<div style="margin-top:20px;">${opts.map((opt, j)=>`
-                    <label class="option-label">
-                        <input type="radio" name="q${i}" value="${opt[0]}"> 
-                        ${opt}
-                    </label>`).join('')}</div>`;
-            }
-
-            return `
-            <div class="quiz-item">
-                <div style="font-weight:bold; color:var(--court-red); margin-bottom:15px; font-size: 14px; letter-spacing: 1px;">
-                    ${item.type==='essay'?'[ ⚖️ วินิจฉัยข้อเขียน ]':'[ 📋 ปรนัยเลือกตอบ ]'}
-                </div>
-                <div class="question-text">${i+1}. ${item.q}</div>
-                ${item.type==='essay' ? `<textarea id="ans${i}" placeholder="บันทึกคำวินิจฉัยของท่านตามหลักกฎหมาย..." oninput="updateProgress()"></textarea>` : optionsHTML}
-            </div>`;
-        }).join('');
-    }
-
-    function updateProgress() {
+    function updateLiveProgress() {
         let done = 0;
         selectedQuestions.forEach((item, i) => {
             if(item.type==='choice' && document.querySelector(`input[name="q${i}"]:checked`)) done++;
-            if(item.type==='essay' && document.getElementById(`ans${i}`).value.trim().length > 10) done++;
+            if(item.type==='essay' && document.getElementById(`ans${i}`).value.length > 5) done++;
         });
-        document.getElementById('progress-bar').style.width = (done/30*100) + "%";
+        let percent = Math.round(done / selectedQuestions.length * 100);
+        document.getElementById('progress-val').style.width = percent + "%";
+        db.ref('live_status/' + userName).update({ progress: percent });
     }
 
-    function confirmSubmit() { 
-        if(confirm("ท่านได้ตรวจสอบคำวินิจฉัยครบถ้วนแล้ว และต้องการส่งกระดาษคำตอบใช่หรือไม่?")) calculateScore(); 
-    }
+    function confirmSubmit() { if(confirm("ต้องการส่งข้อสอบใช่หรือไม่?")) calculateResult(); }
 
-    function calculateScore() {
+    function calculateResult() {
         clearInterval(examInterval);
-        document.getElementById('timer-bar').style.display = 'none';
-        document.querySelector('.progress-container').style.display = 'none';
-        let score = 0, wrongs = [];
-
+        let score = 0;
         selectedQuestions.forEach((item, i) => {
-            let ok = false;
-            if (item.type === 'choice') {
+            if(item.type==='choice') {
                 const sel = document.querySelector(`input[name="q${i}"]:checked`);
-                // Match the correct answer char (A, B, C, D)
-                if (sel && sel.value === item.a) ok = true;
+                if(sel && sel.value === item.a) score++;
             } else {
                 const ans = document.getElementById(`ans${i}`).value;
-                let match = 0; 
-                item.keys.forEach(k => { if (ans.includes(k)) match++; });
-                if ((match / item.keys.length) >= 0.7) ok = true;
+                let match = 0; item.keys.forEach(k => { if(ans.includes(k)) match++; });
+                if((match/item.keys.length) >= 0.7) score++;
             }
-            if (ok) score++; else wrongs.push(i+1);
         });
 
+        db.ref('live_status/' + userName).update({ status: 'Finished', score: score + "/30", progress: 100 });
+        
         document.getElementById('quiz-screen').classList.add('hidden');
+        document.getElementById('timer-bar').style.display = 'none';
         document.getElementById('result-screen').classList.remove('hidden');
-        document.getElementById('score-display-val').innerText = score + "/30";
+        document.getElementById('final-score-circle').innerText = score + "/30";
+        document.getElementById('feedback-msg').innerText = score >= 21 ? "🎉 ท่านผ่านเกณฑ์ตุลาการ!" : "⚖️ ท่านควรศึกษาเพิ่มเติม";
         document.body.style.alignItems = "center"; document.body.style.paddingTop = "0";
-        
-        if(wrongs.length > 0) {
-            document.getElementById('wrong-container').classList.remove('hidden');
-            document.getElementById('wrong-list').innerHTML = wrongs.map(w => `<span class="wrong-badge">ลำดับที่ ${w}</span>`).join('');
-        }
-        
-        const ft = document.getElementById('feedback-text');
-        if(score >= 26) ft.innerHTML = "🏆 <span style='color:#D4AF37'>ระดับ: ดีเยี่ยม (ตุลาการสภา)</span>";
-        else if(score >= 18) ft.innerHTML = "📜 <span style='color:green'>ระดับ: ผ่านเกณฑ์ (ผู้พิพากษาฝึกหัด)</span>";
-        else ft.innerHTML = "⚖️ <span style='color:red'>ระดับ: ควรศึกษาเพิ่มเติม</span>";
     }
+
+    /* --- Particles --- */
+    particlesJS("particles-js", { "particles": { "number": { "value": 80 }, "color": { "value": "#D4AF37" }, "opacity": { "value": 0.3 }, "size": { "value": 2 }, "move": { "enable": true, "speed": 1 } } });
 </script>
 </body>
 </html>
-
