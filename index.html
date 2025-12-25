@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบทดสอบความรู้กฎหมายอาญา ๒๕๖๘ (The Supreme Master)</title>
+    <title>ระบบทดสอบกฎหมายอาญา ๒๕๖๘ (Supreme Master)</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap');
@@ -15,112 +14,154 @@
         :root {
             --gold: #D4AF37;
             --court-red: #8B0000;
-            --court-dark: #1a0202;
-            --paper: rgba(255, 255, 255, 0.98);
+            --dark: #0f0c29;
+            --glass: rgba(255, 255, 255, 0.95);
         }
 
-        body, html { 
-            margin: 0; padding: 0; min-height: 100vh; font-family: 'Sarabun', sans-serif;
+        * { box-sizing: border-box; font-family: 'Sarabun', sans-serif; }
+
+        body { 
+            margin: 0; 
+            background: #000;
             background: radial-gradient(circle at center, #2c0505 0%, #050505 100%);
-            color: #333; overflow-x: hidden; display: flex; justify-content: center; align-items: center;
+            color: #333; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; }
-
-        /* --- Header & Progress --- */
-        #timer-bar {
-            position: fixed; top: 0; left: 0; width: 100%; background: linear-gradient(90deg, var(--court-red), #300);
-            color: #fff; text-align: center; padding: 15px 0; font-size: 24px; font-weight: bold;
-            z-index: 1000; border-bottom: 3px solid var(--gold); display: none; box-shadow: 0 5px 25px rgba(0,0,0,0.8);
-        }
-
-        .progress-fixed { width: 100%; height: 6px; background: rgba(255,255,255,0.1); position: fixed; top: 60px; left: 0; z-index: 1001; display: none; }
-        #progress-inner { width: 0%; height: 100%; background: var(--gold); box-shadow: 0 0 15px var(--gold); transition: 0.5s; }
-
-        /* --- UI Containers --- */
+        /* --- UI Layers --- */
         .container { 
-            background: var(--paper); padding: 50px; border-radius: 25px; border: 2px solid var(--gold);
-            width: 95%; max-width: 850px; text-align: center; position: relative; backdrop-filter: blur(10px);
+            background: var(--glass); padding: 50px; border-radius: 25px; 
+            border: 2px solid var(--gold); width: 95%; max-width: 850px; 
+            text-align: center; position: relative; box-shadow: 0 0 50px rgba(139, 0, 0, 0.5);
             animation: fadeIn 0.8s ease-out;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        input[type="text"], textarea { width: 100%; max-width: 400px; padding: 18px; margin: 10px 0; border: 2px solid #ddd; border-radius: 12px; font-size: 20px; text-align: center; font-family: 'Sarabun'; }
-        .btn-main { background: linear-gradient(135deg, var(--court-red) 0%, #4a0000 100%); color: white; padding: 18px 45px; border: 1px solid var(--gold); border-radius: 50px; font-size: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(139,0,0,0.5); }
+        #timer-bar {
+            position: fixed; top: 0; width: 100%; background: linear-gradient(90deg, var(--court-red), #300);
+            color: #fff; text-align: center; padding: 15px 0; font-size: 24px; font-weight: bold;
+            z-index: 1000; border-bottom: 3px solid var(--gold); display: none;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.8);
+        }
 
-        /* --- Admin Command Center --- */
-        #admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 10, 0.98); color: #fff; z-index: 9999; padding: 40px; display: none; overflow-y: auto; }
+        .progress-container { 
+            position: fixed; top: 57px; width: 100%; height: 6px; background: rgba(255,255,255,0.1); 
+            z-index: 1001; display: none; 
+        }
+        #progress-bar { width: 0%; height: 100%; background: var(--gold); box-shadow: 0 0 15px var(--gold); transition: 0.4s; }
+
+        /* --- Buttons & Inputs --- */
+        input[type="text"], textarea { 
+            width: 100%; max-width: 400px; padding: 18px; margin: 10px 0; 
+            border: 2px solid #ddd; border-radius: 12px; font-size: 20px; text-align: center;
+        }
+        .btn-supreme { 
+            background: linear-gradient(135deg, var(--court-red) 0%, #4a0000 100%);
+            color: white; padding: 18px 45px; border: 1px solid var(--gold); 
+            border-radius: 50px; font-size: 20px; font-weight: bold; cursor: pointer;
+            transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .btn-supreme:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(139,0,0,0.5); }
+
+        /* --- Admin Command Center (The Black Window) --- */
+        #admin-panel {
+            position: fixed; inset: 0; background: rgba(10, 10, 10, 0.98); 
+            color: #fff; z-index: 9999; padding: 40px; display: none; overflow-y: auto;
+            backdrop-filter: blur(20px);
+        }
         .admin-grid { display: grid; grid-template-columns: 350px 1fr; gap: 30px; margin-top: 20px; }
-        .admin-card { background: rgba(255,255,255,0.05); border: 1px solid var(--gold); border-radius: 15px; padding: 20px; }
-        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.05); margin-bottom: 10px; border-radius: 10px; border-left: 5px solid var(--gold); }
-
+        .admin-card { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--gold); border-radius: 15px; padding: 25px; }
+        
+        .live-user-row {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 10px;
+            border-left: 5px solid var(--gold);
+        }
+        .status-badge { padding: 4px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; }
+        .status-online { background: #2ecc71; color: #000; }
+        
         /* --- Quiz Styles --- */
-        .quiz-card { background: #fff; padding: 35px; border-radius: 15px; margin-bottom: 30px; text-align: left; border: 1px solid #eee; border-left: 10px solid var(--court-red); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .opt-label { display: block; padding: 18px; margin: 10px 0; background: #f8f9fa; border: 1px solid #f0f0f0; border-radius: 12px; cursor: pointer; transition: 0.2s; font-size: 18px; }
+        .quiz-card { 
+            background: #fff; padding: 35px; border-radius: 15px; margin-bottom: 30px; 
+            text-align: left; border-left: 10px solid var(--court-red);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .opt-label { 
+            display: block; padding: 18px; margin: 10px 0; background: #f8f9fa; 
+            border: 2px solid #eee; border-radius: 12px; cursor: pointer; transition: 0.2s;
+        }
         .opt-label:hover { background: #fff9e6; border-color: var(--gold); }
+
         .hidden { display: none !important; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<div id="particles-js"></div>
-<audio id="notify-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
+<div id="timer-bar">⏱️ เวลาทดสอบคงเหลือ: <span id="timer-display">50:00</span></div>
+<div class="progress-container"><div id="progress-bar"></div></div>
 
 <div id="admin-panel">
-    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--gold); padding-bottom: 15px;">
-        <h1 style="color: var(--gold); margin: 0;">🏛️ Supreme Command: Minin_Bird</h1>
-        <button class="btn-main" onclick="location.reload()" style="padding: 10px 25px; font-size: 14px;">ออกจากระบบควบคุม</button>
+    <div style="display:flex; justify-content: space-between; align-items:center; border-bottom: 2px solid var(--gold); padding-bottom: 10px;">
+        <h1 style="color: var(--gold); margin: 0;">🏛️ Command Center: Minin_Bird</h1>
+        <button class="btn-supreme" onclick="location.reload()" style="padding: 10px 20px; font-size: 14px;">ออกจากระบบ</button>
     </div>
+
     <div class="admin-grid">
         <div class="admin-card">
-            <h3>🔑 สัญญาณรหัส OTP</h3>
+            <h3 style="color: var(--gold)">🔑 คำขอรหัสผ่าน (Latest)</h3>
             <div id="admin-otp-list"></div>
-            <button onclick="db.ref('otp_requests').remove()" style="width:100%; margin-top:15px; background:none; color:#888; border:1px dashed #444; cursor:pointer;">ล้างประวัติรหัส</button>
+            <button onclick="db.ref('otp').remove()" style="width:100%; margin-top:20px; background:none; border:1px dashed #555; color:#777; cursor:pointer;">ล้างประวัติคำขอ</button>
         </div>
+
         <div class="admin-card">
-            <h3>📊 ติดตามผู้สอบเรียลไทม์</h3>
+            <h3 style="color: var(--gold)">📊 Live Tracking (สถานะผู้สอบ)</h3>
             <div id="user-live-list"></div>
         </div>
     </div>
 </div>
 
-<div id="timer-bar">⏱️ เวลาคงเหลือ: <span id="timer-display">50:00</span></div>
-<div class="progress-fixed"><div id="progress-inner"></div></div>
-
-<div class="container" id="main-frame">
-    <div id="step-name">
-        <h1 style="color: var(--court-red); margin-bottom: 10px;">⚖️ ระบบทดสอบความรู้กฎหมาย</h1>
-        <div style="color:var(--gold); font-weight:bold; font-size: 20px; margin-bottom: 30px;">ประจำพุทธศักราช ๒๕๖๘</div>
-        <input type="text" id="username" placeholder="ระบุ Username ของท่าน..." autocomplete="off">
+<div class="container" id="main-ui">
+    <div id="login-box">
+        <div style="font-size: 60px; margin-bottom: 10px;">⚖️</div>
+        <h1 style="color: var(--court-red); margin-bottom: 5px;">ระบบทดสอบความรู้กฎหมาย</h1>
+        <div style="color: var(--gold); font-weight: bold; margin-bottom: 30px;">พุทธศักราช ๒๕๖๘</div>
+        <p>ระบุ Username เพื่อขอรับสิทธิ์เข้าสอบ</p>
+        <input type="text" id="username" placeholder="ระบุUsernameของท่าน..." autocomplete="off">
         <br><br>
-        <button class="btn-main" onclick="requestOTP()">ขอรับรหัสผ่านจาก Minin_Bird</button>
+        <button class="btn-supreme" onclick="handleLogin()">ขอรหัสผ่านจาก Minin_Bird</button>
     </div>
 
-    <div id="step-otp" class="hidden">
+    <div id="otp-box" class="hidden">
         <h1>🔐 ยืนยันรหัสเข้าสอบ</h1>
-        <p>ระบุรหัส ๔ หลักที่ได้รับแจ้งจากแอดมิน</p>
+        <p>กรุณาระบุรหัสผ่าน ๔ หลักที่ส่งไปยังแอดมิน</p>
         <input type="text" id="otp-input" maxlength="4" placeholder="••••" style="font-size: 40px; letter-spacing: 15px; font-weight: bold;">
         <br><br>
-        <button class="btn-main" onclick="verifyOTP()">เข้าสู่กระบวนการทดสอบ</button>
+        <button class="btn-supreme" onclick="verifyOTP()">เข้าสู่การทดสอบ</button>
     </div>
 
-    <div id="quiz-screen" class="hidden">
-        <div style="text-align: right; font-weight: bold; color: var(--court-red); margin-bottom: 20px;" id="user-tag"></div>
-        <div id="quiz-container"></div>
-        <button class="btn-main" style="width: 100%; margin-top: 30px;" onclick="confirmSubmit()">ส่งคำพิพากษา (ส่งข้อสอบ)</button>
+    <div id="exam-box" class="hidden">
+        <div style="display: flex; justify-content: space-between; font-weight: bold; color: var(--court-red); margin-bottom: 20px;">
+            <span id="user-tag"></span>
+            <span>กฎหมายอาญา ๒๕๖๘</span>
+        </div>
+        <div id="quiz-area"></div>
+        <button class="btn-supreme" style="width: 100%; margin-top: 30px;" onclick="submitExam()">ส่งคำพิพากษา (ส่งข้อสอบ)</button>
     </div>
 
-    <div id="result-screen" class="hidden">
-        <h1>📜 ผลการทดสอบ</h1>
+    <div id="result-box" class="hidden">
+        <h1>📜 ผลการวินิจฉัย</h1>
         <div id="final-score" style="font-size: 80px; font-weight: 900; color: var(--court-red); margin: 20px 0;"></div>
         <div id="feedback-msg" style="font-size: 24px; font-weight: bold; margin-bottom: 30px;"></div>
-        <button class="btn-main" onclick="location.reload()">กลับหน้าหลัก</button>
+        <button class="btn-supreme" onclick="location.reload()">เสร็จสิ้นหน้าที่</button>
     </div>
 </div>
 
 <script>
-    // --- Config เชื่อมต่อ Firebase ---
+    // --- [CONFIG] เชื่อมต่อระบบ Cloud ---
     const firebaseConfig = {
         apiKey: "AIzaSyDzPAYTMlmbIVBR5U862o5vlleDDIz5GEc",
         authDomain: "legal-exam.firebaseapp.com",
@@ -134,9 +175,12 @@
     const db = firebase.database();
 
     const allowedUsers = ["minin_bird", "ruok555sf"];
-    let userName = "", correctOTP = "", selectedQuestions = [], examInterval;
+    let currentUser = "";
+    let correctOTP = "";
+    let examData = [];
+    let examInterval;
 
-    // --- ฐานข้อมูลโจทย์ (จัดเต็ม) ---
+    // --- [DATABASE] โจทย์ข้อสอบ ---
     const essayQuestions = [
         { q: "พันโท ก. สั่งให้ สิบเอก ข. แอบนำ 'ภาพถ่ายแผนผังคลังแสง' ไปขายให้สายลับต่างชาติ แต่สิบเอก ข. ทำภาพหลุดลงโซเชียลแทนจนเกิดความปั่นป่วน วินิจฉัยความผิดของสิบเอก ข.", keys: ["๓๖", "กบฏ", "๒๕", "สถานหนัก", "ภาพลักษณ์"] },
         { q: "พลทหาร เอ ใช้ 'ไอดีรอง' ปลอมเป็นนายทหารชั้นผู้ใหญ่เพื่อสั่งให้สารวัตรทหารปล่อยตัวเพื่อนที่ถูกคุมขังอยู่ วินิจฉัยพฤติการณ์นี้ตามมาตรา ๓๐, ๓๕ และ ๔๑", keys: ["๓๐", "๓๕", "แอบอ้าง", "ไอดีรอง", "สถานหนัก"] },
@@ -274,100 +318,126 @@
     ];
 
 
-    /* --- Logic Functions --- */
+    // --- [LOGIC] ระบบแอดมิน ---
     function initAdmin() {
         document.getElementById('admin-panel').style.display = 'block';
-        db.ref('otp_requests').on('value', snap => {
-            const list = document.getElementById('admin-otp-list'); list.innerHTML = "";
-            snap.forEach(c => { list.innerHTML += `<div style="padding:10px; border-bottom:1px solid #333;"><b>${c.key.toUpperCase()}</b>: <span style="color:lime; font-size:22px;">${c.val().otp}</span></div>`; });
+        document.getElementById('main-ui').style.display = 'none';
+
+        // ติดตามคำขอรหัส OTP
+        db.ref('otp').on('value', snap => {
+            const list = document.getElementById('admin-otp-list');
+            list.innerHTML = "";
+            snap.forEach(c => {
+                list.innerHTML += `<div style="padding:15px; border-bottom:1px solid #333;">
+                    <b style="color:var(--gold)">${c.key.toUpperCase()}</b> ขอรหัสเมื่อ ${c.val().time}<br>
+                    <span style="font-size:24px; color:lime; font-family:monospace;">${c.val().otp}</span>
+                </div>`;
+            });
         });
-        db.ref('live_status').on('value', snap => {
-            const list = document.getElementById('user-live-list'); list.innerHTML = "";
+
+        // ติดตามผู้สอบเรียลไทม์
+        db.ref('status').on('value', snap => {
+            const list = document.getElementById('user-live-list');
+            list.innerHTML = "";
             snap.forEach(c => {
                 const u = c.val();
-                list.innerHTML += `<div class="user-row">
-                    <div><b>${u.name}</b> [${u.status}] <br><small>Progress: ${u.prog || 0}% | Score: ${u.score || '--'}</small></div>
-                    <div>
-                        <button onclick="db.ref('live_status/${c.key}/cmd').set('stop')" style="background:red; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">หยุดสอบ</button>
-                        <button onclick="db.ref('live_status/${c.key}/cmd').set('kick')" style="background:orange; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; margin-left:5px;">เตะออก</button>
-                    </div>
-                </div>`;
+                list.innerHTML += `
+                    <div class="live-user-row">
+                        <div>
+                            <b style="font-size:18px;">${u.name.toUpperCase()}</b> 
+                            <span class="status-badge status-online">${u.state}</span><br>
+                            <small style="color:#aaa;">Progress: ${u.prog}% | Score: ${u.score || '--'}</small>
+                        </div>
+                        <div>
+                            <button onclick="db.ref('status/${c.key}/state').set('Kicked')" style="background:#e74c3c; color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer;">เตะออก</button>
+                        </div>
+                    </div>`;
             });
         });
     }
 
-    function requestOTP() {
-        userName = document.getElementById('username').value.trim().toLowerCase();
-        if (!allowedUsers.includes(userName)) { alert("❌ ไม่มีสิทธิ์เข้าสอบ"); return; }
-        if (userName === "minin_bird") { initAdmin(); return; }
-        correctOTP = Math.floor(1000 + Math.random() * 9000).toString();
-        db.ref('otp_requests/' + userName).set({ otp: correctOTP, time: new Date().toLocaleTimeString(), ts: Date.now() });
-        document.getElementById('step-name').classList.add('hidden');
-        document.getElementById('step-otp').classList.remove('hidden');
+    // --- [LOGIC] ระบบผู้สอบ ---
+    function handleLogin() {
+        const user = document.getElementById('username').value.trim().toLowerCase();
+        if (!allowedUsers.includes(user)) return alert("❌ ชื่อนี้ไม่ได้รับอนุญาต");
+        
+        currentUser = user;
+        if (user === "minin_bird") {
+            initAdmin();
+        } else {
+            correctOTP = Math.floor(1000 + Math.random() * 9000).toString();
+            db.ref('otp/' + user).set({ otp: correctOTP, time: new Date().toLocaleTimeString() });
+            document.getElementById('login-box').classList.add('hidden');
+            document.getElementById('otp-box').classList.remove('hidden');
+        }
     }
 
     function verifyOTP() {
-        if (document.getElementById('otp-input').value === correctOTP) { startQuiz(); }
-        else { alert("❌ รหัสผิด"); }
+        if (document.getElementById('otp-input').value === correctOTP) {
+            startExam();
+        } else { alert("❌ รหัสผ่านไม่ถูกต้อง"); }
     }
 
-    function startQuiz() {
-        db.ref('live_status/' + userName).set({ name: userName, status: 'Online', prog: 0, cmd: 'none' });
-        db.ref(`live_status/${userName}/cmd`).on('value', snap => {
-            if(snap.val()==='stop') { alert("🛑 แอดมินสั่งหยุดการสอบ!"); calculateScore(); }
-            if(snap.val()==='kick') location.reload();
+    function startExam() {
+        db.ref('status/' + currentUser).set({ name: currentUser, state: 'กำลังสอบ', prog: 0 });
+        
+        // ฟังคำสั่งแอดมิน (ถ้าโดนเตะ)
+        db.ref('status/' + currentUser + '/state').on('value', snap => {
+            if(snap.val() === 'Kicked') { alert("🛑 คุณถูกตัดสิทธิ์การสอบโดยแอดมิน"); location.reload(); }
         });
 
-        selectedQuestions = [
-            ...essayDB.sort(()=>0.5-Math.random()).slice(0,5).map(q=>({...q, type:'essay'})),
-            ...choiceDB.sort(()=>0.5-Math.random()).slice(0,25).map(q=>({...q, type:'choice'}))
-        ].sort(()=>0.5-Math.random());
-
-        document.getElementById('step-otp').classList.add('hidden');
-        document.getElementById('quiz-screen').classList.remove('hidden');
+        document.getElementById('otp-box').classList.add('hidden');
+        document.getElementById('exam-box').classList.remove('hidden');
         document.getElementById('timer-bar').style.display = 'block';
-        document.querySelector('.progress-fixed').style.display = 'block';
-        document.getElementById('user-tag').innerText = "👤 ผู้สอบ: " + userName.toUpperCase();
-        document.body.style.alignItems = "flex-start"; document.body.style.paddingTop = "100px";
+        document.querySelector('.progress-container').style.display = 'block';
+        document.getElementById('user-tag').innerText = "ผู้สอบ: " + currentUser.toUpperCase();
+        document.body.style.alignItems = "flex-start"; document.body.style.paddingTop = "120px";
 
-        renderQuestions();
+        // สุ่มโจทย์
+        const essays = [...essayDB].sort(() => 0.5 - Math.random()).slice(0, 5).map(v => ({...v, type:'essay'}));
+        const choices = [...choiceDB].sort(() => 0.5 - Math.random()).slice(0, 25).map(v => ({...v, type:'choice'}));
+        examData = [...essays, ...choices].sort(() => 0.5 - Math.random());
+
+        renderQuiz();
+        
         let t = 50 * 60;
         examInterval = setInterval(() => {
-            t--; let m=Math.floor(t/60), s=t%60;
+            t--;
+            let m=Math.floor(t/60), s=t%60;
             document.getElementById('timer-display').innerText = `${m}:${s<10?'0':''}${s}`;
-            if(t<=0) calculateScore();
+            if(t <= 0) { clearInterval(examInterval); submitExam(); }
         }, 1000);
     }
 
-    function renderQuestions() {
-        const cont = document.getElementById('quiz-container');
-        cont.innerHTML = selectedQuestions.map((item, i) => `
+    function renderQuiz() {
+        const area = document.getElementById('quiz-area');
+        area.innerHTML = examData.map((item, i) => `
             <div class="quiz-card">
-                <div style="font-weight:bold; color:var(--gold); margin-bottom:10px;">ข้อที่ ${i+1} [${item.type==='essay'?'วินิจฉัยข้อเขียน':'ปรนัยเลือกตอบ'}]</div>
+                <div style="font-weight:bold; color:var(--court-red); margin-bottom:10px;">ข้อที่ ${i+1} [${item.type==='essay'?'วินิจฉัย':'ปรนัย'}]</div>
                 <div style="font-size:20px; font-weight:bold; margin-bottom:15px;">${item.q}</div>
-                ${item.type==='essay' ? `<textarea id="ans${i}" oninput="updateProg()"></textarea>` : 
-                item.options.map(opt => `<label class="opt-label"><input type="radio" name="q${i}" value="${opt[0]}" onchange="updateProg()"> ${opt}</label>`).join('')}
+                ${item.type === 'essay' ? 
+                    `<textarea id="ans${i}" oninput="updateProg()"></textarea>` : 
+                    item.options.map(opt => `<label class="opt-label"><input type="radio" name="q${i}" value="${opt[0]}" onchange="updateProg()"> ${opt}</label>`).join('')
+                }
             </div>
         `).join('');
     }
 
     function updateProg() {
         let done = 0;
-        selectedQuestions.forEach((item, i) => {
+        examData.forEach((item, i) => {
             if(item.type==='choice' && document.querySelector(`input[name="q${i}"]:checked`)) done++;
             if(item.type==='essay' && document.getElementById(`ans${i}`).value.length > 5) done++;
         });
-        let p = Math.round(done/30*100);
-        document.getElementById('progress-inner').style.width = p + "%";
-        db.ref('live_status/' + userName).update({ prog: p });
+        let p = Math.round(done/examData.length*100);
+        document.getElementById('progress-bar').style.width = p + "%";
+        db.ref('status/' + currentUser).update({ prog: p });
     }
 
-    function confirmSubmit() { if(confirm("ต้องการส่งข้อสอบใช่หรือไม่?")) calculateScore(); }
-
-    function calculateScore() {
+    function submitExam() {
         clearInterval(examInterval);
         let score = 0;
-        selectedQuestions.forEach((item, i) => {
+        examData.forEach((item, i) => {
             if(item.type==='choice') {
                 const sel = document.querySelector(`input[name="q${i}"]:checked`);
                 if(sel && sel.value === item.a) score++;
@@ -377,16 +447,17 @@
                 if((match/item.keys.length) >= 0.7) score++;
             }
         });
-        db.ref('live_status/' + userName).update({ status: 'Finished', score: score + "/30" });
-        document.getElementById('quiz-screen').classList.add('hidden');
+
+        db.ref('status/' + currentUser).update({ state: 'ส่งข้อสอบแล้ว', score: score + "/" + examData.length, prog: 100 });
+        
+        document.getElementById('exam-box').classList.add('hidden');
         document.getElementById('timer-bar').style.display = 'none';
-        document.getElementById('result-screen').classList.remove('hidden');
-        document.getElementById('final-score').innerText = score + "/30";
-        document.getElementById('feedback-msg').innerText = score >= 21 ? "🎉 ท่านผ่านเกณฑ์ตุลาการ!" : "⚖️ ท่านควรศึกษาเพิ่มเติม";
+        document.getElementById('result-box').classList.remove('hidden');
+        document.getElementById('final-score').innerText = score + " / " + examData.length;
+        document.getElementById('feedback-msg').innerText = score >= (examData.length * 0.7) ? "🎉 ท่านผ่านเกณฑ์ตุลาการ!" : "⚖️ ท่านควรศึกษาเพิ่มเติม";
         document.body.style.alignItems = "center"; document.body.style.paddingTop = "0";
     }
-
-    particlesJS("particles-js", { "particles": { "number": { "value": 80 }, "color": { "value": "#D4AF37" }, "move": { "enable": true, "speed": 1.2 } } });
 </script>
+
 </body>
 </html>
