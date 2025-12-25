@@ -168,20 +168,20 @@
         <div class="header">
             <div style="font-size: 60px; margin-bottom: 10px;">⚖️</div>
             <h1>ระบบทดสอบความรู้กฎหมาย</h1>
-            <div class="header-sub">พุทธศักราช ๒๕๖๘ (Supreme Edition)</div>
+            <div class="header-sub">พุทธศักราช ๒๕๖๘</div>
         </div>
         <p style="font-size: 22px; font-weight:bold; color:#555; margin-bottom: 30px;">ระบุตัวตนของท่านเพื่อขอรับรหัสผ่าน (OTP)</p>
-        <input type="text" id="username" placeholder="ระบุชื่อ-นามสกุล..." autocomplete="off">
+        <input type="text" id="username" placeholder="ระบุUsername" autocomplete="off">
         <br><br>
-        <button class="btn-main" onclick="requestOTP()">ขอรับรหัสผ่านรักษาความปลอดภัย</button>
+        <button class="btn-main" onclick="requestOTP()">ขอรับรหัสผ่านเข้าสู่ระบบ</button>
     </div>
 
     <div id="step-otp" class="hidden">
         <div class="header">
             <div style="font-size: 60px; margin-bottom: 10px;">🔐</div>
-            <h1>การยืนยันความปลอดภัย</h1>
+            <h1>การยืนยันการเข้าสู่ระบบ</h1>
         </div>
-        <p style="font-size: 20px;">กรุณาระบุรหัส ๔ หลักที่ได้รับจาก <strong>Minin_Bird</strong></p>
+        <p style="font-size: 20px;">กรุณาระบุรหัส ๔ หลักที่ได้รับจาก <strong>Examination supervisor</strong></p>
         <input type="text" id="otp-input" maxlength="4" placeholder="รหัส ๔ หลัก" style="font-size: 50px; letter-spacing: 20px; font-weight: bold; width: 300px;">
         <div id="otp-timer-ui" class="otp-expiry">⌛ รหัสจะหมดอายุภายใน: 05:00</div>
         <br>
@@ -551,3 +551,4 @@
 </script>
 </body>
 </html>
+
