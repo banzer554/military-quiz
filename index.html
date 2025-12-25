@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบทดสอบความรู้กฎหมายอาญา ๒๕๖๘ (Secure OTP)</title>
+    <title>ระบบทดสอบความรู้กฎหมายอาญา ๒๕๖๘ (Premium Secure)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap');
         
@@ -11,75 +11,126 @@
             --court-red: #8B0000;
             --court-gold: #D4AF37;
             --court-dark: #2c0505;
-            --paper-white: #fdfdfd;
-            --text-dark: #333;
+            --paper-white: rgba(255, 255, 255, 0.95);
+            --text-dark: #222;
+            --accent: #c0392b;
         }
 
-        body { 
-            font-family: 'Sarabun', sans-serif; 
-            background-color: #f4f1ea;
-            margin: 0; padding: 0;
+        body, html { 
+            margin: 0; padding: 0; min-height: 100vh;
+            font-family: 'Sarabun', sans-serif;
+            background: #0f0c29;  /* fallback for old browsers */
+            background: linear-gradient(to bottom, #24243e, #302b63, #0f0c29);
             color: var(--text-dark);
             display: flex; justify-content: center; align-items: center;
-            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* Constitutional Timer Bar */
+        /* Particles Background */
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; }
+
+        /* Timer Bar with Glow */
         #timer-bar {
             position: fixed; top: 0; left: 0; width: 100%;
             background: var(--court-red); color: white;
-            text-align: center; padding: 15px 0; font-size: 22px; font-weight: bold;
+            text-align: center; padding: 18px 0; font-size: 24px; font-weight: bold;
             z-index: 1000; border-bottom: 4px solid var(--court-gold);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5); display: none;
+            text-shadow: 0 0 10px rgba(255,215,0,0.5);
         }
 
+        /* Progress Bar */
+        .progress-container { width: 100%; height: 8px; background: #ddd; position: fixed; top: 64px; left: 0; z-index: 1001; display: none; }
+        #progress-bar { width: 0%; height: 100%; background: var(--court-gold); transition: 0.4s; }
+
         .container { 
-            background: var(--paper-white); padding: 50px; border-radius: 4px; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2); 
+            background: var(--paper-white); padding: 50px; border-radius: 15px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3); 
             border-top: 15px solid var(--court-red);
             width: 90%; max-width: 850px;
             text-align: center; position: relative;
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .header { border-bottom: 2px solid var(--court-gold); padding-bottom: 25px; margin-bottom: 30px; }
-        h1 { color: var(--court-red); margin: 0; font-size: 28px; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .header { border-bottom: 2px solid var(--court-gold); padding-bottom: 25px; margin-bottom: 35px; }
+        h1 { color: var(--court-red); margin: 0; font-size: 32px; letter-spacing: 1px; }
 
         input[type="text"], textarea { 
-            width: 100%; max-width: 400px; padding: 15px; margin: 15px 0; 
-            border: 1px solid #bbb; border-radius: 4px; font-size: 18px; text-align: center;
+            width: 100%; max-width: 420px; padding: 16px; margin: 12px 0; 
+            border: 2px solid #ddd; border-radius: 8px; font-size: 20px; 
+            text-align: center; transition: 0.3s;
         }
         
-        textarea { max-width: 100%; height: 120px; text-align: left; padding: 20px; }
+        input:focus, textarea:focus { border-color: var(--court-gold); outline: none; box-shadow: 0 0 15px rgba(212,175,55,0.2); }
+        textarea { max-width: 100%; height: 150px; text-align: left; padding: 20px; font-size: 18px; }
 
         .btn-main { 
-            background: var(--court-red); color: white; padding: 18px 45px; border: none; 
-            border-radius: 4px; font-size: 20px; font-weight: bold; cursor: pointer;
-            width: 100%; max-width: 400px; border-bottom: 4px solid var(--court-dark);
+            background: linear-gradient(135deg, var(--court-red) 0%, #600000 100%);
+            color: white; padding: 20px 50px; border: none; 
+            border-radius: 50px; font-size: 22px; font-weight: bold; cursor: pointer;
+            width: 100%; max-width: 420px; transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(139,0,0,0.3);
         }
+        .btn-main:hover { transform: scale(1.03); box-shadow: 0 15px 30px rgba(139,0,0,0.5); }
+        .btn-main:active { transform: scale(0.98); }
 
-        /* Admin OTP Monitor */
+        /* Admin OTP Monitor - Premium Look */
         #admin-monitor {
-            position: fixed; top: 80px; right: 20px; width: 280px;
-            background: #222; color: #fff; padding: 20px; border-radius: 8px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5); z-index: 5000; text-align: left;
-            border-left: 5px solid var(--court-gold);
+            position: fixed; top: 100px; right: 30px; width: 320px;
+            background: rgba(30, 30, 30, 0.9); color: #fff; padding: 25px; border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6); z-index: 5000; text-align: left;
+            border: 1px solid var(--court-gold); backdrop-filter: blur(10px);
         }
 
-        .quiz-item { background: #f9f7f2; padding: 30px; border-radius: 2px; margin-bottom: 35px; border-left: 8px solid var(--court-red); text-align: left; border: 1px solid #eee; border-left: 8px solid var(--court-red); }
+        .quiz-item { 
+            background: #fff; padding: 40px; border-radius: 12px; margin-bottom: 45px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: left;
+            border-left: 10px solid var(--court-red); border: 1px solid #eee; border-left: 10px solid var(--court-red);
+        }
+        
+        .question-text { font-size: 22px; font-weight: bold; color: #1a1a1a; margin-bottom: 25px; }
+
+        .option-label {
+            display: block; padding: 18px; margin: 12px 0; background: #f8f9fa;
+            border: 2px solid #eee; border-radius: 10px; cursor: pointer; transition: 0.2s;
+            font-size: 18px;
+        }
+        .option-label:hover { background: #fff5f5; border-color: var(--court-red); transform: translateX(10px); }
+        input[type="radio"] { transform: scale(1.5); margin-right: 15px; accent-color: var(--court-red); }
+
         .hidden { display: none !important; }
-        .score-circle { width: 180px; height: 180px; line-height: 180px; border-radius: 50%; background: #fff; color: var(--court-red); font-size: 60px; font-weight: bold; margin: 30px auto; border: 10px double var(--court-gold); text-align: center; }
-        .wrong-box { background: #fff5f5; padding: 20px; border: 1px solid var(--court-red); text-align: left; margin-top: 20px; }
+        .otp-expiry { color: #d35400; font-weight: bold; margin-top: 15px; font-size: 16px; display: block;}
+        
+        .score-display { 
+            width: 220px; height: 220px; line-height: 220px; border-radius: 50%; 
+            background: #fff; color: var(--court-red); font-size: 75px; font-weight: 900; 
+            margin: 40px auto; border: 12px double var(--court-gold); text-align: center;
+            box-shadow: 0 0 30px rgba(212,175,55,0.4);
+        }
+
+        .wrong-badge { background: #fee2e2; color: #b91c1c; padding: 5px 12px; border-radius: 5px; font-weight: bold; margin: 5px; display: inline-block; border: 1px solid #fecaca; }
     </style>
 </head>
 <body>
 
-<div id="timer-bar">⏱️ เวลาคงเหลือ: <span id="timer-display">50:00</span></div>
+<div id="particles-js"></div>
+
+<audio id="notify-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
+
+<div id="timer-bar">⏱️ เวลาทำข้อสอบคงเหลือ: <span id="timer-display">50:00</span></div>
+<div class="progress-container"><div id="progress-bar"></div></div>
 
 <div id="admin-monitor" class="hidden">
-    <strong style="color:var(--court-gold)">🔔 ศูนย์รับรหัส OTP (Admin)</strong>
-    <hr style="border-color:#444">
-    <div id="otp-log" style="font-size: 13px; max-height: 200px; overflow-y: auto;">
-        รอคำขอจากผู้เข้าสอบ...
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <strong style="color:var(--court-gold); font-size: 18px;">🏛️ ศูนย์รหัส OTP (Admin)</strong>
+        <button onclick="document.getElementById('admin-monitor').classList.add('hidden')" style="background:none; border:none; color:white; cursor:pointer;">✕</button>
+    </div>
+    <hr style="border-color:#444; margin: 15px 0;">
+    <div id="otp-log" style="font-size: 14px; max-height: 300px; overflow-y: auto;">
+        <span style="color:#888;">รอคำขอรหัสจากผู้สอบ...</span>
     </div>
 </div>
 
@@ -87,92 +138,133 @@
     <div id="step-name">
         <div class="header">
             <h1>⚖️ ระบบทดสอบความรู้กฎหมาย</h1>
-            <div style="color:var(--court-gold); font-weight:bold; margin-top:10px;">ประจำพุทธศักราช ๒๕๖๘</div>
+            <div style="color:var(--court-gold); font-weight:bold; margin-top:10px; font-size: 20px;">พุทธศักราช ๒๕๖๘</div>
         </div>
-        <p style="font-weight:bold; color:#666;">ระบุชื่อเพื่อขอรับรหัสผ่านเข้าสอบ</p>
+        <p style="font-size: 20px; font-weight:bold; color:#444;">ระบุชื่อเพื่อขอรับรหัสผ่านเข้าทำข้อสอบ</p>
         <input type="text" id="username" placeholder="ระบุชื่อผู้เข้าสอบ...">
-        <br>
+        <br><br>
         <button class="btn-main" onclick="requestOTP()">ขอรับรหัสผ่าน (OTP)</button>
     </div>
 
     <div id="step-otp" class="hidden">
-        <div class="header"><h1>🔐 ยืนยันตัวตน</h1></div>
-        <p>กรุณาระบุรหัสผ่าน 4 หลักที่ได้รับจาก <strong>Minin_Bird</strong></p>
-        <input type="text" id="otp-input" placeholder="กรอกรหัส 4 หลักที่นี่">
+        <div class="header"><h1>🔐 ยืนยันรหัสผ่านรักษาความปลอดภัย</h1></div>
+        <p style="font-size: 18px;">กรุณาระบุรหัสผ่าน 4 หลักที่ได้รับแจ้งจาก <strong>Minin_Bird</strong></p>
+        <input type="text" id="otp-input" maxlength="4" placeholder="••••" style="font-size: 40px; letter-spacing: 15px;">
+        <div id="otp-timer-ui" class="otp-expiry">⌛ รหัสจะมีอายุการใช้งาน: 05:00</div>
         <br>
         <button class="btn-main" onclick="verifyOTP()">ยืนยันและเริ่มทำข้อสอบ</button>
-        <p style="font-size:12px; color:red; cursor:pointer; margin-top:15px;" onclick="location.reload()">← เปลี่ยนชื่อผู้สอบ</p>
+        <p style="font-size:14px; color:#e74c3c; cursor:pointer; margin-top:25px; text-decoration: underline;" onclick="location.reload()">ยกเลิกและกลับไปหน้าแรก</p>
     </div>
 
     <div id="quiz-screen" class="hidden">
-        <div id="display-user" style="text-align:right; font-weight:bold; color:var(--court-red); margin-bottom:15px;"></div>
+        <div id="display-user" style="text-align:right; font-weight:bold; color:var(--court-red); font-size: 18px; margin-bottom: 20px;"></div>
         <div id="quiz-container"></div>
-        <button class="btn-main" style="max-width:100%" onclick="confirmSubmit()">ส่งข้อสอบ</button>
+        <button class="btn-main" style="max-width:100%; margin-top: 50px;" onclick="confirmSubmit()">ส่งกระดาษคำตอบ</button>
     </div>
 
     <div id="result-screen" class="hidden">
-        <div class="header"><h1>ผลการทดสอบ</h1></div>
-        <div class="score-circle" id="score-display">0/30</div>
-        <div id="wrong-container" class="wrong-box hidden">
-            <strong style="color:var(--court-red);">❌ ข้อที่วินิจฉัยคลาดเคลื่อน:</strong> <span id="wrong-list"></span>
+        <div class="header"><h1>📝 ผลการทดสอบของท่าน</h1></div>
+        <div class="score-display" id="score-display">0/30</div>
+        <div id="feedback-text" style="font-size: 24px; font-weight: bold; color: var(--court-red); margin-bottom: 20px;"></div>
+        <div id="wrong-container" class="hidden" style="background:#fff5f5; padding:30px; border:2px solid var(--court-red); text-align:left; border-radius: 10px;">
+            <strong style="color:var(--court-red); font-size: 18px;">❌ ข้อที่การวินิจฉัยคลาดเคลื่อน (โปรดศึกษาเพิ่มเติม):</strong>
+            <div id="wrong-list" style="margin-top: 15px; display: flex; flex-wrap: wrap;"></div>
         </div>
-        <button class="btn-main" style="background:#555; margin-top:20px;" onclick="location.reload()">กลับหน้าแรก</button>
+        <button class="btn-main" style="background:#444; margin-top:30px; max-width: 250px;" onclick="location.reload()">กลับสู่หน้าแรก</button>
     </div>
 </div>
 
-<script>
-    const allowedUsers = ["minin_bird", "ruok555sf"];
-    const otpChannel = new BroadcastChannel('otp_system_v3');
-    let timeLeft = 50 * 60;
-    let userName = "";
-    let correctOTP = "";
-    let selectedQuestions = [];
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
-    // --- ระบบ OTP & Admin ---
+<script>
+    /* --- Particles Config --- */
+    particlesJS("particles-js", {
+        "particles": {
+            "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+            "color": { "value": "#ffffff" },
+            "shape": { "type": "circle" },
+            "opacity": { "value": 0.2, "random": true },
+            "size": { "value": 3, "random": true },
+            "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.1, "width": 1 },
+            "move": { "enable": true, "speed": 1, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
+        },
+        "interactivity": { "events": { "onhover": { "enable": true, "mode": "bubble" } }, "modes": { "bubble": { "distance": 200, "size": 6, "duration": 2, "opacity": 0.8, "speed": 3 } } }
+    });
+
+    /* --- Core Logic --- */
+    const allowedUsers = ["minin_bird", "ruok555sf"];
+    const channel = new BroadcastChannel('otp_secure_ultra_v5');
+    let timeLeft = 50 * 60;
+    let otpTimeLeft = 300;
+    let otpInterval, examInterval;
+    let userName = "", correctOTP = "", selectedQuestions = [];
+
+    // --- OTP System ---
     function requestOTP() {
         userName = document.getElementById('username').value.trim();
         const lowName = userName.toLowerCase();
-        
-        if (!allowedUsers.includes(lowName)) {
-            alert("❌ ชื่อนี้ไม่มีสิทธิ์เข้าสอบ"); return;
-        }
+        if (!allowedUsers.includes(lowName)) { alert("❌ ไม่มีรายชื่อในระบบผู้ได้รับสิทธิ์"); return; }
 
         if (lowName === "minin_bird") {
             document.getElementById('admin-monitor').classList.remove('hidden');
-            alert("เข้าสู่ระบบแอดมินเรียบร้อย");
+            alert("ยินดีต้อนรับ Admin Minin_Bird");
             startQuiz(); return;
         }
 
-        // สุ่มรหัส 4 หลัก
         correctOTP = Math.floor(1000 + Math.random() * 9000).toString();
-        
-        // ส่งรหัสไปหา Minin_Bird
-        otpChannel.postMessage({ type: 'SEND_OTP', user: userName, otp: correctOTP });
+        channel.postMessage({ type: 'REQ', user: userName, otp: correctOTP });
 
         document.getElementById('step-name').classList.add('hidden');
         document.getElementById('step-otp').classList.remove('hidden');
+        startOTPCountdown();
     }
 
-    otpChannel.onmessage = (e) => {
-        if (e.data.type === 'SEND_OTP') {
+    function startOTPCountdown() {
+        otpInterval = setInterval(() => {
+            otpTimeLeft--;
+            let m = Math.floor(otpTimeLeft/60), s = otpTimeLeft%60;
+            document.getElementById('otp-timer-ui').innerText = `⌛ รหัสจะมีอายุการใช้งาน: ${m}:${s<10?'0':''}${s}`;
+            if (otpTimeLeft <= 0) {
+                clearInterval(otpInterval);
+                correctOTP = "EXPIRED";
+                document.getElementById('otp-timer-ui').innerText = "❌ รหัสหมดอายุแล้ว โปรด Refresh หน้าเว็บ";
+            }
+        }, 1000);
+    }
+
+    channel.onmessage = (e) => {
+        if (e.data.type === 'REQ') {
+            const sound = document.getElementById('notify-sound');
+            sound.play();
             const log = document.getElementById('otp-log');
             if(log.innerText.includes("รอคำขอ")) log.innerHTML = "";
-            const time = new Date().toLocaleTimeString();
-            log.innerHTML = `<div style="border-bottom:1px solid #444; padding:5px 0;">
-                [${time}] <b>${e.data.user}</b> <br>รหัสเข้าสอบ: <span style="font-size:20px; color:lime;">${e.data.otp}</span>
+            const id = "otp-" + Date.now();
+            log.innerHTML = `<div id="${id}" style="border-bottom:1px solid #555; padding:12px 0; animation: flash 1s;">
+                <b style="color:var(--court-gold);">${e.data.user}</b> ขอรหัสผ่านใหม่ <br>
+                <span style="font-size:24px; color:lime; font-family:monospace;">${e.data.otp}</span>
+                <div id="timer-${id}" style="font-size:11px; color:#aaa;">ใช้งานได้อีก 5:00</div>
             </div>` + log.innerHTML;
+
+            let t = 300;
+            let iv = setInterval(() => {
+                t--;
+                let m=Math.floor(t/60), s=t%60;
+                const el = document.getElementById("timer-"+id);
+                if(el) el.innerText = `ใช้งานได้อีก ${m}:${s<10?'0':''}${s}`;
+                if(t<=0) { clearInterval(iv); if(el) el.innerText="หมดอายุ (Expired)"; if(el) el.style.color="red"; }
+            }, 1000);
         }
     };
 
     function verifyOTP() {
+        if (correctOTP === "EXPIRED") { alert("❌ รหัสหมดอายุ"); return; }
         if (document.getElementById('otp-input').value === correctOTP) {
+            clearInterval(otpInterval);
             startQuiz();
-        } else {
-            alert("❌ รหัสผ่านไม่ถูกต้อง");
-        }
+        } else { alert("❌ รหัสไม่ถูกต้อง"); }
     }
 
-    // --- โจทย์ข้อสอบ ---
+    // --- Exam Logic ---
     const essayQuestions = [
         { q: "พันโท ก. สั่งให้ สิบเอก ข. แอบนำ 'ภาพถ่ายแผนผังคลังแสง' ไปขายให้สายลับต่างชาติ แต่สิบเอก ข. ทำภาพหลุดลงโซเชียลแทนจนเกิดความปั่นป่วน วินิจฉัยความผิดของสิบเอก ข.", keys: ["๓๖", "กบฏ", "๒๕", "สถานหนัก", "ภาพลักษณ์"] },
         { q: "พลทหาร เอ ใช้ 'ไอดีรอง' ปลอมเป็นนายทหารชั้นผู้ใหญ่เพื่อสั่งให้สารวัตรทหารปล่อยตัวเพื่อนที่ถูกคุมขังอยู่ วินิจฉัยพฤติการณ์นี้ตามมาตรา ๓๐, ๓๕ และ ๔๑", keys: ["๓๐", "๓๕", "แอบอ้าง", "ไอดีรอง", "สถานหนัก"] },
@@ -204,10 +296,7 @@
         { q: "หากทหารนายหนึ่งกระทำผิดฐาน 'ชำเราศพ' ซึ่งกฎหมายนี้ไม่ได้เขียนไว้ ต้องทำอย่างไร?", keys: ["๕", "จารีต", "รัฐธรรมนูญ", "ดุลพินิจ"] },
         { q: "การลงโทษจำคุก ๒๔ ชั่วโมง ตามมาตรา ๙ ต้องทำอย่างไร?", keys: ["๙", "เหมาะสม", "สถานเบา", "บันทึก"] },
         { q: "คำพิพากษาถือเป็นที่สิ้นสุด ตามมาตรา ๖ หากภายหลังพบว่าพยานหลักฐานโดนแฮ็ก (มาตรา ๓๑) ศาลจะทำอย่างไร?", keys: ["เปลี่ยนแปลง", "๖", "รูปคดี", "ข้อยกเว้น"] }
-
     ];
-
-
 
     const choiceQuestions = [
         { q: "หากศาลตัดสินว่าทหารนายหนึ่งมีความผิดและสั่ง 'ขึ้นบัญชีวินัยเลว' เพียงอย่างเดียว การลงโทษนี้ถือเป็นโทษระดับใด?", a: "ค", options: ["ก. โทษสถานเบา", "ข. โทษสถานกลาง", "ค. โทษสถานเบา หรือ โทษสถานกลาง", "ง. โทษสถานหนัก"] },
@@ -312,43 +401,58 @@
         { q: "ชื่อประมวลกฎหมายนี้คือ พ.ศ. ใด?", a: "ง", options: ["ก. ๒๕๖๕", "ข. ๒๕๖๖", "ค. ๒๕๖๗", "ง. ๒๕๖๘"] }
     ];
 
-    function getRandom(arr, n) { return [...arr].sort(() => 0.5 - Math.random()).slice(0, n); }
 
     function startQuiz() {
-        selectedQuestions = [...getRandom(essayQuestions, 5).map(q=>({...q, type:'essay'})), ...getRandom(choiceQuestions, 25).map(q=>({...q, type:'choice'}))].sort(() => 0.5 - Math.random());
-        
-        document.getElementById('step-name').classList.add('hidden');
+        const essays = [...essayQuestions].sort(()=>0.5-Math.random()).slice(0,5).map(q=>({...q, type:'essay'}));
+        const choices = [...choiceQuestions].sort(()=>0.5-Math.random()).slice(0,25).map(q=>({...q, type:'choice'}));
+        selectedQuestions = [...essays, ...choices].sort(()=>0.5-Math.random());
+
         document.getElementById('step-otp').classList.add('hidden');
+        document.getElementById('step-name').classList.add('hidden');
         document.getElementById('quiz-screen').classList.remove('hidden');
-        document.getElementById('display-user').innerText = "👤 ผู้สอบ: " + userName;
         document.getElementById('timer-bar').style.display = 'block';
-        document.body.style.alignItems = "flex-start"; document.body.style.paddingTop = "100px";
+        document.querySelector('.progress-container').style.display = 'block';
+        document.getElementById('display-user').innerText = "👤 ผู้สอบ: " + userName;
+        document.body.style.alignItems = "flex-start"; document.body.style.paddingTop = "120px";
 
         renderQuiz();
-        setInterval(() => {
+        examInterval = setInterval(() => {
             timeLeft--;
             let m = Math.floor(timeLeft/60), s = timeLeft%60;
             document.getElementById('timer-display').innerText = `${m}:${s<10?'0':''}${s}`;
-            if (timeLeft <= 0) calculateScore();
+            if(timeLeft <= 0) calculateScore();
         }, 1000);
     }
 
     function renderQuiz() {
-        document.getElementById('quiz-container').innerHTML = selectedQuestions.map((item, i) => `
-            <div class="quiz-item">
-                <div style="color:var(--court-red); font-weight:bold; margin-bottom:10px;">${item.type==='essay'?'[วินิจฉัยข้อเขียน]':'[ปรนัย]'}</div>
-                <div style="font-size:19px; font-weight:bold;">${i+1}. ${item.q}</div>
-                ${item.type==='essay' ? `<textarea id="ans${i}" placeholder="เขียนคำวินิจฉัย..."></textarea>` : 
-                `<div style="margin-top:15px;">${item.options.map((opt, j)=>`<label style="display:block; padding:12px; border:1px solid #ddd; margin:8px 0; background:#fff; cursor:pointer;"><input type="radio" name="q${i}" value="${['ก','ข','ค','ง'][j]}"> ${opt}</label>`).join('')}</div>`}
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = selectedQuestions.map((item, i) => `
+            <div class="quiz-item" id="item-${i}">
+                <div style="font-weight:bold; color:var(--court-red); margin-bottom:10px;">${item.type==='essay'?'[ข้อเขียนวินิจฉัย]':'[ปรนัย]'}</div>
+                <div class="question-text">${i+1}. ${item.q}</div>
+                ${item.type==='essay' ? `<textarea id="ans${i}" oninput="updateProgress()"></textarea>` : 
+                `<div>${item.options.map((opt, j)=>`<label class="option-label"><input type="radio" name="q${i}" value="${['ก','ข','ค','ง'][j]}" onchange="updateProgress()"> ${opt}</label>`).join('')}</div>`}
             </div>
         `).join('');
     }
 
-    function confirmSubmit() { if(confirm("ยืนยันส่งข้อสอบ?")) calculateScore(); }
+    function updateProgress() {
+        let done = 0;
+        selectedQuestions.forEach((item, i) => {
+            if(item.type==='choice' && document.querySelector(`input[name="q${i}"]:checked`)) done++;
+            if(item.type==='essay' && document.getElementById(`ans${i}`).value.length > 5) done++;
+        });
+        document.getElementById('progress-bar').style.width = (done/30*100) + "%";
+    }
+
+    function confirmSubmit() { if(confirm("ท่านต้องการส่งกระดาษคำตอบและยุติการทดสอบ?")) calculateScore(); }
 
     function calculateScore() {
-        document.getElementById('timer-bar').classList.add('hidden');
-        let score = 0; let wrongs = [];
+        clearInterval(examInterval);
+        document.getElementById('timer-bar').style.display = 'none';
+        document.querySelector('.progress-container').style.display = 'none';
+        let score = 0, wrongs = [];
+
         selectedQuestions.forEach((item, i) => {
             let ok = false;
             if (item.type === 'choice') {
@@ -365,7 +469,17 @@
         document.getElementById('quiz-screen').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
         document.getElementById('score-display').innerText = score + "/30";
-        if(wrongs.length > 0) { document.getElementById('wrong-container').classList.remove('hidden'); document.getElementById('wrong-list').innerText = wrongs.join(", "); }
+        document.body.style.alignItems = "center"; document.body.style.paddingTop = "0";
+        
+        if(wrongs.length > 0) {
+            document.getElementById('wrong-container').classList.remove('hidden');
+            document.getElementById('wrong-list').innerHTML = wrongs.map(w => `<span class="wrong-badge">ข้อที่ ${w}</span>`).join('');
+        }
+        
+        const ft = document.getElementById('feedback-text');
+        if(score >= 26) ft.innerText = "🌟 ระดับ: ดีเยี่ยม (ตุลาการอาวุโส)";
+        else if(score >= 18) ft.innerText = "✅ ระดับ: ผ่านเกณฑ์ (ผู้ช่วยตุลาการ)";
+        else ft.innerText = "❌ ระดับ: ควรทบทวน (นิติกรฝึกหัด)";
     }
 </script>
 </body>
