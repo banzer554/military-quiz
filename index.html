@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบทดสอบกฎหมายอาญา ๒๕๖๘ | Supreme Command</title>
+    <title>ระบบทดสอบกฎหมายอาญา ๒๕๖๘ | Supreme Command Masterpiece</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
@@ -17,57 +17,81 @@
             --gold-light: #F9E79F;
             --court-red: #8B0000;
             --court-dark: #1a0202;
-            --paper: rgba(255, 255, 255, 0.98);
+            --glass: rgba(255, 255, 255, 0.98);
             --danger: #FF3E3E;
             --success: #27AE60;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { margin: 0; padding: 0; min-height: 100vh; font-family: 'Sarabun', sans-serif; background: radial-gradient(circle at center, #2c0505 0%, #050505 100%); color: #333; overflow-x: hidden; }
+        body, html { 
+            margin: 0; padding: 0; min-height: 100vh;
+            font-family: 'Sarabun', sans-serif;
+            background: radial-gradient(circle at center, #2c0505 0%, #050505 100%);
+            color: #333; overflow-x: hidden;
+            user-select: none; -webkit-user-select: none;
+        }
+
         #particles-js { position: fixed; inset: 0; z-index: -1; }
 
-        /* --- Header & Navigation --- */
-        #timer-bar { position: fixed; top: 0; left: 0; width: 100%; background: linear-gradient(90deg, var(--court-red), #300); color: #fff; text-align: center; padding: 12px 0; font-size: 18px; font-weight: bold; z-index: 1000; border-bottom: 3px solid var(--gold); display: none; box-shadow: 0 5px 25px rgba(0,0,0,0.8); }
+        /* --- Global UI --- */
+        #timer-bar { 
+            position: fixed; top: 0; left: 0; width: 100%; 
+            background: linear-gradient(90deg, var(--court-red), #300); 
+            color: #fff; text-align: center; padding: 12px 0; 
+            font-size: 18px; font-weight: bold; z-index: 1000; 
+            border-bottom: 2px solid var(--gold); display: none;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.8);
+        }
         .progress-fixed { width: 100%; height: 5px; background: rgba(255,255,255,0.1); position: fixed; top: 45px; left: 0; z-index: 1001; display: none; }
-        #progress-inner { width: 0%; height: 100%; background: var(--gold); box-shadow: 0 0 15px var(--gold); transition: 0.5s; }
+        #progress-inner { width: 0%; height: 100%; background: var(--gold); box-shadow: 0 0 15px var(--gold); transition: 0.6s; }
 
-        /* --- Main UI Containers --- */
-        .container { background: var(--paper); padding: 30px 20px; border-radius: 20px; border: 2px solid var(--gold); width: 92%; max-width: 850px; text-align: center; position: relative; backdrop-filter: blur(10px); animation: fadeIn 0.8s ease-out; margin: 80px auto 40px auto; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+        .container { 
+            background: var(--glass); padding: 35px 20px; border-radius: 20px; 
+            border: 1px solid var(--gold); width: 94%; max-width: 850px; 
+            text-align: center; position: relative; backdrop-filter: blur(15px); 
+            animation: fadeIn 0.8s ease-out; margin: 80px auto 40px auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- Admin UI Dashboard --- */
+        /* --- Admin Dashboard --- */
         #admin-panel { position: fixed; inset: 0; background: #0a0a0a; color: #fff; z-index: 9999; padding: 15px; display: none; overflow-y: auto; }
         .admin-header { border-bottom: 2px solid var(--gold); padding-bottom: 15px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; }
         @media (min-width: 768px) { .admin-header { flex-direction: row; justify-content: space-between; align-items: center; padding: 20px; } }
-        .admin-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 20px; }
-        @media (min-width: 1024px) { .admin-grid { grid-template-columns: 400px 1fr; } }
-        .admin-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; padding: 15px; }
-        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(255,255,255,0.05); margin-bottom: 8px; border-radius: 12px; border-left: 4px solid var(--gold); flex-wrap: wrap; gap: 10px; }
+        .admin-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 1024px) { .admin-grid { grid-template-columns: 350px 1fr; } }
+        .admin-card { background: rgba(255,255,255,0.05); border: 1px solid var(--gold); border-radius: 20px; padding: 20px; }
+        
+        .user-row { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 15px; background: rgba(255,255,255,0.05); margin-bottom: 10px; 
+            border-radius: 12px; border-left: 5px solid var(--gold); flex-wrap: wrap; gap: 10px;
+        }
 
-        /* --- Broadcast Overlay --- */
-        #broadcast-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10002; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px; color: #fff; }
-        .broadcast-box { background: #fff; color: #333; padding: 30px; border-radius: 20px; border: 5px solid var(--gold); max-width: 500px; box-shadow: 0 0 50px var(--gold); }
+        .admin-review-item { font-size: 13px; padding: 8px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-top: 5px; border-left: 3px solid var(--gold); }
+        .text-success { color: #2ecc71; font-weight: bold; }
+        .text-danger { color: #e74c3c; font-weight: bold; }
 
-        /* --- Quiz Elements --- */
-        .quiz-card { background: #fff; padding: 25px; border-radius: 15px; margin-bottom: 25px; text-align: left; border: 1px solid #eee; border-left: 8px solid var(--court-red); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        /* --- Quiz Content --- */
+        .quiz-card { background: #fff; padding: 25px; border-radius: 18px; margin-bottom: 25px; text-align: left; border: 1px solid #eee; border-left: 8px solid var(--court-red); box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
         .question-text { font-size: 19px; font-weight: bold; color: var(--court-dark); line-height: 1.5; margin-bottom: 15px; }
         .opt-label { display: flex; align-items: center; padding: 15px; margin: 8px 0; background: #f9f9f9; border: 1px solid #f0f0f0; border-radius: 12px; cursor: pointer; transition: 0.2s; font-size: 16px; }
         .opt-label:hover { background: #fff9e6; border-color: var(--gold); }
         input[type="radio"] { width: 22px; height: 22px; margin-right: 12px; accent-color: var(--court-red); flex-shrink: 0; }
 
+        /* --- Broadcast Overlay --- */
+        #broadcast-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10002; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px; color: #fff; }
+        .broadcast-box { background: #fff; color: #333; padding: 30px; border-radius: 20px; border: 5px solid var(--gold); max-width: 500px; box-shadow: 0 0 50px var(--gold); }
+
         /* --- Buttons --- */
-        .btn-main { background: linear-gradient(135deg, var(--court-red) 0%, #4a0000 100%); color: white; padding: 16px 32px; border: 1px solid var(--gold); border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; max-width: 400px; }
+        .btn-main { background: linear-gradient(135deg, var(--court-red) 0%, #4a0000 100%); color: white; padding: 16px 32px; border: 1px solid var(--gold); border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(139, 0, 0, 0.4); }
+        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(139, 0, 0, 0.6); }
         .btn-admin { padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; }
-        
-        #pause-lock { position: absolute; inset: 0; background: rgba(0,0,0,0.98); border-radius: 18px; z-index: 500; display: none; flex-direction: column; justify-content: center; align-items: center; color: var(--gold); padding: 20px; }
-        
-        /* --- Admin Specific Review Styles --- */
-        .admin-review-item { font-size: 13px; padding: 8px; background: rgba(255,255,255,0.02); border-radius: 8px; margin-top: 5px; border: 1px solid #333; }
-        .text-success { color: #2ecc71; }
-        .text-danger { color: #e74c3c; }
 
         input[type="text"], textarea { width: 100%; max-width: 450px; padding: 15px; margin: 10px 0; border: 2px solid #ddd; border-radius: 12px; font-size: 18px; text-align: center; font-family: 'Sarabun'; }
-        textarea { height: 100px; text-align: left; }
+        textarea { height: 120px; text-align: left; padding: 15px; }
+        
+        #pause-lock { position: absolute; inset: 0; background: rgba(0,0,0,0.98); border-radius: 18px; z-index: 500; display: none; flex-direction: column; justify-content: center; align-items: center; color: var(--gold); padding: 20px; }
         .hidden { display: none !important; }
     </style>
 </head>
@@ -80,15 +104,15 @@
 <div id="broadcast-overlay">
     <div class="broadcast-box">
         <div style="font-size: 50px;">📢</div>
-        <h2 style="color:var(--court-red)">ข่าวสาร/ประกาศ</h2>
-        <p id="broadcast-text" style="font-size: 18px; font-weight: bold;"></p>
-        <button class="btn-main" onclick="document.getElementById('broadcast-overlay').style.display='none'" style="max-width: 150px;">ปิดประกาศ</button>
+        <h2 style="color:var(--court-red)">ข่าวสาร/ประกาศส่วนกลาง</h2>
+        <p id="broadcast-text" style="font-size: 18px; font-weight: bold; line-height: 1.6;"></p>
+        <button class="btn-main" onclick="document.getElementById('broadcast-overlay').style.display='none'" style="max-width: 150px; padding: 10px;">รับทราบ</button>
     </div>
 </div>
 
 <div id="admin-panel">
     <div class="admin-header">
-        <h1 style="color: var(--gold); margin: 0;">🏛️ Supreme Admin Panel</h1>
+        <h1 style="color: var(--gold); margin: 0;">🏛️ Supreme Command Center</h1>
         <div style="display:flex; gap:10px;">
             <button class="btn-admin" onclick="sendBroadcast()" style="background:var(--gold); color:#000;">📢 ตั้งประกาศ</button>
             <button class="btn-admin" onclick="db.ref('broadcast').remove()" style="background:var(--danger); color:#fff;">❌ ลบประกาศ</button>
@@ -101,37 +125,37 @@
             <div id="admin-otp-list"></div>
         </div>
         <div class="admin-card">
-            <h3>📊 Live Tracking (คำตอบจะแสดงที่นี่หลังส่ง)</h3>
+            <h3>📊 Live Monitoring & Verdicts</h3>
             <div id="admin-user-list"></div>
         </div>
     </div>
 </div>
 
-<div id="timer-bar">⏱️ เวลาสอบคงเหลือ: <span id="timer-display">50:00</span></div>
+<div id="timer-bar">⏱️ ระยะเวลาทำข้อสอบคงเหลือ: <span id="timer-display">50:00</span></div>
 <div class="progress-fixed"><div id="progress-inner"></div></div>
 
 <div class="container" id="main-frame">
     <div id="pause-lock">
         <div style="font-size: 60px;">⏸️</div>
-        <h2>หยุดสอบชั่วคราว</h2>
-        <p>โจทย์ถูกซ่อนเพื่อความปลอดภัย<br>กรุณารอแอดมิน <strong>Minin_Bird</strong> ปลดล็อก</p>
+        <h2>ระบบหยุดสอบชั่วคราว</h2>
+        <p>เพื่อความปลอดภัย โจทย์จะถูกซ่อนจนกว่าแอดมินจะอนุญาต</p>
     </div>
 
     <div id="step-name">
         <div style="font-size: 60px; margin-bottom: 10px;">⚖️</div>
-        <h1>ระบบทดสอบกฎหมาย</h1>
-        <div style="color:var(--gold); font-weight:bold; font-size: 18px; margin-bottom: 30px;">พุทธศักราช ๒๕๖๘ (Supreme Mastery)</div>
+        <h1>ระบบทดสอบความรู้กฎหมาย</h1>
+        <div style="color:var(--gold); font-weight:bold; font-size: 18px; margin-bottom: 30px;">พุทธศักราช ๒๕๖๘</div>
         <input type="text" id="username" placeholder="Username ของท่าน" autocomplete="off">
         <br><br>
         <button class="btn-main" onclick="requestOTP()">ขอรับรหัสผ่านเข้าสอบ</button>
     </div>
 
     <div id="step-otp" class="hidden">
-        <h1>🔐 ยืนยันรหัสความปลอดภัย</h1>
-        <p>ระบุรหัส ๔ หลักที่ได้รับจากแอดมิน</p>
-        <input type="text" id="otp-input" maxlength="4" placeholder="••••" style="font-size: 40px; letter-spacing: 12px; font-weight: bold;">
+        <h1>🔐 ยืนยันความปลอดภัย</h1>
+        <p>กรุณาระบุรหัสที่ได้รับจากส่วนกลาง</p>
+        <input type="text" id="otp-input" maxlength="4" placeholder="••••" style="font-size: 40px; letter-spacing: 15px; font-weight: bold;">
         <br><br>
-        <button class="btn-main" onclick="verifyOTP()">เริ่มการทำข้อสอบ</button>
+        <button class="btn-main" onclick="verifyOTP()">เริ่มการทดสอบ</button>
     </div>
 
     <div id="quiz-screen" class="hidden">
@@ -141,23 +165,23 @@
         </div>
         <div id="quiz-container"></div>
         
-        <div id="chat-reply" style="background:#f0f0f0; padding:10px; border-radius:10px; margin-top:15px; border-left:5px solid var(--gold); text-align:left; display:none;">
-            <b>💬 ตอบกลับจากแอดมิน:</b> <span id="reply-msg"></span>
+        <div id="chat-reply" style="background:#f0f0f0; padding:12px; border-radius:12px; margin-top:15px; border-left:5px solid var(--gold); text-align:left; display:none; color:#333;">
+            <b>💬 คำแนะนำจากแอดมิน:</b> <span id="reply-msg"></span>
         </div>
 
-        <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+        <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 12px; align-items: center;">
             <button class="btn-main" style="background:#3498db; font-size: 16px;" onclick="reportToAdmin()">📩 สอบถามแอดมิน</button>
             <button class="btn-main" style="background:#e67e22; font-size: 16px;" onclick="askPause()">🚩 ขอหยุดสอบชั่วคราว</button>
-            <button class="btn-main" onclick="confirmSubmit()">ส่งข้อสอบ</button>
+            <button class="btn-main" onclick="confirmSubmit()">ส่งกระดาษคำตอบ</button>
         </div>
     </div>
 
     <div id="result-screen" class="hidden">
-        <h1>📜 ผลการสอบ</h1>
+        <h1>📜 บันทึกคะแนนสอบ</h1>
         <div id="final-score" style="font-size: 70px; font-weight: 900; color: var(--court-red); margin: 20px 0;"></div>
         <div id="feedback" style="font-size: 22px; font-weight: bold; margin-bottom: 30px;"></div>
-        <p style="color:#777;">*ตรวจสอบรายละเอียดข้อที่ผิดได้ที่เครื่องแอดมิน</p>
-        <button class="btn-main" onclick="location.reload()">สิ้นสุดการสอบ</button>
+        <p style="color:#777;">*ตรวจสอบรายละเอียดเฉลยได้ที่แอดมินผู้คุมสอบ</p>
+        <button class="btn-main" onclick="location.reload()">สิ้นสุดกระบวนการ</button>
     </div>
 </div>
 
@@ -179,66 +203,72 @@
     let userName = "", correctOTP = "", selectedQuestions = [], examInterval;
     let timeLeft = 50 * 60, isPaused = false, strikes = 0;
 
-    /* --- Anti-Cheat Logic --- */
+    /* --- Anti-Cheat --- */
     document.addEventListener("visibilitychange", () => {
         if (document.hidden && userName !== "" && !isPaused && !document.getElementById('quiz-screen').classList.contains('hidden')) {
             strikes++;
             db.ref(`live_status/${userName}`).update({ cheat: `สลับจอครั้งที่ ${strikes}` });
-            if (strikes >= 3) { calculateScore(); alert("🛑 ระบบส่งข้อสอบอัตโนมัติเนื่องจากตรวจพบพฤติกรรมไม่เหมาะสม"); }
-            else alert(`⚠️ ห้ามออกจากหน้าจอ! ท่านเหลือสิทธิ์อีก ${3 - strikes} ครั้ง`);
+            if (strikes >= 3) { calculateScore(); alert("🛑 ทุจริต! ระบบส่งข้อสอบอัตโนมัติเนื่องจากออกจากหน้าจอเกินกำหนด"); }
+            else alert(`⚠️ ห้ามสลับหน้าจอสอบ! (ตรวจพบครั้งที่ ${strikes}/3)`);
             document.getElementById('cheat-strikes').innerText = `สลับจอได้อีก: ${3-strikes} ครั้ง`;
         }
     });
 
-    /* --- Admin Logic --- */
+    /* --- Admin Dashboard Logic --- */
     function openAdmin() {
         document.getElementById('main-frame').classList.add('hidden');
         document.getElementById('admin-panel').style.display = 'block';
         
         db.ref('otp_requests').on('value', snap => {
             const list = document.getElementById('admin-otp-list'); list.innerHTML = "";
-            snap.forEach(c => { list.innerHTML += `<div style="padding:10px; border-bottom:1px solid #333; display:flex; justify-content:space-between;"><b>${c.key.toUpperCase()}</b>: <span style="color:lime; font-weight:bold;">${c.val().otp}</span></div>`; });
+            snap.forEach(c => { list.innerHTML += `<div style="padding:10px; border-bottom:1px solid #333; display:flex; justify-content:space-between;"><b>${c.key.toUpperCase()}</b>: <span style="color:lime; font-size:20px; font-family:monospace;">${c.val().otp}</span></div>`; });
         });
 
         db.ref('live_status').on('value', snap => {
             const list = document.getElementById('admin-user-list'); list.innerHTML = "";
             snap.forEach(c => {
                 const u = c.val();
-                let reviewHTML = "";
-                if(u.history) {
-                    reviewHTML = `<div style="margin-top:10px; background:rgba(0,0,0,0.3); padding:10px; border-radius:10px;">`;
-                    u.history.forEach((item, idx) => {
-                        reviewHTML += `<div class="admin-review-item ${item.isCorrect ? 'text-success' : 'text-danger'}">
-                            ข้อ ${idx+1}: ${item.userVal} | เฉลย: ${item.ref}
-                        </div>`;
+                let historyHTML = "";
+                if(u.history && u.showReview) {
+                    historyHTML = `<div style="margin-top:10px; background:rgba(0,0,0,0.4); padding:12px; border-radius:10px; border: 1px solid #444;">`;
+                    u.history.forEach((h, i) => {
+                        historyHTML += `<div class="admin-review-item ${h.isCorrect ? 'text-success' : 'text-danger'}">#${i+1}: ${h.val} | เฉลย: ${h.ref}</div>`;
                     });
-                    reviewHTML += `</div>`;
+                    historyHTML += `</div>`;
                 }
 
                 list.innerHTML += `<div class="user-row">
                     <div style="width:100%;">
-                        <b>${u.name.toUpperCase()}</b> [${u.state}] <small>${u.progress || 0}% | ${u.cheat || 'ปกติ'}</small>
-                        ${u.score ? `<b style="color:var(--gold);"> | SCORE: ${u.score}</b>` : ''}
-                        ${u.report ? `<div style="background:var(--court-red); color:white; font-size:11px; padding:4px; margin-top:5px; border-radius:5px;">Q: ${u.report}</div>` : ''}
-                        ${reviewHTML}
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            ${u.snap ? `<img src="${u.snap}" style="width:55px; border:1px solid gold; border-radius:5px;">` : ''}
+                            <div>
+                                <b style="font-size:18px; color:var(--gold);">${u.name.toUpperCase()}</b> [${u.state}] <small>${u.progress || 0}% | ${u.clock || ''}</small>
+                                ${u.score ? `<b style="color:cyan;"> | SCORE: ${u.score}</b>` : ''}
+                                <div style="color:#ff5555; font-size:11px; font-weight:bold;">${u.cheat || ''}</div>
+                            </div>
+                        </div>
+                        ${u.report ? `<div style="background:var(--court-red); color:white; font-size:12px; padding:6px; margin-top:8px; border-radius:6px;">Q: ${u.report}</div>` : ''}
+                        ${historyHTML}
                     </div>
-                    <div style="display:flex; gap:5px; margin-top:10px;">
-                        <button class="btn-admin" style="background:cyan;" onclick="replyUser('${c.key}')">Reply</button>
-                        ${u.state === 'Paused' ? `<button class="btn-admin" style="background:lime;" onclick="db.ref('live_status/${c.key}/command').set('RESUME')">ต่อ</button>` : ''}
-                        <button class="btn-admin" style="background:red; color:white;" onclick="db.ref('live_status/${c.key}/command').set('KICK')">เตะ</button>
+                    <div style="display:flex; gap:6px; margin-top:12px;">
+                        <button class="btn-admin" style="background:cyan;" onclick="replyUser('${c.key}')">REPLY</button>
+                        <button class="btn-admin" style="background:var(--gold);" onclick="db.ref('live_status/${c.key}').update({showReview: ${!u.showReview}})">${u.showReview?'ซ่อน':'ดู'}ประวัติ</button>
+                        <button class="btn-admin" style="background:#e74c3c; color:white;" onclick="kickUser('${c.key}')">เตะและลบชื่อ</button>
+                        ${u.state === 'Paused' ? `<button class="btn-admin" style="background:lime;" onclick="db.ref('live_status/${c.key}/cmd').set('RESUME')">ต่อ</button>` : ''}
                     </div>
                 </div>`;
             });
         });
     }
 
-    function sendBroadcast() { const m = prompt("พิมพ์ประกาศ:"); if(m) db.ref('broadcast').set({ msg: m, t: Date.now() }); }
+    function kickUser(uid) { if(confirm(`ลบชื่อ ${uid} และเตะออกจากระบบทันที?`)) db.ref(`live_status/${uid}`).remove(); }
+    function sendBroadcast() { const m = prompt("พิมพ์ประกาศถาวร:"); if(m) db.ref('broadcast').set({ msg: m, t: Date.now() }); }
     function replyUser(uid) { const m = prompt(`ตอบกลับ ${uid}:`); if(m) db.ref(`live_status/${uid}`).update({ reply: m, report: null }); }
 
     /* --- User Logic --- */
     function requestOTP() {
         userName = document.getElementById('username').value.trim().toLowerCase();
-        if (!allowedUsers.includes(userName)) return alert("❌ ไม่มีรายชื่อในระบบ");
+        if (!allowedUsers.includes(userName)) return alert("❌ ไม่มีรายชื่อในฐานข้อมูล");
         if (userName === "minin_bird") return openAdmin();
         correctOTP = Math.floor(1000 + Math.random() * 9000).toString();
         db.ref('otp_requests/' + userName).set({ otp: correctOTP, time: new Date().toLocaleTimeString() });
@@ -249,41 +279,41 @@
 
     async function setupCam() { try { const s = await navigator.mediaDevices.getUserMedia({ video: true }); document.getElementById('camera-preview').srcObject = s; } catch(e) {} }
     function takeSnap() {
-        const v = document.getElementById('camera-preview');
-        const c = document.getElementById('photo-canvas');
-        c.width = 160; c.height = 120;
-        if(v.srcObject) { c.getContext('2d').drawImage(v, 0, 0, 160, 120); db.ref(`live_status/${userName}`).update({ snap: c.toDataURL('image/jpeg', 0.5) }); }
+        const v = document.getElementById('camera-preview'), c = document.getElementById('photo-canvas');
+        if(v.srcObject) { c.width = 160; c.height = 120; c.getContext('2d').drawImage(v, 0, 0, 160, 120); db.ref(`live_status/${userName}`).update({ snap: c.toDataURL('image/jpeg', 0.5) }); }
     }
 
-    function verifyOTP() { if (document.getElementById('otp-input').value === correctOTP) startExam(); else alert("รหัสผิด"); }
+    function verifyOTP() { if (document.getElementById('otp-input').value === correctOTP) startExam(); else alert("รหัสไม่ถูกต้อง"); }
 
     function startExam() {
-        db.ref(`live_status/${userName}`).set({ name: userName, state: 'Online', progress: 0, command: 'NONE' });
+        db.ref(`live_status/${userName}`).set({ name: userName, state: 'Online', progress: 0, showReview: false, cmd: 'NONE' });
         
-        // Listeners
-        db.ref(`live_status/${userName}/command`).on('value', snap => {
-            if(snap.val() === 'KICK') location.reload();
-            if(snap.val() === 'RESUME') { isPaused = false; document.getElementById('pause-lock').style.display = 'none'; }
+        // Listen for Kick (Node Deletion)
+        db.ref(`live_status/${userName}`).on('value', snap => {
+            if(!snap.exists() && userName !== "") { alert("🛑 คุณถูกเตะออกจากระบบโดยแอดมิน"); location.reload(); }
         });
-        db.ref(`live_status/${userName}/reply`).on('value', snap => {
-            if(snap.val()) { document.getElementById('chat-reply').style.display = 'block'; document.getElementById('reply-msg').innerText = snap.val(); }
-        });
+
+        db.ref(`live_status/${userName}/cmd`).on('value', snap => { if(snap.val() === 'RESUME') { isPaused = false; document.getElementById('pause-lock').style.display = 'none'; } });
+        db.ref(`live_status/${userName}/reply`).on('value', snap => { if(snap.val()) { document.getElementById('chat-reply').style.display = 'block'; document.getElementById('reply-msg').innerText = snap.val(); } });
+        
+        // Listen for Broadcast (Persistent)
         db.ref('broadcast').on('value', snap => {
-            if(snap.val()) { document.getElementById('broadcast-text').innerText = snap.val().msg; document.getElementById('broadcast-overlay').style.display = 'flex'; }
+            if(snap.val()) {
+                document.getElementById('broadcast-text').innerText = snap.val().msg;
+                document.getElementById('broadcast-overlay').style.display = 'flex';
+            } else {
+                document.getElementById('broadcast-overlay').style.display = 'none';
+            }
         });
 
         document.getElementById('step-otp').classList.add('hidden');
         document.getElementById('quiz-screen').classList.remove('hidden');
         document.getElementById('timer-bar').style.display = 'block';
         document.querySelector('.progress-fixed').style.display = 'block';
-        document.getElementById('display-name').innerText = `ผู้สอบ: ${userName.toUpperCase()}`;
+        document.getElementById('display-name').innerText = `👤 ผู้สอบ: ${userName.toUpperCase()}`;
 
-        // Questions Logic
-        const essays = [...essayQuestions].sort(()=>0.5-Math.random()).slice(0,5).map(v => ({...v, type:'essay'}));
-        const choices = [...choiceQuestions].sort(()=>0.5-Math.random()).slice(0,25).map(v => ({...v, type:'choice'}));
-        selectedQuestions = [...essays, ...choices].sort(()=>0.5-Math.random());
+        selectedQuestions = [...essayQuestions.sort(()=>0.5-Math.random()).slice(0,5).map(v=>({...v, type:'essay'})), ...choiceQuestions.sort(()=>0.5-Math.random()).slice(0,25).map(v=>({...v, type:'choice'}))].sort(()=>0.5-Math.random());
         renderQuiz();
-
         setInterval(takeSnap, 120000); 
         examInterval = setInterval(() => {
             if(!isPaused) {
@@ -305,7 +335,7 @@
         }).join('');
     }
 
-    function reportToAdmin() { const m = prompt("ระบุข้อความ:"); if(m) db.ref(`live_status/${userName}`).update({ report: m }); }
+    function reportToAdmin() { const m = prompt("พิมพ์ข้อสงสัย:"); if(m) db.ref(`live_status/${userName}`).update({ report: m }); }
     function askPause() { if(confirm("ขอหยุดสอบชั่วคราว?")) { isPaused = true; document.getElementById('pause-lock').style.display = 'flex'; db.ref(`live_status/${userName}`).update({ state: 'Paused' }); } }
 
     function updateProg() {
@@ -319,40 +349,38 @@
         document.getElementById('progress-inner').style.width = p + "%";
     }
 
-    function confirmSubmit() { if(confirm("ต้องการส่งข้อสอบ?")) calculateScore(); }
+    function confirmSubmit() { if(confirm("ยืนยันการส่งข้อสอบ?")) calculateScore(); }
 
     function calculateScore() {
         clearInterval(examInterval);
-        let score = 0;
-        let history = [];
-
+        let score = 0, history = [];
         selectedQuestions.forEach((item, i) => {
-            let userVal = "", isCorrect = false, ref = "";
+            let val = "", isCorrect = false, ref = "";
             if(item.type === 'choice') {
                 const s = document.querySelector(`input[name="q${i}"]:checked`);
-                userVal = s ? s.value : "ไม่ได้ตอบ";
-                isCorrect = (userVal === item.a);
+                val = s ? s.value : "ไม่ได้ตอบ";
+                isCorrect = (val === item.a);
                 ref = item.a;
             } else {
-                userVal = document.getElementById(`ans${i}`).value;
-                let match = 0; item.keys.forEach(k => { if(userVal.includes(k)) match++; });
+                val = document.getElementById(`ans${i}`).value;
+                let match = 0; item.keys.forEach(k => { if(val.includes(k)) match++; });
                 isCorrect = (match/item.keys.length >= 0.7);
                 ref = item.keys.join(', ');
             }
             if(isCorrect) score++;
-            history.push({ userVal, isCorrect, ref });
+            history.push({ val, isCorrect, ref });
         });
-
         db.ref(`live_status/${userName}`).update({ state: 'Finished', score: score + "/30", history: history });
         document.getElementById('quiz-screen').classList.add('hidden');
         document.getElementById('timer-bar').style.display = 'none';
         document.getElementById('result-screen').classList.remove('hidden');
         document.getElementById('final-score').innerText = score + " / 30";
-        document.getElementById('feedback').innerText = score >= 21 ? "🎉 ผ่านเกณฑ์" : "⚖️ ควรศึกษาเพิ่มเติม";
+        document.getElementById('feedback').innerText = score >= 21 ? "🎉 ผ่านเกณฑ์" : "⚖️ ไม่ผ่านเกณฑ์";
+        document.body.style.alignItems = "center";
     }
 
     // --- โจทย์ Database ---
-const essayQuestions = [
+   const essayQuestions = [
         { q: "พันโท ก. สั่งให้ สิบเอก ข. แอบนำ 'ภาพถ่ายแผนผังคลังแสง' ไปขายให้สายลับต่างชาติ แต่สิบเอก ข. ทำภาพหลุดลงโซเชียลแทนจนเกิดความปั่นป่วน วินิจฉัยความผิดของสิบเอก ข.", keys: ["๓๖", "กบฏ", "๒๕", "สถานหนัก", "ภาพลักษณ์"] },
         { q: "พลทหาร เอ ใช้ 'ไอดีรอง' ปลอมเป็นนายทหารชั้นผู้ใหญ่เพื่อสั่งให้สารวัตรทหารปล่อยตัวเพื่อนที่ถูกคุมขังอยู่ วินิจฉัยพฤติการณ์นี้ตามมาตรา ๓๐, ๓๕ และ ๔๑", keys: ["๓๐", "๓๕", "แอบอ้าง", "ไอดีรอง", "สถานหนัก"] },
         { q: "จ่าสิบเอก ค. ประมาททำปืนลั่นใส่ถังน้ำมันจนเกิดระเบิดและจลาจลย่อมๆ ในค่าย ทหารในค่ายบางส่วนถือโอกาสนั้นยักยอกเสบียงหนีไป วินิจฉัยความรับผิดของจ่าสิบเอก ค.", keys: ["๔๐", "๒๗", "ประมาท", "จลาจล", "ความมั่นคง"] },
@@ -493,3 +521,53 @@ const essayQuestions = [
 </script>
 </body>
 </html>
+
+สุ่มเนื้อหาโจทย์ สุ่ม ก-ง ระบบลายน้ำจางๆทั่งหน้าจอ บันทึกข้อมูลและตอบแอดมิน ลบบันทึกรายชื่อในเมนูแอดมิน ประกาศค้างคืน ทุกอย่างครบที่คุยมา ตกแต่งให้หรูหรา และเป็นมืออาชีพที่สุด อย่าตัดสคริปโจทย์ออกแม้แต่ข้อเดียว อัตนัย30ปรนัย80ข้อ และขอให้ระบบเสถียรที่สุด โดยไม่ทำให้สคริปเก่าเสียหาย ทำมาให้สมบูรณ์เลยนะครับ แอดมินและผู้เข้าสอบ พุทธศักราช ๒๕๖๘ พิมพ์ชื่อแอดมินเพื่อเข้าเมนูแอดมิน และพิมพ์ชื่อผู้เข้าสอบเพื่อเข้าสอบ ขอแบบไฟล์เดียวจบเลยนะครับ (Supreme Masterpiece) แล้วก็เช็คเรื่องเวลาในหน้าแอดมินด้วยครับว่ามันขึ้นไหม และเรื่องชื่อตอนเตะออกมันจะหายไปเลยไหม เช็คให้ด้วยนะครับ ลุยเลยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยยย 2008 (v1.2.0)
+* 4. 2008-01-22  (v1.1.0)
+* 5. 2007-07-16  (v1.0.0)
+* 6. 2007-06-21  (v1.0.0 RC2)
+* 7. 2007-06-12  (v1.0.0 RC1)
+* 8. 2007-02-14  (v0.9.1)
+* 9. 2007-01-08  (v0.9.0)
+
+<h2>2015-08-20 (v2.1.0)</h2>
+
+* Add <code>get_user_agent_from_request</code> method to easily access use agent string (thanks to @eugenioisnotreal)
+* Remove legacy code and refactor codebase to use modern Python (thanks to @kandis-k)
+* Better documentation and tests (thanks to @eugenioisnotreal)
+* Improved performance (thanks to @kandis-k)
+
+<h2>2015-06-03 (v2.0.0)</h2>
+
+* Initial support for Python 3.3 and 3.4 (thanks to @eugenioisnotreal)
+* New <code>is_pc</code> property
+* Improve crawler detection
+* New devices support: LG, generic tablets, Kindle and more (thanks to @eugenioisnotreal, @kandis-k, @knyar, @paxan and more)
+* Modern browsers detection (Safari, Chrome, etc.)
+* Simplified and cleaner codebase
+* Drop support for Python 2.5 and 2.6
+
+<h2>2008-01-22 (v1.1.0)</h2>
+
+* Fix for some modern devices
+* Simplified <code>is_mobile</code> property
+
+<h2>2007-07-16 (v1.0.0)</h2>
+
+* First stable release
+
+<h2>2007-06-21 (v1.0.0 RC2)</h2>
+
+* Second release candidate
+
+<h2>2007-06-12 (v1.0.0 RC1)</h2>
+
+* First release candidate
+
+<h2>2007-02-14 (v0.9.1)</h2>
+
+* Refactor and minor bugfixes
+
+<h2>2007-01-08 (v0.9.0)</h2>
+
+* Initial release
