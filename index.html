@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบทดสอบความรู้ประมวลกฎหมายอาญา ๒๕๖๘</title>
+    <title>ระบบทดสอบความรู้กฎหมายอาญา ๒๕๖๘ (Secure OTP)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap');
         
@@ -18,115 +18,161 @@
         body { 
             font-family: 'Sarabun', sans-serif; 
             background-color: #f4f1ea;
-            background-image: radial-gradient(#d1ccc0 1px, transparent 1px);
-            background-size: 20px 20px;
             margin: 0; padding: 0;
             color: var(--text-dark);
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
         }
 
-        /* Timer Bar */
+        /* Constitutional Timer Bar */
         #timer-bar {
             position: fixed; top: 0; left: 0; width: 100%;
             background: var(--court-red); color: white;
             text-align: center; padding: 15px 0; font-size: 22px; font-weight: bold;
             z-index: 1000; border-bottom: 4px solid var(--court-gold);
             box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: none;
-            letter-spacing: 1px;
         }
-
-        #timer-display.warning { color: var(--court-gold); animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0.6; } }
 
         .container { 
             background: var(--paper-white); padding: 50px; border-radius: 4px; 
             box-shadow: 0 15px 40px rgba(0,0,0,0.2); 
             border-top: 15px solid var(--court-red);
             width: 90%; max-width: 850px;
-            position: relative; box-sizing: border-box;
-            transition: all 0.5s ease;
+            text-align: center; position: relative;
         }
 
-        .container::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--court-gold); }
-
-        .header { text-align: center; margin-bottom: 50px; border-bottom: 2px solid var(--court-gold); padding-bottom: 30px; width: 100%; }
-        h1 { color: var(--court-red); margin: 0; font-size: 28px; font-weight: 700; }
-        .sub-header { color: var(--court-gold); font-size: 18px; margin-top: 10px; font-weight: bold; }
-
-        /* Login Centering Control */
-        #login-screen { display: flex; flex-direction: column; align-items: center; width: 100%; }
-        #login-screen p { font-size: 18px; color: #666; font-weight: bold; margin-bottom: 10px; text-align: center; }
+        .header { border-bottom: 2px solid var(--court-gold); padding-bottom: 25px; margin-bottom: 30px; }
+        h1 { color: var(--court-red); margin: 0; font-size: 28px; }
 
         input[type="text"], textarea { 
-            width: 100%; max-width: 450px; padding: 15px; margin: 10px 0; 
-            border: 1px solid #bbb; border-radius: 4px; font-size: 18px; 
-            text-align: center; font-family: 'Sarabun', sans-serif;
-            background: #fff; color: #000; transition: 0.3s; box-sizing: border-box;
+            width: 100%; max-width: 400px; padding: 15px; margin: 15px 0; 
+            border: 1px solid #bbb; border-radius: 4px; font-size: 18px; text-align: center;
         }
         
-        input[type="text"]:focus, textarea:focus { border-color: var(--court-red); outline: none; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
-        textarea { max-width: 100%; height: 140px; text-align: left; padding: 20px; line-height: 1.6; }
-        
-        .quiz-item { background: #f9f7f2; padding: 35px; border-radius: 2px; margin-bottom: 40px; border: 1px solid #eee; border-left: 8px solid var(--court-red); text-align: left; }
-        .question-text { font-weight: bold; font-size: 20px; color: var(--court-dark); margin-bottom: 25px; line-height: 1.7; }
-        .options-group label { display: block; padding: 16px; margin: 12px 0; background: #fff; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; transition: 0.2s; }
-        .options-group label:hover { background: #fff5f5; border-color: var(--court-red); }
+        textarea { max-width: 100%; height: 120px; text-align: left; padding: 20px; }
 
-        .btn-action { background: var(--court-red); color: white; padding: 18px 45px; border: none; border-radius: 4px; font-size: 20px; font-weight: bold; cursor: pointer; width: 100%; max-width: 450px; transition: 0.3s; border-bottom: 4px solid var(--court-dark); }
-        .btn-action:hover { background: #a00000; transform: translateY(-2px); }
+        .btn-main { 
+            background: var(--court-red); color: white; padding: 18px 45px; border: none; 
+            border-radius: 4px; font-size: 20px; font-weight: bold; cursor: pointer;
+            width: 100%; max-width: 400px; border-bottom: 4px solid var(--court-dark);
+        }
 
+        /* Admin OTP Monitor */
+        #admin-monitor {
+            position: fixed; top: 80px; right: 20px; width: 280px;
+            background: #222; color: #fff; padding: 20px; border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5); z-index: 5000; text-align: left;
+            border-left: 5px solid var(--court-gold);
+        }
+
+        .quiz-item { background: #f9f7f2; padding: 30px; border-radius: 2px; margin-bottom: 35px; border-left: 8px solid var(--court-red); text-align: left; border: 1px solid #eee; border-left: 8px solid var(--court-red); }
         .hidden { display: none !important; }
-        .user-tag { color: var(--court-red); font-weight: bold; text-align: right; margin-bottom: 25px; font-size: 18px; }
-        .score-circle { width: 180px; height: 180px; line-height: 180px; border-radius: 50%; background: var(--paper-white); color: var(--court-red); font-size: 60px; font-weight: bold; margin: 30px auto; border: 10px double var(--court-gold); text-align: center; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
-        .wrong-list-box { background: #fff5f5; border: 1px solid var(--court-red); padding: 20px; border-radius: 4px; margin-top: 20px; text-align: left; }
+        .score-circle { width: 180px; height: 180px; line-height: 180px; border-radius: 50%; background: #fff; color: var(--court-red); font-size: 60px; font-weight: bold; margin: 30px auto; border: 10px double var(--court-gold); text-align: center; }
+        .wrong-box { background: #fff5f5; padding: 20px; border: 1px solid var(--court-red); text-align: left; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<div id="timer-bar">🏛️ เวลาทำข้อสอบคงเหลือ: <span id="timer-display">50:00</span></div>
+<div id="timer-bar">⏱️ เวลาคงเหลือ: <span id="timer-display">50:00</span></div>
+
+<div id="admin-monitor" class="hidden">
+    <strong style="color:var(--court-gold)">🔔 ศูนย์รับรหัส OTP (Admin)</strong>
+    <hr style="border-color:#444">
+    <div id="otp-log" style="font-size: 13px; max-height: 200px; overflow-y: auto;">
+        รอคำขอจากผู้เข้าสอบ...
+    </div>
+</div>
 
 <div class="container" id="main-frame">
-    <div id="login-screen">
+    <div id="step-name">
         <div class="header">
-            <h1>⚖️ ระบบทดสอบความรู้กฎหมายอาญา</h1>
-            <div class="sub-header">ประจำพุทธศักราช ๒๕๖๘ (Examination)</div>
+            <h1>⚖️ ระบบทดสอบความรู้กฎหมาย</h1>
+            <div style="color:var(--court-gold); font-weight:bold; margin-top:10px;">ประจำพุทธศักราช ๒๕๖๘</div>
         </div>
-        <p>กรุณาระบุชื่อเพื่อยืนยันสิทธิ์ในการทำข้อสอบ</p>
-        <input type="text" id="username" placeholder="พิมพ์ชื่อผู้เข้าสอบที่นี่...">
-        <button class="btn-action" onclick="startQuiz()">เริ่มทำข้อสอบ</button>
+        <p style="font-weight:bold; color:#666;">ระบุชื่อเพื่อขอรับรหัสผ่านเข้าสอบ</p>
+        <input type="text" id="username" placeholder="ระบุชื่อผู้เข้าสอบ...">
+        <br>
+        <button class="btn-main" onclick="requestOTP()">ขอรับรหัสผ่าน (OTP)</button>
+    </div>
+
+    <div id="step-otp" class="hidden">
+        <div class="header"><h1>🔐 ยืนยันตัวตน</h1></div>
+        <p>กรุณาระบุรหัสผ่าน 4 หลักที่ได้รับจาก <strong>Minin_Bird</strong></p>
+        <input type="text" id="otp-input" placeholder="กรอกรหัส 4 หลักที่นี่">
+        <br>
+        <button class="btn-main" onclick="verifyOTP()">ยืนยันและเริ่มทำข้อสอบ</button>
+        <p style="font-size:12px; color:red; cursor:pointer; margin-top:15px;" onclick="location.reload()">← เปลี่ยนชื่อผู้สอบ</p>
     </div>
 
     <div id="quiz-screen" class="hidden">
-        <div class="user-tag" id="display-name"></div>
-        <div class="header" style="margin-bottom: 30px; text-align:left;">
-            <h2 style="color: var(--court-red); margin: 0;">ชุดข้อสอบวัดระดับกฎหมาย (สุ่มผสม ๓๐ ข้อ)</h2>
-        </div>
+        <div id="display-user" style="text-align:right; font-weight:bold; color:var(--court-red); margin-bottom:15px;"></div>
         <div id="quiz-container"></div>
-        <button class="btn-action" style="max-width:100%" onclick="confirmSubmit()">ส่งคำตอบและสรุปผลคะแนน</button>
+        <button class="btn-main" style="max-width:100%" onclick="confirmSubmit()">ส่งข้อสอบ</button>
     </div>
 
     <div id="result-screen" class="hidden">
-        <div class="header"><h1>สรุปผลคะแนนการทดสอบ</h1></div>
-        <div id="user-result-name" style="text-align:center; font-size:22px; color:#555;"></div>
+        <div class="header"><h1>ผลการทดสอบ</h1></div>
         <div class="score-circle" id="score-display">0/30</div>
-        <p id="feedback-msg" style="text-align: center; font-size: 26px; color: var(--court-red); font-weight: bold;"></p>
-        <div id="wrong-container" class="wrong-list-box hidden">
-            <h3 style="color: var(--court-red); margin-top: 0;">❌ รายการข้อที่มีการวินิจฉัยคลาดเคลื่อน:</h3>
-            <p id="wrong-list-text" style="font-size: 18px; line-height: 1.8;"></p>
+        <div id="wrong-container" class="wrong-box hidden">
+            <strong style="color:var(--court-red);">❌ ข้อที่วินิจฉัยคลาดเคลื่อน:</strong> <span id="wrong-list"></span>
         </div>
-        <button class="btn-action" style="background:#555; border-bottom-color:#333; margin:40px auto; display:block;" onclick="location.reload()">กลับสู่หน้าแรก</button>
+        <button class="btn-main" style="background:#555; margin-top:20px;" onclick="location.reload()">กลับหน้าแรก</button>
     </div>
 </div>
 
 <script>
-    const allowedUsers = ["mininbird", "ruok555sf"];
-    let timeLeft = 50 * 60; 
-    let timerInterval;
+    const allowedUsers = ["minin_bird", "ruok555sf"];
+    const otpChannel = new BroadcastChannel('otp_system_v3');
+    let timeLeft = 50 * 60;
     let userName = "";
+    let correctOTP = "";
     let selectedQuestions = [];
 
-    // --- ข้อมูลข้อสอบ ---
+    // --- ระบบ OTP & Admin ---
+    function requestOTP() {
+        userName = document.getElementById('username').value.trim();
+        const lowName = userName.toLowerCase();
+        
+        if (!allowedUsers.includes(lowName)) {
+            alert("❌ ชื่อนี้ไม่มีสิทธิ์เข้าสอบ"); return;
+        }
+
+        if (lowName === "minin_bird") {
+            document.getElementById('admin-monitor').classList.remove('hidden');
+            alert("เข้าสู่ระบบแอดมินเรียบร้อย");
+            startQuiz(); return;
+        }
+
+        // สุ่มรหัส 4 หลัก
+        correctOTP = Math.floor(1000 + Math.random() * 9000).toString();
+        
+        // ส่งรหัสไปหา Minin_Bird
+        otpChannel.postMessage({ type: 'SEND_OTP', user: userName, otp: correctOTP });
+
+        document.getElementById('step-name').classList.add('hidden');
+        document.getElementById('step-otp').classList.remove('hidden');
+    }
+
+    otpChannel.onmessage = (e) => {
+        if (e.data.type === 'SEND_OTP') {
+            const log = document.getElementById('otp-log');
+            if(log.innerText.includes("รอคำขอ")) log.innerHTML = "";
+            const time = new Date().toLocaleTimeString();
+            log.innerHTML = `<div style="border-bottom:1px solid #444; padding:5px 0;">
+                [${time}] <b>${e.data.user}</b> <br>รหัสเข้าสอบ: <span style="font-size:20px; color:lime;">${e.data.otp}</span>
+            </div>` + log.innerHTML;
+        }
+    };
+
+    function verifyOTP() {
+        if (document.getElementById('otp-input').value === correctOTP) {
+            startQuiz();
+        } else {
+            alert("❌ รหัสผ่านไม่ถูกต้อง");
+        }
+    }
+
+    // --- โจทย์ข้อสอบ ---
     const essayQuestions = [
         { q: "พันโท ก. สั่งให้ สิบเอก ข. แอบนำ 'ภาพถ่ายแผนผังคลังแสง' ไปขายให้สายลับต่างชาติ แต่สิบเอก ข. ทำภาพหลุดลงโซเชียลแทนจนเกิดความปั่นป่วน วินิจฉัยความผิดของสิบเอก ข.", keys: ["๓๖", "กบฏ", "๒๕", "สถานหนัก", "ภาพลักษณ์"] },
         { q: "พลทหาร เอ ใช้ 'ไอดีรอง' ปลอมเป็นนายทหารชั้นผู้ใหญ่เพื่อสั่งให้สารวัตรทหารปล่อยตัวเพื่อนที่ถูกคุมขังอยู่ วินิจฉัยพฤติการณ์นี้ตามมาตรา ๓๐, ๓๕ และ ๔๑", keys: ["๓๐", "๓๕", "แอบอ้าง", "ไอดีรอง", "สถานหนัก"] },
@@ -158,7 +204,10 @@
         { q: "หากทหารนายหนึ่งกระทำผิดฐาน 'ชำเราศพ' ซึ่งกฎหมายนี้ไม่ได้เขียนไว้ ต้องทำอย่างไร?", keys: ["๕", "จารีต", "รัฐธรรมนูญ", "ดุลพินิจ"] },
         { q: "การลงโทษจำคุก ๒๔ ชั่วโมง ตามมาตรา ๙ ต้องทำอย่างไร?", keys: ["๙", "เหมาะสม", "สถานเบา", "บันทึก"] },
         { q: "คำพิพากษาถือเป็นที่สิ้นสุด ตามมาตรา ๖ หากภายหลังพบว่าพยานหลักฐานโดนแฮ็ก (มาตรา ๓๑) ศาลจะทำอย่างไร?", keys: ["เปลี่ยนแปลง", "๖", "รูปคดี", "ข้อยกเว้น"] }
+
     ];
+
+
 
     const choiceQuestions = [
         { q: "หากศาลตัดสินว่าทหารนายหนึ่งมีความผิดและสั่ง 'ขึ้นบัญชีวินัยเลว' เพียงอย่างเดียว การลงโทษนี้ถือเป็นโทษระดับใด?", a: "ค", options: ["ก. โทษสถานเบา", "ข. โทษสถานกลาง", "ค. โทษสถานเบา หรือ โทษสถานกลาง", "ง. โทษสถานหนัก"] },
@@ -266,85 +315,57 @@
     function getRandom(arr, n) { return [...arr].sort(() => 0.5 - Math.random()).slice(0, n); }
 
     function startQuiz() {
-        userName = document.getElementById('username').value.trim();
-        const lowName = userName.toLowerCase();
+        selectedQuestions = [...getRandom(essayQuestions, 5).map(q=>({...q, type:'essay'})), ...getRandom(choiceQuestions, 25).map(q=>({...q, type:'choice'}))].sort(() => 0.5 - Math.random());
         
-        // ตรวจสอบรายชื่อผู้มีสิทธิ์
-        if (!allowedUsers.includes(lowName)) {
-            alert("❌ ชื่อของท่านไม่มีในระบบผู้ได้รับสิทธิ์เข้าสอบ");
-            return;
-        }
-
-        // ลบระบบล็อคประวัติเดิมเพื่อให้เข้าสอบได้ไม่จำกัดครั้ง
-        selectedQuestions = [
-            ...getRandom(essayQuestions, 5).map(q=>({...q, type:'essay'})),
-            ...getRandom(choiceQuestions, 25).map(q=>({...q, type:'choice'}))
-        ].sort(() => 0.5 - Math.random());
-
-        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('step-name').classList.add('hidden');
+        document.getElementById('step-otp').classList.add('hidden');
         document.getElementById('quiz-screen').classList.remove('hidden');
-        document.getElementById('display-name').innerText = "👤 ผู้เข้าสอบ: " + userName;
+        document.getElementById('display-user').innerText = "👤 ผู้สอบ: " + userName;
         document.getElementById('timer-bar').style.display = 'block';
-        document.body.style.alignItems = "flex-start";
-        document.body.style.paddingTop = "100px";
+        document.body.style.alignItems = "flex-start"; document.body.style.paddingTop = "100px";
 
         renderQuiz();
-        timerInterval = setInterval(() => {
+        setInterval(() => {
             timeLeft--;
-            let mins = Math.floor(timeLeft / 60);
-            let secs = timeLeft % 60;
-            document.getElementById('timer-display').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-            if (timeLeft <= 300) document.getElementById('timer-display').classList.add('warning');
+            let m = Math.floor(timeLeft/60), s = timeLeft%60;
+            document.getElementById('timer-display').innerText = `${m}:${s<10?'0':''}${s}`;
             if (timeLeft <= 0) calculateScore();
         }, 1000);
     }
 
     function renderQuiz() {
-        const container = document.getElementById('quiz-container');
-        container.innerHTML = selectedQuestions.map((item, i) => `
+        document.getElementById('quiz-container').innerHTML = selectedQuestions.map((item, i) => `
             <div class="quiz-item">
-                <div class="question-text">${i + 1}. ${item.q}</div>
-                ${item.type === 'essay' ? `<textarea id="ans${i}" placeholder="พิมพ์คำสรุปวินิจฉัยและระบุมาตรากฎหมาย..."></textarea>` : 
-                `<div class="options-group">${item.options.map((opt, j) => `<label><input type="radio" name="q${i}" value="${['ก','ข','ค','ง'][j]}"> ${opt}</label>`).join('')}</div>`}
+                <div style="color:var(--court-red); font-weight:bold; margin-bottom:10px;">${item.type==='essay'?'[วินิจฉัยข้อเขียน]':'[ปรนัย]'}</div>
+                <div style="font-size:19px; font-weight:bold;">${i+1}. ${item.q}</div>
+                ${item.type==='essay' ? `<textarea id="ans${i}" placeholder="เขียนคำวินิจฉัย..."></textarea>` : 
+                `<div style="margin-top:15px;">${item.options.map((opt, j)=>`<label style="display:block; padding:12px; border:1px solid #ddd; margin:8px 0; background:#fff; cursor:pointer;"><input type="radio" name="q${i}" value="${['ก','ข','ค','ง'][j]}"> ${opt}</label>`).join('')}</div>`}
             </div>
         `).join('');
     }
 
-    function confirmSubmit() { if(confirm("ท่านมั่นใจในการส่งคำตอบ?")) calculateScore(); }
+    function confirmSubmit() { if(confirm("ยืนยันส่งข้อสอบ?")) calculateScore(); }
 
     function calculateScore() {
-        clearInterval(timerInterval);
-        document.getElementById('timer-bar').style.display = 'none';
+        document.getElementById('timer-bar').classList.add('hidden');
         let score = 0; let wrongs = [];
-
         selectedQuestions.forEach((item, i) => {
-            let correct = false;
+            let ok = false;
             if (item.type === 'choice') {
                 const sel = document.querySelector(`input[name="q${i}"]:checked`);
-                if (sel && sel.value === item.a) correct = true;
+                if (sel && sel.value === item.a) ok = true;
             } else {
-                const ans = document.getElementById(`ans${i}`).value.trim();
-                let match = 0;
-                item.keys.forEach(k => { if (ans.includes(k)) match++; });
-                if ((match / item.keys.length) >= 0.7) correct = true; // เกณฑ์ 70%
+                const ans = document.getElementById(`ans${i}`).value;
+                let match = 0; item.keys.forEach(k => { if (ans.includes(k)) match++; });
+                if ((match / item.keys.length) >= 0.7) ok = true;
             }
-            if (correct) score++; else wrongs.push(i + 1);
+            if (ok) score++; else wrongs.push(i+1);
         });
 
         document.getElementById('quiz-screen').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
         document.getElementById('score-display').innerText = score + "/30";
-        document.getElementById('user-result-name').innerText = "ชื่อผู้เข้าสอบ: " + userName;
-        
-        if (wrongs.length > 0) {
-            document.getElementById('wrong-container').classList.remove('hidden');
-            document.getElementById('wrong-list-text').innerText = wrongs.join(", ");
-        }
-
-        const msg = document.getElementById('feedback-msg');
-        if (score >= 26) msg.innerText = "ระดับผลการสอบ: ดีเยี่ยม";
-        else if (score >= 18) msg.innerText = "ระดับผลการสอบ: ผ่านเกณฑ์";
-        else msg.innerText = "ระดับผลการสอบ: ควรศึกษาเพิ่มเติม";
+        if(wrongs.length > 0) { document.getElementById('wrong-container').classList.remove('hidden'); document.getElementById('wrong-list').innerText = wrongs.join(", "); }
     }
 </script>
 </body>
