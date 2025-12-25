@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบทดสอบกฎหมายอาญา ๒๕๖๘ | Supreme Command Masterpiece</title>
+    <title>ระบบทดสอบความรู้กฎหมายอาญา ๒๕๖๘ | Supreme Masterpiece</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
@@ -14,133 +14,51 @@
         
         :root {
             --gold: #D4AF37;
-            --gold-light: #F9E79F;
             --court-red: #8B0000;
             --court-dark: #1a0202;
-            --glass-white: rgba(255, 255, 255, 0.96);
+            --glass: rgba(255, 255, 255, 0.98);
             --danger: #FF3E3E;
             --success: #27AE60;
-            --premium-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body, html { 
-            margin: 0; padding: 0; min-height: 100vh;
-            font-family: 'Sarabun', sans-serif;
-            background: #050505;
-            background: radial-gradient(circle at center, #2c0505 0%, #050505 100%);
-            color: #333; overflow-x: hidden;
-            user-select: none; -webkit-user-select: none;
-        }
+        body, html { margin: 0; padding: 0; min-height: 100vh; font-family: 'Sarabun', sans-serif; background: radial-gradient(circle at center, #2c0505 0%, #050505 100%); color: #333; overflow-x: hidden; user-select: none; -webkit-user-select: none; }
+        #particles-js { position: fixed; inset: 0; z-index: -1; }
 
-        #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; }
+        /* --- UI Elements --- */
+        #timer-bar { position: fixed; top: 0; left: 0; width: 100%; background: linear-gradient(90deg, var(--court-red), #300); color: #fff; text-align: center; padding: 14px 0; font-size: 20px; font-weight: bold; z-index: 1000; border-bottom: 2px solid var(--gold); display: none; box-shadow: 0 5px 25px rgba(0,0,0,0.8); letter-spacing: 1px; }
+        .progress-fixed { width: 100%; height: 5px; background: rgba(255,255,255,0.1); position: fixed; top: 52px; left: 0; z-index: 1001; display: none; }
+        #progress-inner { width: 0%; height: 100%; background: var(--gold); box-shadow: 0 0 15px var(--gold); transition: 0.6s; }
 
-        /* --- Global Elements --- */
-        #timer-bar { 
-            position: fixed; top: 0; left: 0; width: 100%; 
-            background: linear-gradient(135deg, var(--court-red), #500); 
-            color: #fff; text-align: center; padding: 15px 0; 
-            font-size: 20px; font-weight: bold; z-index: 1000; 
-            border-bottom: 2px solid var(--gold); box-shadow: 0 5px 25px rgba(0,0,0,0.6);
-            display: none; letter-spacing: 1.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
+        .container { background: var(--glass); padding: 40px 25px; border-radius: 20px; border: 1px solid var(--gold); width: 94%; max-width: 880px; text-align: center; position: relative; backdrop-filter: blur(20px); animation: fadeIn 0.8s; margin: 90px auto 40px auto; box-shadow: 0 25px 60px rgba(0,0,0,0.5); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .progress-fixed { 
-            width: 100%; height: 4px; background: rgba(255,255,255,0.1); 
-            position: fixed; top: 50px; left: 0; z-index: 1001; display: none; 
-        }
-        @media (min-width: 768px) { .progress-fixed { top: 58px; } }
-        #progress-inner { width: 0%; height: 100%; background: linear-gradient(90deg, var(--gold), #fff); box-shadow: 0 0 15px var(--gold); transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        /* --- Admin UI --- */
+        #admin-panel { position: fixed; inset: 0; background: #080808; color: #fff; z-index: 9999; padding: 25px; display: none; overflow-y: auto; }
+        .admin-card { background: rgba(255,255,255,0.05); border: 1px solid var(--gold); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.05); margin-bottom: 10px; border-radius: 12px; border-left: 5px solid var(--gold); }
 
-        /* --- Containers --- */
-        .container { 
-            background: var(--glass-white); padding: 40px 25px; border-radius: 25px; 
-            border: 1px solid var(--gold); width: 94%; max-width: 880px; 
-            text-align: center; position: relative; backdrop-filter: blur(20px); 
-            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1); margin: 90px auto 40px auto;
-            box-shadow: var(--premium-shadow);
-        }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- Quiz Content --- */
+        .quiz-card { background: #fff; padding: 30px; border-radius: 18px; margin-bottom: 25px; text-align: left; border: 1px solid #eee; border-left: 8px solid var(--court-red); box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .question-text { font-size: 20px; font-weight: bold; color: var(--court-dark); line-height: 1.5; margin-bottom: 20px; }
+        .opt-label { display: flex; align-items: center; padding: 18px; margin: 12px 0; background: #f9f9f9; border: 1px solid #f0f0f0; border-radius: 14px; cursor: pointer; transition: 0.2s; font-size: 17px; }
+        .opt-label:hover { background: #fffcf0; border-color: var(--gold); }
+        input[type="radio"] { width: 22px; height: 22px; margin-right: 15px; accent-color: var(--court-red); }
 
-        /* --- Typography --- */
-        .header h1 { color: var(--court-red); margin: 0; font-size: 28px; font-weight: 700; text-transform: uppercase; }
-        .header-sub { color: var(--gold); font-weight: bold; font-size: 18px; margin-top: 5px; letter-spacing: 1px; }
+        /* --- Status & Buttons --- */
+        .btn-main { background: linear-gradient(135deg, var(--court-red) 0%, #500 100%); color: white; padding: 18px 36px; border: 1px solid var(--gold); border-radius: 50px; font-size: 20px; font-weight: bold; cursor: pointer; transition: 0.4s; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(139, 0, 0, 0.4); }
+        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(139, 0, 0, 0.6); }
 
-        /* --- Admin UI Dashboard --- */
-        #admin-panel { position: fixed; inset: 0; background: #0a0a0a; color: #fff; z-index: 9999; padding: 25px; display: none; overflow-y: auto; }
-        .admin-header { border-bottom: 2px solid var(--gold); padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-        .admin-grid { display: grid; grid-template-columns: 1fr; gap: 25px; }
-        @media (min-width: 1024px) { .admin-grid { grid-template-columns: 380px 1fr; } }
-        .admin-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.2); border-radius: 20px; padding: 25px; box-shadow: inset 0 0 20px rgba(0,0,0,0.4); }
-        
-        .user-row { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 18px; background: rgba(255,255,255,0.06); margin-bottom: 12px; 
-            border-radius: 15px; border-left: 5px solid var(--gold); transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .user-row:hover { background: rgba(255,255,255,0.1); transform: scale(1.01); }
+        .review-box { margin-top: 40px; text-align: left; background: #fff; padding: 25px; border-radius: 20px; border: 1px solid #ddd; }
+        .review-item { padding: 15px; border-bottom: 1px solid #eee; margin-bottom: 10px; }
+        .review-item.wrong { border-left: 5px solid var(--danger); background: #fff8f8; }
+        .ans-correct { color: var(--success); font-weight: bold; }
+        .ans-wrong { color: var(--danger); font-weight: bold; }
 
-        /* --- Quiz Cards --- */
-        .quiz-card { 
-            background: #fff; padding: 30px; border-radius: 20px; margin-bottom: 30px; 
-            text-align: left; border: 1px solid #e0e0e0; border-left: 10px solid var(--court-red); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.04); transition: 0.3s;
-        }
-        .quiz-card:hover { border-color: var(--gold); box-shadow: 0 15px 35px rgba(212,175,55,0.1); }
-        .question-text { font-size: 21px; font-weight: bold; color: var(--court-dark); line-height: 1.6; margin-bottom: 25px; }
-        
-        .opt-label { 
-            display: flex; align-items: center; padding: 20px; margin: 12px 0; 
-            background: #f9f9f9; border: 2px solid #f0f0f0; border-radius: 15px; 
-            cursor: pointer; transition: 0.2s all; font-size: 18px; color: #444; 
-        }
-        .opt-label:hover { background: #fffcf0; border-color: var(--gold); color: #000; transform: translateX(8px); }
-        input[type="radio"] { width: 24px; height: 24px; margin-right: 18px; accent-color: var(--court-red); flex-shrink: 0; }
-
-        /* --- Buttons Master --- */
-        .btn-main { 
-            background: linear-gradient(135deg, var(--court-red) 0%, #600 100%);
-            color: white; padding: 18px 36px; border: 1px solid var(--gold); 
-            border-radius: 50px; font-size: 20px; font-weight: bold; cursor: pointer;
-            transition: 0.4s; width: 100%; max-width: 420px;
-            box-shadow: 0 10px 30px rgba(139, 0, 0, 0.4);
-            letter-spacing: 1px;
-        }
-        .btn-main:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(139, 0, 0, 0.6); filter: brightness(1.2); }
-        .btn-main:active { transform: translateY(-2px); }
-
-        .btn-admin { padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; transition: 0.2s; }
-        .btn-kick { background: var(--danger); color: #fff; }
-        .btn-kick:hover { background: #ff1a1a; box-shadow: 0 0 15px rgba(255,0,0,0.4); }
-
-        /* --- Overlay Status --- */
-        #pause-lock { 
-            position: absolute; inset: 0; background: rgba(0,0,0,0.97); 
-            border-radius: 25px; z-index: 500; display: none; 
-            flex-direction: column; justify-content: center; align-items: center; 
-            color: var(--gold); padding: 20px; text-align: center;
-        }
-
-        .score-display-premium { 
-            width: 220px; height: 220px; line-height: 220px; border-radius: 50%; 
-            background: #fff; color: var(--court-red); font-size: 70px; font-weight: 900; 
-            margin: 40px auto; border: 15px double var(--gold); text-align: center;
-            box-shadow: 0 0 40px rgba(212,175,55,0.3);
-        }
-
-        input[type="text"], textarea { 
-            width: 100%; max-width: 450px; padding: 20px; margin: 15px 0; 
-            border: 2px solid #e0e0e0; border-radius: 18px; font-size: 22px; 
-            text-align: center; transition: 0.3s; font-family: 'Sarabun';
-            background: #fff;
-        }
-        input:focus { border-color: var(--gold); box-shadow: 0 0 20px rgba(212,175,55,0.2); outline: none; }
-        textarea { height: 160px; text-align: left; padding: 25px; font-size: 18px; line-height: 1.6; }
-        
+        input[type="text"], textarea { width: 100%; max-width: 450px; padding: 18px; margin: 10px 0; border: 2px solid #ddd; border-radius: 15px; font-size: 20px; text-align: center; font-family: 'Sarabun'; }
+        textarea { height: 140px; text-align: left; }
+        #pause-lock { position: absolute; inset: 0; background: rgba(0,0,0,0.98); border-radius: 20px; z-index: 500; display: none; flex-direction: column; justify-content: center; align-items: center; color: var(--gold); text-align: center; }
         .hidden { display: none !important; }
-        .badge-paused { background: #f39c12; color: #000; animation: glow-paused 1.5s infinite alternate; }
-        @keyframes glow-paused { from { box-shadow: 0 0 5px #f39c12; } to { box-shadow: 0 0 20px #f39c12; } }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -149,95 +67,96 @@
 <video id="camera-preview" style="display:none;" autoplay playsinline></video>
 <canvas id="photo-canvas" style="display:none;"></canvas>
 
-<div id="broadcast-overlay" style="position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 10002; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px; color: #fff;">
-    <div style="background: #fff; color: #333; padding: 40px; border-radius: 30px; border: 5px solid var(--gold); max-width: 550px; box-shadow: 0 0 60px var(--gold);">
-        <div style="font-size: 60px; margin-bottom:10px;">📢</div>
-        <h2 style="color:var(--court-red); font-size: 28px; margin-bottom:15px;">ประกาศสำคัญ</h2>
-        <p id="broadcast-text" style="font-size: 20px; font-weight: bold; line-height: 1.6;"></p>
-        <br>
-        <button class="btn-main" onclick="document.getElementById('broadcast-overlay').style.display='none'" style="max-width: 200px;">รับทราบ</button>
+<div id="broadcast-overlay" style="position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10002; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px; color: #fff;">
+    <div style="background: #fff; color: #333; padding: 40px; border-radius: 30px; border: 5px solid var(--gold); max-width: 500px;">
+        <h2 style="color:var(--court-red)">📢 ประกาศจากผู้คุมสอบ</h2>
+        <p id="broadcast-text" style="font-size: 20px; font-weight: bold;"></p>
+        <button class="btn-main" onclick="document.getElementById('broadcast-overlay').style.display='none'" style="max-width: 150px; padding: 10px;">รับทราบ</button>
     </div>
 </div>
 
 <div id="admin-panel">
-    <div class="admin-header">
-        <h1 style="color: var(--gold);"><span style="opacity:0.6;">🏛️</span> SUPREME COMMAND CENTER</h1>
-        <div style="display:flex; gap:12px;">
-            <button class="btn-admin" onclick="sendBroadcast()" style="background:var(--gold); color:#000;">📢 ส่งประกาศ</button>
-            <button class="btn-admin" onclick="location.reload()" style="background:#444; color:white;">LOGOUT</button>
+    <div class="admin-header" style="display:flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--gold); padding-bottom: 15px;">
+        <h1 style="color: var(--gold); margin:0;">🏛️ EXAM COMMAND CENTER</h1>
+        <div style="display:flex; gap:10px;">
+            <button class="btn-main" onclick="sendBroadcast()" style="padding: 10px 20px; font-size: 14px; max-width: 150px; background:var(--gold); color:#000;">📢 ประกาศทุกคน</button>
+            <button class="btn-main" onclick="location.reload()" style="padding: 10px 20px; font-size: 14px; max-width: 120px; background:#555;">Logout</button>
         </div>
     </div>
-    <div class="admin-grid">
+    
+    <div style="display: grid; grid-template-columns: 300px 1fr; gap: 20px; margin-top: 20px;">
         <div class="admin-card">
-            <h3 style="color:var(--gold); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom:15px; margin-top:0;">🔑 ACCESS SIGNALS</h3>
+            <h3>🔑 OTP Signals</h3>
             <div id="admin-otp-list"></div>
         </div>
         <div class="admin-card">
-            <h3 style="color:var(--gold); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom:15px; margin-top:0;">📊 LIVE STATUS & SNAPSHOTS</h3>
+            <h3>📊 Live Monitoring</h3>
             <div id="admin-user-list"></div>
         </div>
     </div>
 </div>
 
-<div id="timer-bar">⏱️ เวลาวินิจฉัยคงเหลือ: <span id="timer-display">50:00</span></div>
+<div id="timer-bar">⏱️ เวลาทำข้อสอบคงเหลือ: <span id="timer-display">50:00</span></div>
 <div class="progress-fixed"><div id="progress-inner"></div></div>
 
 <div class="container" id="main-frame">
     <div id="pause-lock">
-        <div style="font-size: 90px; margin-bottom: 25px; filter: drop-shadow(0 0 20px var(--gold));">⏸️</div>
-        <h1 style="color:var(--gold); font-size: 36px; margin:0;">ระงับการเข้าถึง</h1>
-        <p style="font-size: 18px; color:rgba(255,255,255,0.8); margin-top:15px;">กรุณารอแอดมิน <strong>Minin_Bird</strong> อนุญาตให้ดำเนินการต่อ</p>
+        <div style="font-size: 60px;">⏸️</div>
+        <h2>หยุดสอบชั่วคราว</h2>
+        <p>โจทย์ถูกซ่อนเพื่อความปลอดภัย<br>กรุณารอแอดมินอนุญาตให้ทำข้อสอบต่อ</p>
     </div>
 
     <div id="step-name">
-        <div style="font-size: 70px; margin-bottom: 20px;">⚖️</div>
+        <div style="font-size: 60px; margin-bottom: 10px;">⚖️</div>
         <h1>ระบบทดสอบความรู้กฎหมาย</h1>
-        <div class="header-sub">พุทธศักราช ๒๕๖๘</div>
-        <div style="height: 2px; width: 100px; background: var(--gold); margin: 30px auto;"></div>
-        <p style="font-weight: bold; color: #555;">ระบุตัวตนของท่านเพื่อขอรับสิทธิ์เข้าสู่ระบบ</p>
-        <input type="text" id="username" placeholder="Username" autocomplete="off">
+        <div style="color:var(--gold); font-weight:bold; margin-bottom: 30px;">พุทธศักราช ๒๕๖๘ (Supreme Edition)</div>
+        <input type="text" id="username" placeholder="ระบุ Username ของท่าน" autocomplete="off">
         <br><br>
-        <button class="btn-main" onclick="requestOTP()">ขอรับรหัสผ่าน (OTP)</button>
+        <button class="btn-main" onclick="requestOTP()">ขอรับรหัสผ่านเข้าสอบ</button>
     </div>
 
     <div id="step-otp" class="hidden">
-        <div style="font-size: 60px; margin-bottom: 20px;">🔐</div>
-        <h1>ยืนยันความปลอดภัย</h1>
-        <p style="color: var(--danger); font-weight: bold;">ระบุรหัส ๔ หลักที่ปรากฏบนเครื่องแอดมิน</p>
-        <input type="text" id="otp-input" maxlength="4" placeholder="••••" style="font-size: 45px; letter-spacing: 20px; font-weight: bold; width: 320px;">
+        <h1>🔐 ยืนยันรหัสความปลอดภัย</h1>
+        <p style="color:var(--danger); font-weight:bold;">ระบบบันทึกการสลับหน้าจอและสุ่มถ่ายภาพอัตโนมัติ</p>
+        <input type="text" id="otp-input" maxlength="4" placeholder="••••" style="font-size: 40px; letter-spacing: 15px; font-weight: bold;">
         <br><br>
-        <button class="btn-main" onclick="verifyOTP()">เริ่มกระบวนการวินิจฉัย</button>
+        <button class="btn-main" onclick="verifyOTP()">เข้าสู่ห้องสอบ</button>
     </div>
 
     <div id="quiz-screen" class="hidden">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">
-             <div style="font-weight: bold; color: var(--court-red); font-size: 18px;">ID: <span id="exam-id" style="color:#777;"></span></div>
-             <div id="display-user" style="font-weight:bold; color:var(--gold); font-size: 18px;"></div>
+        <div style="display: flex; justify-content: space-between; font-weight: bold; color: var(--court-red); margin-bottom: 20px;">
+            <span id="display-user"></span>
+            <span id="strike-display" style="color:var(--danger)">สลับจอได้: 3/3</span>
         </div>
-        
         <div id="quiz-container"></div>
         
-        <div id="chat-reply-area" class="chat-reply-box" style="margin-bottom:30px;">
-            <strong style="color:var(--court-red);">💬 ข้อความจากแอดมิน:</strong> <span id="admin-msg-text" style="font-size: 18px;"></span>
+        <div id="chat-reply" style="background:#f0f0f0; padding:10px; border-radius:10px; margin-top:15px; border-left:5px solid var(--gold); text-align:left; display:none;">
+            <b>💬 แอดมินตอบ:</b> <span id="reply-msg"></span>
         </div>
 
-        <div style="background: rgba(212,175,55,0.05); padding: 25px; border-radius: 20px; display: grid; grid-template-columns: 1fr; gap: 12px; border: 1px dashed var(--gold);">
-            <button class="btn-main" style="background:#3498db; font-size: 16px; margin:0;" onclick="reportToAdmin()">📩 ส่งคำถามถึงแอดมิน</button>
-            <button class="btn-main" style="background:#e67e22; font-size: 16px; margin:0;" onclick="askPause()">🚩 ร้องขอหยุดสอบชั่วคราว</button>
-            <button class="btn-main" onclick="confirmSubmit()" style="margin:0;">ส่งคำพิพากษา (ส่งข้อสอบ)</button>
+        <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+            <button class="btn-main" style="background:#3498db; font-size: 16px;" onclick="reportToAdmin()">📩 สอบถามผู้คุมสอบ (Report)</button>
+            <button class="btn-main" style="background:#e67e22; font-size: 16px;" onclick="askPause()">🚩 ขอหยุดสอบชั่วคราว</button>
+            <button class="btn-main" onclick="confirmSubmit()">ส่งกระดาษคำตอบ</button>
         </div>
     </div>
 
     <div id="result-screen" class="hidden">
-        <h1 style="font-size: 36px; margin-bottom:10px;">📜 ผลการวินิจฉัย</h1>
-        <div class="score-display-premium" id="score-val">0/30</div>
-        <div id="feedback-txt" style="font-size: 26px; font-weight: bold; color: var(--court-red); margin-bottom: 40px;"></div>
-        <button class="btn-main" style="background:var(--court-dark); max-width:250px;" onclick="location.reload()">สิ้นสุดหน้าที่</button>
+        <h1>📜 สรุปผลการทดสอบ</h1>
+        <div style="font-size: 60px; font-weight: 900; color: var(--court-red); margin: 20px 0;" id="final-score"></div>
+        <div id="feedback-txt" style="font-size: 24px; font-weight: bold; margin-bottom: 30px;"></div>
+        
+        <div class="review-box">
+            <h3 style="color:var(--court-red)">🔍 ตรวจทานประวัติการตอบและเฉลย</h3>
+            <div id="review-list"></div>
+        </div>
+
+        <button class="btn-main" style="margin-top:30px;" onclick="location.reload()">กลับหน้าหลัก</button>
     </div>
 </div>
 
 <script>
-    /* --- Firebase Master Config --- */
+    /* --- Firebase Config --- */
     const firebaseConfig = {
         apiKey: "AIzaSyDzPAYTMlmbIVBR5U862o5vlleDDIz5GEc",
         authDomain: "legal-exam.firebaseapp.com",
@@ -254,93 +173,77 @@
     let userName = "", correctOTP = "", selectedQuestions = [], examInterval;
     let timeLeft = 50 * 60, isPaused = false, strikes = 0;
 
-    /* --- Anti-Cheat Engine --- */
+    /* --- Anti-Cheat Logic --- */
     document.addEventListener("visibilitychange", () => {
         if (document.hidden && userName !== "" && !isPaused && !document.getElementById('quiz-screen').classList.contains('hidden')) {
             strikes++;
             db.ref(`live_status/${userName}`).update({ cheat: `⚠️ สลับจอครั้งที่ ${strikes}` });
-            if(strikes >= 3) { calculateScore(); alert("🛑 ทุจริต! สลับหน้าจอเกินกำหนด ระบบส่งข้อสอบทันที"); }
-            else alert(`⚠️ คำเตือน: ห้ามสลับหน้าจอ! (ครั้งที่ ${strikes}/3)`);
+            if (strikes >= 3) { calculateScore(); alert("🛑 ระบบส่งข้อสอบอัตโนมัติเนื่องจากตรวจพบพฤติกรรมไม่เหมาะสม"); }
+            else alert(`⚠️ คำเตือน! ห้ามสลับหน้าจอ (เหลือสิทธิ์อีก ${3 - strikes} ครั้ง)`);
+            document.getElementById('strike-display').innerText = `สลับจอได้: ${3-strikes}/3`;
         }
     });
 
-    async function setupCamera() {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            document.getElementById('camera-preview').srcObject = stream;
-        } catch (e) { console.warn("Camera blocked"); }
+    /* --- Camera Snap --- */
+    async function setupCam() { try { const s = await navigator.mediaDevices.getUserMedia({ video: true }); document.getElementById('camera-preview').srcObject = s; } catch(e) {} }
+    function takeSnap() {
+        const v = document.getElementById('camera-preview');
+        const c = document.getElementById('photo-canvas');
+        c.width = 160; c.height = 120;
+        if(v.srcObject) { c.getContext('2d').drawImage(v, 0, 0, 160, 120); db.ref(`live_status/${userName}`).update({ snap: c.toDataURL('image/jpeg', 0.5) }); }
     }
 
-    function takeSnapshot() {
-        const video = document.getElementById('camera-preview');
-        if(!video.srcObject) return;
-        const canvas = document.getElementById('photo-canvas');
-        canvas.width = 160; canvas.height = 120;
-        canvas.getContext('2d').drawImage(video, 0, 0, 160, 120);
-        db.ref(`live_status/${userName}`).update({ snap: canvas.toDataURL('image/jpeg', 0.5) });
-    }
-
-    /* --- Command Center Logic --- */
+    /* --- Core Logic --- */
     function openAdminPanel() {
         document.getElementById('main-frame').classList.add('hidden');
         document.getElementById('admin-panel').style.display = 'block';
-        
         db.ref('otp_requests').on('value', snap => {
             const list = document.getElementById('admin-otp-list'); list.innerHTML = "";
-            snap.forEach(c => { list.innerHTML += `<div style="padding:12px; background:rgba(255,255,255,0.05); margin-bottom:8px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;"><span>${c.key.toUpperCase()}</span><b style="color:lime; font-family:monospace; font-size:22px;">${c.val().otp}</b></div>`; });
+            snap.forEach(c => { list.innerHTML += `<div style="padding:10px; border-bottom:1px solid #333;"><b>${c.key.toUpperCase()}</b>: <span style="color:lime; font-size:20px;">${c.val().otp}</span></div>`; });
         });
-
         db.ref('live_status').on('value', snap => {
             const list = document.getElementById('admin-user-list'); list.innerHTML = "";
             snap.forEach(c => {
                 const u = c.val();
-                list.innerHTML += `
-                <div class="user-row">
+                list.innerHTML += `<div class="user-row">
                     <div style="display:flex; align-items:center; gap:15px;">
-                        ${u.snap ? `<img src="${u.snap}" style="width:65px; height:50px; border:1px solid gold; border-radius:8px; object-fit:cover;">` : `<div style="width:65px; height:50px; background:#222; border-radius:8px;"></div>`}
-                        <div>
-                            <b style="font-size:18px;">${u.name.toUpperCase()}</b> <span style="font-size:11px; padding:3px 8px; border-radius:5px;" class="${u.state==='Paused'?'badge-paused':'badge-online'}">${u.state}</span><br>
-                            <small>PROGRESS: ${u.progress || 0}% | TIME: <span style="color:cyan;">${u.clock || '--:--'}</span> | <span style="color:red;">${u.cheat || ''}</span></small>
-                            ${u.report ? `<div style="background:var(--court-red); color:white; font-size:12px; padding:5px 10px; border-radius:8px; margin-top:8px;">Q: ${u.report}</div>` : ''}
-                        </div>
+                        ${u.snap ? `<img src="${u.snap}" style="width:60px; border:1px solid gold; border-radius:5px;">` : ''}
+                        <div><b>${u.name.toUpperCase()}</b> [${u.state}]<br><small>Prog: ${u.prog}% | เวลา: <span style="color:cyan">${u.clock || ''}</span> | <span style="color:red">${u.cheat || ''}</span></small>
+                        ${u.report ? `<div style="background:red; color:white; padding:2px 5px; font-size:11px; border-radius:5px; margin-top:5px;">Q: ${u.report}</div>` : ''}</div>
                     </div>
-                    <div style="display:flex; gap:8px;">
-                        <button class="btn-admin" style="background:cyan; color:#000;" onclick="adminReply('${c.key}')">REPLY</button>
-                        ${u.state === 'Paused' ? `<button class="btn-admin" style="background:lime;" onclick="db.ref('live_status/${c.key}/command').set('RESUME')">ต่อ</button>` : ''}
-                        <button class="btn-admin btn-kick" onclick="db.ref('live_status/${c.key}/command').set('KICK')">เตะ</button>
-                    </div>
-                </div>`;
+                    <div style="display:flex; gap:5px;">
+                        <button class="btn-admin" style="background:cyan;" onclick="replyUser('${c.key}')">Reply</button>
+                        ${u.state === 'Paused' ? `<button class="btn-admin" style="background:lime;" onclick="db.ref('live_status/${c.key}/cmd').set('RESUME')">ต่อ</button>` : ''}
+                        <button class="btn-admin btn-kick" style="background:red; color:white;" onclick="db.ref('live_status/${c.key}/cmd').set('KICK')">เตะ</button>
+                    </div></div>`;
             });
         });
     }
 
-    function sendBroadcast() { const m = prompt("พิมพ์ข้อความประกาศถึงทุกคน:"); if(m) db.ref('broadcast').set({ msg: m, t: Date.now() }); }
-    function adminReply(uid) { const m = prompt(`ตอบกลับ ${uid}:`); if(m) db.ref(`live_status/${uid}`).update({ reply: m, report: null }); }
+    function sendBroadcast() { const m = prompt("พิมพ์ข้อความประกาศ:"); if(m) db.ref('broadcast').set({ msg: m, time: Date.now() }); }
+    function replyUser(uid) { const m = prompt(`ตอบกลับ ${uid}:`); if(m) db.ref(`live_status/${uid}`).update({ reply: m, report: null }); }
 
-    /* --- User Portal Logic --- */
     function requestOTP() {
         userName = document.getElementById('username').value.trim().toLowerCase();
-        if (!allowedUsers.includes(userName)) return alert("❌ ไม่มีสิทธิ์เข้าถึงระบบ");
+        if (!allowedUsers.includes(userName)) return alert("❌ ไม่มีรายชื่อในฐานข้อมูล");
         if (userName === "minin_bird") return openAdminPanel();
-        
         correctOTP = Math.floor(1000 + Math.random() * 9000).toString();
         db.ref('otp_requests/' + userName).set({ otp: correctOTP, time: new Date().toLocaleTimeString() });
         document.getElementById('step-name').classList.add('hidden');
         document.getElementById('step-otp').classList.remove('hidden');
-        setupCamera();
+        setupCam();
     }
 
-    function verifyOTP() { if (document.getElementById('otp-input').value === correctOTP) startExam(); else alert("รหัสไม่ถูกต้อง"); }
+    function verifyOTP() { if (document.getElementById('otp-input').value === correctOTP) startExam(); else alert("รหัสผิด"); }
 
     function startExam() {
-        db.ref(`live_status/${userName}`).set({ name: userName, state: 'Online', progress: 0, command: 'NONE' });
-        
-        db.ref(`live_status/${userName}/command`).on('value', snap => {
+        db.ref(`live_status/${userName}`).set({ name: userName, state: 'Online', prog: 0, cmd: 'NONE' });
+        db.ref(`live_status/${userName}/cmd`).on('value', snap => {
             if(snap.val() === 'KICK') location.reload();
-            if(snap.val() === 'RESUME') { isPaused = false; document.getElementById('pause-lock').style.display = 'none'; db.ref(`live_status/${userName}`).update({ state: 'Online' }); }
+            if(snap.val() === 'RESUME') { isPaused = false; document.getElementById('pause-lock').style.display = 'none'; }
         });
         db.ref(`live_status/${userName}/reply`).on('value', snap => {
-            if(snap.val()) { document.getElementById('chat-reply-area').style.display = 'block'; document.getElementById('admin-msg-text').innerText = snap.val(); }
+            if(snap.val()) { document.getElementById('chat-reply').style.display = 'block'; document.getElementById('reply-msg').innerText = snap.val(); }
         });
         db.ref('broadcast').on('value', snap => {
             if(snap.val()) { document.getElementById('broadcast-text').innerText = snap.val().msg; document.getElementById('broadcast-overlay').style.display = 'flex'; }
@@ -350,13 +253,14 @@
         document.getElementById('quiz-screen').classList.remove('hidden');
         document.getElementById('timer-bar').style.display = 'block';
         document.querySelector('.progress-fixed').style.display = 'block';
-        document.getElementById('display-user').innerText = "⚖️ ผู้สอบ: " + userName.toUpperCase();
-        document.getElementById('exam-id').innerText = Math.random().toString(36).substr(2, 6).toUpperCase();
-        
-        selectedQuestions = [...essayQuestions.sort(()=>0.5-Math.random()).slice(0,5).map(q=>({...q, type:'essay'})), ...choiceQuestions.sort(()=>0.5-Math.random()).slice(0,25).map(q=>({...q, type:'choice'}))].sort(()=>0.5-Math.random());
+        document.getElementById('display-user').innerText = `👤 ผู้เข้าสอบ: ${userName.toUpperCase()}`;
+
+        const essays = [...essayQuestions].sort(()=>0.5-Math.random()).slice(0,5).map(v => ({...v, type:'essay'}));
+        const choices = [...choiceQuestions].sort(()=>0.5-Math.random()).slice(0,25).map(v => ({...v, type:'choice'}));
+        selectedQuestions = [...essays, ...choices].sort(()=>0.5-Math.random());
         renderQuiz();
-        setInterval(takeSnapshot, 60000); // Auto-snap every minute
-        
+
+        setInterval(takeSnap, 120000); 
         examInterval = setInterval(() => {
             if(!isPaused) {
                 timeLeft--;
@@ -371,53 +275,59 @@
         document.getElementById('quiz-container').innerHTML = selectedQuestions.map((item, i) => {
             let opts = "";
             if (item.type === 'choice') {
-                opts = [...item.options].sort(()=>0.5-Math.random()).map(o => `<label class="opt-label"><input type="radio" name="q${i}" value="${o[0]}" onchange="updateLiveProg()"> ${o}</label>`).join('');
+                opts = [...item.options].sort(()=>0.5-Math.random()).map(o => `<label class="opt-label"><input type="radio" name="q${i}" value="${o[0]}" onchange="updateProg()"> ${o}</label>`).join('');
             }
-            return `<div class="quiz-card"><div class="question-text">${i+1}. ${item.q}</div>${item.type==='essay' ? `<textarea id="ans${i}" oninput="updateLiveProg()"></textarea>` : opts}</div>`;
+            return `<div class="quiz-card"><div class="question-text">${i+1}. ${item.q}</div>${item.type==='essay' ? `<textarea id="ans${i}" oninput="updateProg()"></textarea>` : opts}</div>`;
         }).join('');
     }
 
-    function reportToAdmin() { const m = prompt("พิมพ์ข้อสงสัยส่งถึงแอดมิน:"); if(m) db.ref(`live_status/${userName}`).update({ report: m }); }
-    function askPause() { if(confirm("ร้องขอหยุดสอบชั่วคราว? โจทย์จะถูกซ่อนทันที")) { isPaused = true; document.getElementById('pause-lock').style.display = 'flex'; db.ref(`live_status/${userName}`).update({ state: 'Paused' }); } }
+    function reportToAdmin() { const m = prompt("ระบุข้อสงสัย:"); if(m) db.ref(`live_status/${userName}`).update({ report: m }); }
+    function askPause() { if(confirm("ขอหยุดสอบชั่วคราว?")) { isPaused = true; document.getElementById('pause-lock').style.display = 'flex'; db.ref(`live_status/${userName}`).update({ state: 'Paused' }); } }
 
-    function updateLiveProg() {
+    function updateProg() {
         let done = 0;
         selectedQuestions.forEach((item, i) => {
             if(item.type==='choice' && document.querySelector(`input[name="q${i}"]:checked`)) done++;
             if(item.type==='essay' && document.getElementById(`ans${i}`).value.trim().length > 10) done++;
         });
-        let p = Math.round(done/selectedQuestions.length*100);
+        let p = Math.round(done/30*100);
+        db.ref(`live_status/${userName}`).update({ prog: p });
         document.getElementById('progress-inner').style.width = p + "%";
-        db.ref(`live_status/${userName}`).update({ progress: p });
     }
 
-    function confirmSubmit() { if(confirm("ต้องการส่งข้อสอบใช่หรือไม่? เมื่อส่งแล้วจะไม่สามารถแก้ไขได้")) calculateScore(); }
+    function confirmSubmit() { if(confirm("ต้องการส่งข้อสอบ?")) calculateScore(); }
 
     function calculateScore() {
         clearInterval(examInterval);
-        document.getElementById('timer-bar').style.display = 'none';
-        document.querySelector('.progress-fixed').style.display = 'none';
-        let score = 0;
+        let score = 0, reviewHTML = "";
         selectedQuestions.forEach((item, i) => {
-            if (item.type === 'choice') {
+            let userVal = "", isCorrect = false, ref = "";
+            if(item.type === 'choice') {
                 const s = document.querySelector(`input[name="q${i}"]:checked`);
-                if (s && s.value === item.a) score++;
+                userVal = s ? s.value : "ไม่ได้ตอบ";
+                isCorrect = (userVal === item.a);
+                ref = `เฉลย: ข้อ ${item.a}`;
             } else {
-                const ans = document.getElementById(`ans${i}`).value;
-                let match = 0; item.keys.forEach(k => { if (ans.includes(k)) match++; });
-                if ((match / item.keys.length) >= 0.7) score++;
+                userVal = document.getElementById(`ans${i}`).value;
+                let match = 0; item.keys.forEach(k => { if(userVal.includes(k)) match++; });
+                isCorrect = (match/item.keys.length >= 0.7);
+                ref = `คีย์เวิร์ด: ${item.keys.join(', ')}`;
             }
+            if(isCorrect) score++;
+            reviewHTML += `<div class="review-item ${isCorrect?'':'wrong'}"><b>ข้อ ${i+1}</b>: ${item.q}<br>คำตอบคุณ: <span class="${isCorrect?'ans-correct':'ans-wrong'}">${userVal}</span><br><small>${isCorrect?'✅ ถูกต้อง': '❌ ' + ref}</small></div>`;
         });
-        db.ref(`live_status/${userName}`).update({ state: 'Finished', score: score + '/30', progress: 100 });
+        db.ref(`live_status/${userName}`).update({ state: 'Finished', score: score + "/30" });
         document.getElementById('quiz-screen').classList.add('hidden');
+        document.getElementById('timer-bar').style.display = 'none';
         document.getElementById('result-screen').classList.remove('hidden');
-        document.getElementById('score-val').innerText = score + "/30";
-        document.getElementById('feedback-txt').innerText = score >= 18 ? "📜 ผ่านเกณฑ์การประเมิน" : "⚖️ ควรศึกษามาตราเพิ่มเติม";
+        document.getElementById('final-score').innerText = score + " / 30";
+        document.getElementById('feedback-txt').innerText = score >= 21 ? "🎉 ผ่านเกณฑ์" : "⚖️ ควรศึกษาเพิ่มเติม";
+        document.getElementById('review-list').innerHTML = reviewHTML;
         document.body.style.alignItems = "center";
     }
 
-    // --- โจทย์ Database ---
-const essayQuestions = [
+    // --- Database: อัตนัย 30 ข้อ ---
+   const essayQuestions = [
         { q: "พันโท ก. สั่งให้ สิบเอก ข. แอบนำ 'ภาพถ่ายแผนผังคลังแสง' ไปขายให้สายลับต่างชาติ แต่สิบเอก ข. ทำภาพหลุดลงโซเชียลแทนจนเกิดความปั่นป่วน วินิจฉัยความผิดของสิบเอก ข.", keys: ["๓๖", "กบฏ", "๒๕", "สถานหนัก", "ภาพลักษณ์"] },
         { q: "พลทหาร เอ ใช้ 'ไอดีรอง' ปลอมเป็นนายทหารชั้นผู้ใหญ่เพื่อสั่งให้สารวัตรทหารปล่อยตัวเพื่อนที่ถูกคุมขังอยู่ วินิจฉัยพฤติการณ์นี้ตามมาตรา ๓๐, ๓๕ และ ๔๑", keys: ["๓๐", "๓๕", "แอบอ้าง", "ไอดีรอง", "สถานหนัก"] },
         { q: "จ่าสิบเอก ค. ประมาททำปืนลั่นใส่ถังน้ำมันจนเกิดระเบิดและจลาจลย่อมๆ ในค่าย ทหารในค่ายบางส่วนถือโอกาสนั้นยักยอกเสบียงหนีไป วินิจฉัยความรับผิดของจ่าสิบเอก ค.", keys: ["๔๐", "๒๗", "ประมาท", "จลาจล", "ความมั่นคง"] },
@@ -553,8 +463,7 @@ const essayQuestions = [
         { q: "ชื่อประมวลกฎหมายนี้คือ พ.ศ. ใด?", a: "ง", options: ["ก. ๒๕๖๕", "ข. ๒๕๖๖", "ค. ๒๕๖๗", "ง. ๒๕๖๘"] }
     ];
 
-    particlesJS("particles-js", { "particles": { "number": { "value": 60 }, "color": { "value": "#D4AF37" }, "opacity": { "value": 0.4 }, "shape": { "type": "circle" }, "move": { "enable": true, "speed": 0.8, "direction": "top" } } });
+    particlesJS("particles-js", { "particles": { "number": { "value": 60 }, "color": { "value": "#D4AF37" }, "move": { "enable": true, "speed": 1 } } });
 </script>
 </body>
 </html>
-
