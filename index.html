@@ -199,7 +199,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    const allowedUsers = ["minin_bird", "ruok555sf", "puttxrxdnx", "briht100", "miracleimage", "luckyc137"];
+    const allowedUsers = ["minin_bird", "ruok555sf", "puttxrxdnx", "briht100", "miracleimage", "luckyc137", "miracleImage"];
     let userName = "", correctOTP = "", selectedQuestions = [], examInterval;
     let timeLeft = 50 * 60, isPaused = false, strikes = 0;
 
@@ -375,7 +375,7 @@
         document.getElementById('timer-bar').style.display = 'none';
         document.getElementById('result-screen').classList.remove('hidden');
         document.getElementById('final-score').innerText = score + " / 30";
-        document.getElementById('feedback').innerText = score >= 21 ? "🎉 ผ่านเกณฑ์" : "⚖️ ไม่ผ่านเกณฑ์";
+        document.getElementById('feedback').innerText = score >= 25 ? "🎉 ผ่านเกณฑ์" : "⚖️ ไม่ผ่านเกณฑ์";
         document.body.style.alignItems = "center";
     }
 
@@ -521,5 +521,6 @@ const essayQuestions = [
 </script>
 </body>
 </html>
+
 
 
