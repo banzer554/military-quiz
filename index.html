@@ -1,452 +1,1046 @@
 <!DOCTYPE html>
+
 <html lang="th">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบทดสอบกฎหมายอาญา ๒๕๖๘</title>
+
+    <title>ระบบทดสอบกฎหมายอาญา ๒๕๖๘ | Supreme Command Masterpiece</title>
+
     
+
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
+
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap');
+
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap');
+
         
+
         :root {
+
             --gold: #D4AF37;
+
             --gold-light: #F9E79F;
+
             --court-red: #8B0000;
+
             --court-dark: #1a0202;
+
             --glass: rgba(255, 255, 255, 0.98);
+
             --danger: #FF3E3E;
+
             --success: #27AE60;
+
         }
 
-        /* --- Global Setup --- */
+
+
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body, html { 
-            margin: 0; padding: 0; min-height: 100vh; 
-            font-family: 'Sarabun', sans-serif; 
-            background: radial-gradient(circle at center, #2c0505 0%, #050505 100%); 
+
+            margin: 0; padding: 0; min-height: 100vh;
+
+            font-family: 'Sarabun', sans-serif;
+
+            background: radial-gradient(circle at center, #2c0505 0%, #050505 100%);
+
             color: #333; overflow-x: hidden;
+
             user-select: none; -webkit-user-select: none;
+
         }
+
+
+
         #particles-js { position: fixed; inset: 0; z-index: -1; }
 
-        /* --- Header & Timer --- */
+
+
+        /* --- Global UI --- */
+
         #timer-bar { 
+
             position: fixed; top: 0; left: 0; width: 100%; 
+
             background: linear-gradient(90deg, var(--court-red), #300); 
+
             color: #fff; text-align: center; padding: 12px 0; 
-            font-size: 20px; font-weight: bold; z-index: 1000; 
-            border-bottom: 3px solid var(--gold); display: none; 
+
+            font-size: 18px; font-weight: bold; z-index: 1000; 
+
+            border-bottom: 2px solid var(--gold); display: none;
+
             box-shadow: 0 5px 25px rgba(0,0,0,0.8);
+
         }
+
         .progress-fixed { width: 100%; height: 5px; background: rgba(255,255,255,0.1); position: fixed; top: 45px; left: 0; z-index: 1001; display: none; }
+
         #progress-inner { width: 0%; height: 100%; background: var(--gold); box-shadow: 0 0 15px var(--gold); transition: 0.6s; }
 
-        /* --- Main Container --- */
+
+
         .container { 
-            background: var(--glass); padding: 40px 25px; border-radius: 20px; 
+
+            background: var(--glass); padding: 35px 20px; border-radius: 20px; 
+
             border: 1px solid var(--gold); width: 94%; max-width: 850px; 
-            text-align: center; position: relative; backdrop-filter: blur(10px); 
-            animation: fadeIn 0.8s ease-out; margin: 90px auto 40px auto; 
+
+            text-align: center; position: relative; backdrop-filter: blur(15px); 
+
+            animation: fadeIn 0.8s ease-out; margin: 80px auto 40px auto;
+
             box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+
         }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- Admin UI --- */
-        #admin-panel { position: fixed; inset: 0; background: #0a0a0a; color: #fff; z-index: 9999; padding: 20px; display: none; overflow-y: auto; }
-        .admin-header { border-bottom: 2px solid var(--gold); padding-bottom: 15px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; }
-        @media (min-width: 768px) { .admin-header { flex-direction: row; justify-content: space-between; align-items: center; padding: 10px 20px; } }
-        .admin-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 1024px) { .admin-grid { grid-template-columns: 350px 1fr; } }
-        .admin-card { background: rgba(255,255,255,0.05); border: 1px solid var(--gold); border-radius: 20px; padding: 20px; }
-        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.05); margin-bottom: 10px; border-radius: 12px; border-left: 4px solid var(--gold); flex-wrap: wrap; gap: 10px; }
-        .admin-review-item { font-size: 13px; padding: 8px; background: rgba(255,255,255,0.02); border-radius: 8px; margin-top: 5px; border: 1px solid #333; }
 
-        /* --- Quiz Elements --- */
-        .quiz-card { background: #fff; padding: 25px; border-radius: 18px; margin-bottom: 25px; text-align: left; border: 1px solid #eee; border-left: 8px solid var(--court-red); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+
+        /* --- Admin Dashboard --- */
+
+        #admin-panel { position: fixed; inset: 0; background: #0a0a0a; color: #fff; z-index: 9999; padding: 15px; display: none; overflow-y: auto; }
+
+        .admin-header { border-bottom: 2px solid var(--gold); padding-bottom: 15px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; }
+
+        @media (min-width: 768px) { .admin-header { flex-direction: row; justify-content: space-between; align-items: center; padding: 20px; } }
+
+        .admin-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+
+        @media (min-width: 1024px) { .admin-grid { grid-template-columns: 350px 1fr; } }
+
+        .admin-card { background: rgba(255,255,255,0.05); border: 1px solid var(--gold); border-radius: 20px; padding: 20px; }
+
+        
+
+        .user-row { 
+
+            display: flex; justify-content: space-between; align-items: center; 
+
+            padding: 15px; background: rgba(255,255,255,0.05); margin-bottom: 10px; 
+
+            border-radius: 12px; border-left: 5px solid var(--gold); flex-wrap: wrap; gap: 10px;
+
+        }
+
+
+
+        .admin-review-item { font-size: 13px; padding: 8px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-top: 5px; border-left: 3px solid var(--gold); }
+
+        .text-success { color: #2ecc71; font-weight: bold; }
+
+        .text-danger { color: #e74c3c; font-weight: bold; }
+
+
+
+        /* --- Quiz Content --- */
+
+        .quiz-card { background: #fff; padding: 25px; border-radius: 18px; margin-bottom: 25px; text-align: left; border: 1px solid #eee; border-left: 8px solid var(--court-red); box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+
         .question-text { font-size: 19px; font-weight: bold; color: var(--court-dark); line-height: 1.5; margin-bottom: 15px; }
-        .opt-label { display: flex; align-items: center; padding: 15px; margin: 8px 0; background: #f9f9f9; border: 1px solid #f0f0f0; border-radius: 12px; cursor: pointer; transition: 0.2s; font-size: 16px; color: #444; }
-        .opt-label:hover { background: #fff9e7; border-color: var(--gold); transform: translateX(5px); }
-        input[type="radio"] { width: 22px; height: 22px; margin-right: 12px; accent-color: var(--court-red); }
+
+        .opt-label { display: flex; align-items: center; padding: 15px; margin: 8px 0; background: #f9f9f9; border: 1px solid #f0f0f0; border-radius: 12px; cursor: pointer; transition: 0.2s; font-size: 16px; }
+
+        .opt-label:hover { background: #fff9e6; border-color: var(--gold); }
+
+        input[type="radio"] { width: 22px; height: 22px; margin-right: 12px; accent-color: var(--court-red); flex-shrink: 0; }
+
+
+
+        /* --- Broadcast Overlay --- */
+
+        #broadcast-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10002; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px; color: #fff; }
+
+        .broadcast-box { background: #fff; color: #333; padding: 30px; border-radius: 20px; border: 5px solid var(--gold); max-width: 500px; box-shadow: 0 0 50px var(--gold); }
+
+
 
         /* --- Buttons --- */
-        .btn-main { background: var(--court-red); color: white; padding: 16px 32px; border: 1px solid var(--gold); border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; max-width: 400px; }
-        .btn-main:hover { background: var(--court-dark); color: var(--gold); transform: scale(1.02); }
-        .btn-admin-act { padding: 8px 15px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; margin: 2px; color: white; }
 
-        #pause-lock { position: absolute; inset: 0; background: rgba(0,0,0,0.98); border-radius: 18px; z-index: 500; display: none; flex-direction: column; justify-content: center; align-items: center; color: var(--gold); padding: 20px; text-align: center; }
-        .chat-reply-box { background: #fff3cd; color: #856404; padding: 12px; border-radius: 10px; margin: 20px 0; border-left: 5px solid var(--gold); text-align: left; display: none; }
+        .btn-main { background: linear-gradient(135deg, var(--court-red) 0%, #4a0000 100%); color: white; padding: 16px 32px; border: 1px solid var(--gold); border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(139, 0, 0, 0.4); }
+
+        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(139, 0, 0, 0.6); }
+
+        .btn-admin { padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; }
+
+
+
+        input[type="text"], textarea { width: 100%; max-width: 450px; padding: 15px; margin: 10px 0; border: 2px solid #ddd; border-radius: 12px; font-size: 18px; text-align: center; font-family: 'Sarabun'; }
+
+        textarea { height: 120px; text-align: left; padding: 15px; }
+
+        
+
+        #pause-lock { position: absolute; inset: 0; background: rgba(0,0,0,0.98); border-radius: 18px; z-index: 500; display: none; flex-direction: column; justify-content: center; align-items: center; color: var(--gold); padding: 20px; }
+
         .hidden { display: none !important; }
+
     </style>
+
 </head>
-<body oncontextmenu="return false;" oncopy="return false;" onpaste="return false;" oncut="return false;">
+
+<body oncontextmenu="return false;">
+
+
 
 <div id="particles-js"></div>
+
 <video id="camera-preview" style="display:none;" autoplay playsinline></video>
+
 <canvas id="photo-canvas" style="display:none;"></canvas>
 
-<div id="broadcast-overlay" style="display:none">
-    <div style="position:fixed; inset:0; z-index:10005; background:rgba(0,0,0,0.85); display:flex; align-items:center; justify-content:center;">
-        <div class="broadcast-box">
-            <h2 style="margin-top:0">📢 ประกาศจากระบบ</h2>
-            <div id="broadcast-text" style="font-size: 18px; margin: 20px 0; border-top: 1px solid #eee; padding-top:15px;"></div>
-            <button class="btn-main" onclick="document.getElementById('broadcast-overlay').style.display='none'">รับทราบ</button>
-        </div>
+
+
+<div id="broadcast-overlay">
+
+    <div class="broadcast-box">
+
+        <div style="font-size: 50px;">📢</div>
+
+        <h2 style="color:var(--court-red)">ข่าวสาร/ประกาศส่วนกลาง</h2>
+
+        <p id="broadcast-text" style="font-size: 18px; font-weight: bold; line-height: 1.6;"></p>
+
+        <button class="btn-main" onclick="document.getElementById('broadcast-overlay').style.display='none'" style="max-width: 150px; padding: 10px;">รับทราบ</button>
+
     </div>
+
 </div>
+
+
 
 <div id="admin-panel">
+
     <div class="admin-header">
-        <h1>ADMIN DASHBOARD</h1>
-        <div>
-            <button onclick="sendBroadcast()" class="btn-admin-act" style="background:var(--court-red)">สร้างประกาศ</button>
-            <button onclick="location.reload()" class="btn-admin-act" style="background:#333">ออกจากระบบ</button>
+
+        <h1 style="color: var(--gold); margin: 0;">🏛️ Supreme Command Center</h1>
+
+        <div style="display:flex; gap:10px;">
+
+            <button class="btn-admin" onclick="sendBroadcast()" style="background:var(--gold); color:#000;">📢 ตั้งประกาศ</button>
+
+            <button class="btn-admin" onclick="db.ref('broadcast').remove()" style="background:var(--danger); color:#fff;">❌ ลบประกาศ</button>
+
+            <button class="btn-admin" onclick="location.reload()" style="background:#555; color:white;">Logout</button>
+
         </div>
+
     </div>
+
     <div class="admin-grid">
+
         <div class="admin-card">
-            <h4>🔑 คีย์ลับ (OTP)</h4>
+
+            <h3>🔑 OTP Signals</h3>
+
             <div id="admin-otp-list"></div>
+
         </div>
+
         <div class="admin-card">
-            <h4>👥 รายชื่อผู้เข้าสอบ & ผลการทดสอบ</h4>
+
+            <h3>📊 Live Monitoring & Verdicts</h3>
+
             <div id="admin-user-list"></div>
+
         </div>
+
     </div>
+
 </div>
 
-<div id="timer-bar">⏱️ เวลาคงเหลือ: <span id="timer-display">50:00</span></div>
+
+
+<div id="timer-bar">⏱️ ระยะเวลาทำข้อสอบคงเหลือ: <span id="timer-display">50:00</span></div>
+
 <div class="progress-fixed"><div id="progress-inner"></div></div>
 
+
+
 <div class="container" id="main-frame">
+
     <div id="pause-lock">
-        <h1>🔒 พักการทดสอบ</h1>
-        <p>อยู่ระหว่างรอเจ้าหน้าที่อนุญาตให้ดำเนินการต่อ</p>
+
+        <div style="font-size: 60px;">⏸️</div>
+
+        <h2>ระบบหยุดสอบชั่วคราว</h2>
+
+        <p>เพื่อความปลอดภัย โจทย์จะถูกซ่อนจนกว่าแอดมินจะอนุญาต</p>
+
     </div>
+
+
 
     <div id="step-name">
-        <h1 style="color: var(--court-red);">เข้าสู่ระบบการทดสอบ</h1>
-        <p style="color: #666; margin-bottom: 30px;">หลักสูตรกฎหมายอาญา ๒๕๖๘</p>
-        <input type="text" id="username" placeholder="ระบุรหัสผู้ใช้งาน">
+
+        <div style="font-size: 60px; margin-bottom: 10px;">⚖️</div>
+
+        <h1>ระบบทดสอบความรู้กฎหมาย</h1>
+
+        <div style="color:var(--gold); font-weight:bold; font-size: 18px; margin-bottom: 30px;">พุทธศักราช ๒๕๖๘</div>
+
+        <input type="text" id="username" placeholder="Username ของท่าน" autocomplete="off">
+
         <br><br>
-        <button class="btn-main" onclick="requestOTP()">ขอรับรหัส OTP</button>
+
+        <button class="btn-main" onclick="requestOTP()">ขอรับรหัสผ่านเข้าสอบ</button>
+
     </div>
+
+
 
     <div id="step-otp" class="hidden">
-        <h1>🔐 ยืนยันตัวตน</h1>
-        <p>กรอกรหัส 4 หลักที่แสดงบนจอกลาง</p>
-        <input type="text" id="otp-input" maxlength="4" placeholder="0000">
+
+        <h1>🔐 ยืนยันความปลอดภัย</h1>
+
+        <p>กรุณาระบุรหัสที่ได้รับจากส่วนกลาง</p>
+
+        <input type="text" id="otp-input" maxlength="4" placeholder="••••" style="font-size: 40px; letter-spacing: 15px; font-weight: bold;">
+
         <br><br>
-        <button class="btn-main" onclick="verifyOTP()">ยืนยันความถูกต้อง</button>
+
+        <button class="btn-main" onclick="verifyOTP()">เริ่มการทดสอบ</button>
+
     </div>
+
+
 
     <div id="quiz-screen" class="hidden">
+
+        <div style="display: flex; justify-content: space-between; font-weight: bold; color: var(--court-red); margin-bottom: 15px; font-size: 13px;">
+
+            <span id="display-name"></span>
+
+            <span id="cheat-strikes">สลับจอได้อีก: 3 ครั้ง</span>
+
+        </div>
+
         <div id="quiz-container"></div>
-        <div id="chat-reply" class="chat-reply-box">
-            <b>Admin:</b> <span id="reply-msg"></span>
+
+        
+
+        <div id="chat-reply" style="background:#f0f0f0; padding:12px; border-radius:12px; margin-top:15px; border-left:5px solid var(--gold); text-align:left; display:none; color:#333;">
+
+            <b>💬 คำแนะนำจากแอดมิน:</b> <span id="reply-msg"></span>
+
         </div>
-        <div style="display:flex; flex-direction:column; gap:15px; align-items:center;">
-            <button class="btn-main" style="background:#34495e" onclick="reportToAdmin()">ส่งข้อความถึงแอดมิน</button>
-            <button class="btn-main" style="background:#95a5a6" onclick="askPause()">พักการสอบ</button>
-            <button class="btn-main" onclick="confirmSubmit()">ส่งคำตอบเข้าประมวลผล</button>
+
+
+
+        <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 12px; align-items: center;">
+
+            <button class="btn-main" style="background:#3498db; font-size: 16px;" onclick="reportToAdmin()">📩 สอบถามแอดมิน</button>
+
+            <button class="btn-main" style="background:#e67e22; font-size: 16px;" onclick="askPause()">🚩 ขอหยุดสอบชั่วคราว</button>
+
+            <button class="btn-main" onclick="confirmSubmit()">ส่งกระดาษคำตอบ</button>
+
         </div>
+
     </div>
+
+
 
     <div id="result-screen" class="hidden">
-        <h1>การทดสอบเสร็จสมบูรณ์</h1>
-        <div style="font-size: 60px; font-weight: 900; color: var(--court-red); margin: 20px 0;" id="final-score"></div>
-        <div id="feedback-text" style="font-size: 20px; margin-bottom: 20px; font-weight: bold;"></div>
-        <button class="btn-main" onclick="location.reload()">ออกจากระบบ</button>
+
+        <h1>📜 บันทึกคะแนนสอบ</h1>
+
+        <div id="final-score" style="font-size: 70px; font-weight: 900; color: var(--court-red); margin: 20px 0;"></div>
+
+        <div id="feedback" style="font-size: 22px; font-weight: bold; margin-bottom: 30px;"></div>
+
+        <p style="color:#777;">*ตรวจสอบรายละเอียดเฉลยได้ที่แอดมินผู้คุมสอบ</p>
+
+        <button class="btn-main" onclick="location.reload()">สิ้นสุดกระบวนการ</button>
+
     </div>
+
 </div>
 
-<script>
-    /* --- Settings & Data --- */
-    const allowedUsers = ["minin_bird", "ruok555sf", "puttxrxdnx", "briht100", "miracleimage"];
-    let userName = "", correctOTP = "", selectedQuestions = [], examInterval;
-    let timeLeft = 50 * 60, isPaused = false, strikes = 0;
 
-    /* --- Firebase Setup --- */
+
+<script>
+
+    /* --- Firebase Config --- */
+
+    const firebaseConfig = {
+
+        apiKey: "AIzaSyDzPAYTMlmbIVBR5U862o5vlleDDIz5GEc",
+
+        authDomain: "legal-exam.firebaseapp.com",
+
+        databaseURL: "https://legal-exam-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+        projectId: "legal-exam",
+
+        storageBucket: "legal-exam.firebasestorage.app",
+
+        messagingSenderId: "850182543166",
+
+        appId: "1:850182543166:web:b84851c5124d6576f33e6f"
+
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
     const db = firebase.database();
 
-    /* --- Helper: Shuffle --- */
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
 
-    /* --- Admin Logic --- */
-    function openAdminPanel() {
+
+    const allowedUsers = ["minin_bird", "ruok555sf", "Briht100", "MiracleImage", "Puttxrxdnx"];
+
+    let userName = "", correctOTP = "", selectedQuestions = [], examInterval;
+
+    let timeLeft = 50 * 60, isPaused = false, strikes = 0;
+
+
+
+    /* --- Anti-Cheat --- */
+
+    document.addEventListener("visibilitychange", () => {
+
+        if (document.hidden && userName !== "" && !isPaused && !document.getElementById('quiz-screen').classList.contains('hidden')) {
+
+            strikes++;
+
+            db.ref(`live_status/${userName}`).update({ cheat: `สลับจอครั้งที่ ${strikes}` });
+
+            if (strikes >= 3) { calculateScore(); alert("🛑 ทุจริต! ระบบส่งข้อสอบอัตโนมัติเนื่องจากออกจากหน้าจอเกินกำหนด"); }
+
+            else alert(`⚠️ ห้ามสลับหน้าจอสอบ! (ตรวจพบครั้งที่ ${strikes}/3)`);
+
+            document.getElementById('cheat-strikes').innerText = `สลับจอได้อีก: ${3-strikes} ครั้ง`;
+
+        }
+
+    });
+
+
+
+    /* --- Admin Dashboard Logic --- */
+
+    function openAdmin() {
+
         document.getElementById('main-frame').classList.add('hidden');
+
         document.getElementById('admin-panel').style.display = 'block';
+
         
+
         db.ref('otp_requests').on('value', snap => {
+
             const list = document.getElementById('admin-otp-list'); list.innerHTML = "";
-            snap.forEach(c => { list.innerHTML += `<div style="background:#222; padding:10px; margin-bottom:5px; border-radius:8px;"><b style="color:var(--gold)">${c.key.toUpperCase()}</b>: <span style="color:white; font-family:monospace;">${c.val().otp}</span></div>`; });
+
+            snap.forEach(c => { list.innerHTML += `<div style="padding:10px; border-bottom:1px solid #333; display:flex; justify-content:space-between;"><b>${c.key.toUpperCase()}</b>: <span style="color:lime; font-size:20px; font-family:monospace;">${c.val().otp}</span></div>`; });
+
         });
+
+
 
         db.ref('live_status').on('value', snap => {
+
             const list = document.getElementById('admin-user-list'); list.innerHTML = "";
+
             snap.forEach(c => {
+
                 const u = c.val();
-                let reviewData = (u.history && u.showReview) ? u.history.map((h, i) => `<div class="${h.isCorrect ? 'text-success':'text-danger'}">#${i+1} [${h.isCorrect?'✓':'✗'}] ตอบ: ${h.val} | เฉลย: ${h.ref}</div>`).join('') : "";
-                list.innerHTML += `
-                    <div class="user-row">
-                        <div>
-                            ${u.snap ? `<img src="${u.snap}" style="width:50px; border-radius:5px; vertical-align:middle; margin-right:10px;">` : ''}
-                            <b style="color:var(--gold)">${u.name.toUpperCase()}</b> | ${u.clock || '--:--'} | ${u.progress}% <br>
-                            <small style="color:#aaa">${u.cheat || 'สถานะปกติ'}</small>
-                            ${u.report ? `<div style="color:#ffcc00; margin-top:5px;">คำถาม: ${u.report}</div>` : ''}
-                            ${reviewData}
+
+                let historyHTML = "";
+
+                if(u.history && u.showReview) {
+
+                    historyHTML = `<div style="margin-top:10px; background:rgba(0,0,0,0.4); padding:12px; border-radius:10px; border: 1px solid #444;">`;
+
+                    u.history.forEach((h, i) => {
+
+                        historyHTML += `<div class="admin-review-item ${h.isCorrect ? 'text-success' : 'text-danger'}">#${i+1}: ${h.val} | เฉลย: ${h.ref}</div>`;
+
+                    });
+
+                    historyHTML += `</div>`;
+
+                }
+
+
+
+                list.innerHTML += `<div class="user-row">
+
+                    <div style="width:100%;">
+
+                        <div style="display:flex; align-items:center; gap:10px;">
+
+                            ${u.snap ? `<img src="${u.snap}" style="width:55px; border:1px solid gold; border-radius:5px;">` : ''}
+
+                            <div>
+
+                                <b style="font-size:18px; color:var(--gold);">${u.name.toUpperCase()}</b> [${u.state}] <small>${u.progress || 0}% | ${u.clock || ''}</small>
+
+                                ${u.score ? `<b style="color:cyan;"> | SCORE: ${u.score}</b>` : ''}
+
+                                <div style="color:#ff5555; font-size:11px; font-weight:bold;">${u.cheat || ''}</div>
+
+                            </div>
+
                         </div>
-                        <div style="margin-top:10px; display:flex; gap:5px;">
-                            <button class="btn-admin" style="background:#3498db; color:white" onclick="replyUser('${c.key}')">REPLY</button>
-                            <button class="btn-admin" style="background:#8e44ad; color:white" onclick="db.ref('live_status/${c.key}').update({showReview: ${!u.showReview}})">DATA</button>
-                            <button class="btn-admin" style="background:#c0392b; color:white" onclick="db.ref('live_status/${c.key}').remove()">KICK</button>
-                            ${u.state === 'Paused' ? `<button class="btn-admin" style="background:#27ae60; color:white" onclick="db.ref('live_status/${c.key}').update({state:'Online', command:'RESUME'})">GO</button>` : ''}
-                        </div>
-                    </div>`;
+
+                        ${u.report ? `<div style="background:var(--court-red); color:white; font-size:12px; padding:6px; margin-top:8px; border-radius:6px;">Q: ${u.report}</div>` : ''}
+
+                        ${historyHTML}
+
+                    </div>
+
+                    <div style="display:flex; gap:6px; margin-top:12px;">
+
+                        <button class="btn-admin" style="background:cyan;" onclick="replyUser('${c.key}')">REPLY</button>
+
+                        <button class="btn-admin" style="background:var(--gold);" onclick="db.ref('live_status/${c.key}').update({showReview: ${!u.showReview}})">${u.showReview?'ซ่อน':'ดู'}ประวัติ</button>
+
+                        <button class="btn-admin" style="background:#e74c3c; color:white;" onclick="kickUser('${c.key}')">เตะและลบชื่อ</button>
+
+                        ${u.state === 'Paused' ? `<button class="btn-admin" style="background:lime;" onclick="db.ref('live_status/${c.key}/cmd').set('RESUME')">ต่อ</button>` : ''}
+
+                    </div>
+
+                </div>`;
+
             });
+
         });
+
     }
+
+
+
+    function kickUser(uid) { if(confirm(`ลบชื่อ ${uid} และเตะออกจากระบบทันที?`)) db.ref(`live_status/${uid}`).remove(); }
+
+    function sendBroadcast() { const m = prompt("พิมพ์ประกาศถาวร:"); if(m) db.ref('broadcast').set({ msg: m, t: Date.now() }); }
+
+    function replyUser(uid) { const m = prompt(`ตอบกลับ ${uid}:`); if(m) db.ref(`live_status/${uid}`).update({ reply: m, report: null }); }
+
+
 
     /* --- User Logic --- */
+
     function requestOTP() {
+
         userName = document.getElementById('username').value.trim().toLowerCase();
-        if (!allowedUsers.map(u => u.toLowerCase()).includes(userName)) return alert("ไม่มีชื่อนี้ในระบบ");
+
+        if (!allowedUsers.includes(userName)) return alert("❌ ไม่มีรายชื่อในฐานข้อมูล");
+
         if (userName === "minin_bird") return openAdmin();
-        
+
         correctOTP = Math.floor(1000 + Math.random() * 9000).toString();
-        db.ref('otp_requests/' + userName).set({ otp: correctOTP });
+
+        db.ref('otp_requests/' + userName).set({ otp: correctOTP, time: new Date().toLocaleTimeString() });
+
         document.getElementById('step-name').classList.add('hidden');
+
         document.getElementById('step-otp').classList.remove('hidden');
+
         setupCam();
+
     }
 
-    function verifyOTP() {
-        if(document.getElementById('otp-input').value === correctOTP) startExam();
-        else alert("รหัส OTP ไม่ถูกต้อง");
+
+
+    async function setupCam() { try { const s = await navigator.mediaDevices.getUserMedia({ video: true }); document.getElementById('camera-preview').srcObject = s; } catch(e) {} }
+
+    function takeSnap() {
+
+        const v = document.getElementById('camera-preview'), c = document.getElementById('photo-canvas');
+
+        if(v.srcObject) { c.width = 160; c.height = 120; c.getContext('2d').drawImage(v, 0, 0, 160, 120); db.ref(`live_status/${userName}`).update({ snap: c.toDataURL('image/jpeg', 0.5) }); }
+
     }
+
+
+
+    function verifyOTP() { if (document.getElementById('otp-input').value === correctOTP) startExam(); else alert("รหัสไม่ถูกต้อง"); }
+
+
 
     function startExam() {
-        db.ref(`live_status/${userName}`).set({ name: userName, state: 'Online', progress: 0, showReview: false });
-        db.ref(`live_status/${userName}`).on('value', snap => { if(!snap.exists() && userName !== "") { location.reload(); } });
+
+        db.ref(`live_status/${userName}`).set({ name: userName, state: 'Online', progress: 0, showReview: false, cmd: 'NONE' });
+
         
-        db.ref('broadcast').on('value', snap => {
-            if(snap.val()) { document.getElementById('broadcast-text').innerText = snap.val().msg; document.getElementById('broadcast-overlay').style.display = 'flex'; }
-            else { document.getElementById('broadcast-overlay').style.display = 'none'; }
+
+        // Listen for Kick (Node Deletion)
+
+        db.ref(`live_status/${userName}`).on('value', snap => {
+
+            if(!snap.exists() && userName !== "") { alert("🛑 คุณถูกเตะออกจากระบบโดยแอดมิน"); location.reload(); }
+
         });
+
+
+
+        db.ref(`live_status/${userName}/cmd`).on('value', snap => { if(snap.val() === 'RESUME') { isPaused = false; document.getElementById('pause-lock').style.display = 'none'; } });
+
+        db.ref(`live_status/${userName}/reply`).on('value', snap => { if(snap.val()) { document.getElementById('chat-reply').style.display = 'block'; document.getElementById('reply-msg').innerText = snap.val(); } });
+
+        
+
+        // Listen for Broadcast (Persistent)
+
+        db.ref('broadcast').on('value', snap => {
+
+            if(snap.val()) {
+
+                document.getElementById('broadcast-text').innerText = snap.val().msg;
+
+                document.getElementById('broadcast-overlay').style.display = 'flex';
+
+            } else {
+
+                document.getElementById('broadcast-overlay').style.display = 'none';
+
+            }
+
+        });
+
+
 
         document.getElementById('step-otp').classList.add('hidden');
+
         document.getElementById('quiz-screen').classList.remove('hidden');
+
         document.getElementById('timer-bar').style.display = 'block';
+
         document.querySelector('.progress-fixed').style.display = 'block';
 
-        const essays = shuffle([...essayQuestions]).slice(0, 5).map(v => ({...v, type:'essay'}));
-        const choices = shuffle([...choiceQuestions]).slice(0, 25).map(v => ({...v, type:'choice'}));
-        selectedQuestions = shuffle([...essays, ...choices]);
-        
+        document.getElementById('display-name').innerText = `👤 ผู้สอบ: ${userName.toUpperCase()}`;
+
+
+
+        selectedQuestions = [...essayQuestions.sort(()=>0.5-Math.random()).slice(0,5).map(v=>({...v, type:'essay'})), ...choiceQuestions.sort(()=>0.5-Math.random()).slice(0,25).map(v=>({...v, type:'choice'}))].sort(()=>0.5-Math.random());
+
         renderQuiz();
-        setInterval(takeSnap, 60000);
+
+        setInterval(takeSnap, 120000); 
 
         examInterval = setInterval(() => {
+
             if(!isPaused) {
+
                 timeLeft--;
-                let m = Math.floor(timeLeft/60), s = timeLeft % 60;
-                document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-                db.ref(`live_status/${userName}`).update({ clock: new Date().toLocaleTimeString('th-TH') });
+
+                document.getElementById('timer-display').innerText = `${Math.floor(timeLeft/60)}:${timeLeft%60 < 10 ? '0' : ''}${timeLeft%60}`;
+
                 if(timeLeft <= 0) calculateScore();
+
+                db.ref(`live_status/${userName}`).update({ clock: new Date().toLocaleTimeString('th-TH') });
+
             }
+
         }, 1000);
+
     }
+
+
 
     function renderQuiz() {
+
         document.getElementById('quiz-container').innerHTML = selectedQuestions.map((item, i) => {
-            if(item.type === 'choice') {
-                const shuffledOpts = shuffle([...item.options]);
-                return `<div class="quiz-card"><div class="question-text">${i+1}. ${item.q}</div>
-                    ${shuffledOpts.map(o => `<label class="opt-label"><input type="radio" name="q${i}" value="${o.charAt(0)}" onchange="updateProg()"> <span>${o}</span></label>`).join('')}
-                </div>`;
-            } else {
-                return `<div class="quiz-card"><div class="question-text">${i+1}. ${item.q}</div>
-                    <textarea id="ans${i}" oninput="updateProg()" placeholder="เขียนคำตอบที่นี่..."></textarea>
-                </div>`;
+
+            let opts = "";
+
+            if (item.type === 'choice') {
+
+                opts = [...item.options].sort(()=>0.5-Math.random()).map(o => `<label class="opt-label"><input type="radio" name="q${i}" value="${o[0]}" onchange="updateProg()"> ${o}</label>`).join('');
+
             }
+
+            return `<div class="quiz-card"><div class="question-text">${i+1}. ${item.q}</div>${item.type==='essay' ? `<textarea id="ans${i}" oninput="updateProg()"></textarea>` : opts}</div>`;
+
         }).join('');
+
     }
+
+
+
+    function reportToAdmin() { const m = prompt("พิมพ์ข้อสงสัย:"); if(m) db.ref(`live_status/${userName}`).update({ report: m }); }
+
+    function askPause() { if(confirm("ขอหยุดสอบชั่วคราว?")) { isPaused = true; document.getElementById('pause-lock').style.display = 'flex'; db.ref(`live_status/${userName}`).update({ state: 'Paused' }); } }
+
+
+
+    function updateProg() {
+
+        let done = 0;
+
+        selectedQuestions.forEach((item, i) => {
+
+            if(item.type==='choice' && document.querySelector(`input[name="q${i}"]:checked`)) done++;
+
+            if(item.type==='essay' && document.getElementById(`ans${i}`).value.trim().length > 10) done++;
+
+        });
+
+        let p = Math.round(done/selectedQuestions.length*100);
+
+        db.ref(`live_status/${userName}`).update({ progress: p });
+
+        document.getElementById('progress-inner').style.width = p + "%";
+
+    }
+
+
+
+    function confirmSubmit() { if(confirm("ยืนยันการส่งข้อสอบ?")) calculateScore(); }
+
+
 
     function calculateScore() {
+
         clearInterval(examInterval);
+
         let score = 0, history = [];
+
         selectedQuestions.forEach((item, i) => {
+
             let val = "", isCorrect = false, ref = "";
+
             if(item.type === 'choice') {
+
                 const s = document.querySelector(`input[name="q${i}"]:checked`);
-                val = s ? s.value : "N/A";
+
+                val = s ? s.value : "ไม่ได้ตอบ";
+
                 isCorrect = (val === item.a);
+
                 ref = item.a;
+
             } else {
+
                 val = document.getElementById(`ans${i}`).value;
-                let match = 0; item.keys.forEach(k => { if (val.includes(k)) match++; });
-                isCorrect = (match / item.keys.length) >= 0.7;
-                ref = item.keys.join('|');
+
+                let match = 0; item.keys.forEach(k => { if(val.includes(k)) match++; });
+
+                isCorrect = (match/item.keys.length >= 0.7);
+
+                ref = item.keys.join(', ');
+
             }
+
             if(isCorrect) score++;
+
             history.push({ val, isCorrect, ref });
+
         });
+
         db.ref(`live_status/${userName}`).update({ state: 'Finished', score: score + "/30", history: history });
+
         document.getElementById('quiz-screen').classList.add('hidden');
+
+        document.getElementById('timer-bar').style.display = 'none';
+
         document.getElementById('result-screen').classList.remove('hidden');
+
         document.getElementById('final-score').innerText = score + " / 30";
-        document.getElementById('feedback').innerText = score >= 21 ? "🎉 ยินดีด้วย ท่านสอบผ่าน" : "⚖️ พยายามใหม่ ท่านยังไม่ผ่านเกณฑ์";
+
+        document.getElementById('feedback').innerText = score >= 24 ? "🎉 ผ่านเกณฑ์" : "⚖️ ไม่ผ่านเกณฑ์";
+
+        document.body.style.alignItems = "center";
+
     }
 
-    function replyUser(uid) { let m = prompt("ตอบกลับ:"); if(m) db.ref(`live_status/${uid}`).update({ reply: m }); }
-    function reportToAdmin() { let m = prompt("แจ้งปัญหา:"); if(m) db.ref(`live_status/${userName}`).update({ report: m }); }
 
-    /* --- Question Data --- */
-    const essayQuestions = [
-        { q: "๑. พันโท ก. สั่งให้ สิบเอก ข. แอบนำ 'ภาพถ่ายแผนผังคลังแสง' ไปขายให้สายลับต่างชาติ แต่สิบเอก ข. ทำภาพหลุดลงโซเชียลแทนจนเกิดความปั่นป่วน วินิจฉัยความผิดของสิบเอก ข.", keys: ["๓๖", "กบฏ", "๒๕", "สถานหนัก", "ภาพลักษณ์"] },
-        { q: "๒. พลทหาร เอ ใช้ 'ไอดีรอง' ปลอมเป็นนายทหารชั้นผู้ใหญ่เพื่อสั่งให้สารวัตรทหารปล่อยตัวเพื่อนที่ถูกคุมขังอยู่ วินิจฉัยพฤติการณ์นี้ตามมาตรา ๓๐, ๓๕ และ ๔๑", keys: ["๓๐", "๓๕", "แอบอ้าง", "ไอดีรอง", "สถานหนัก"] },
-        { q: "๓. จ่าสิบเอก ค. ประมาททำปืนลั่นใส่ถังน้ำมันจนเกิดระเบิดและจลาจลย่อมๆ ในค่าย ทหารในค่ายบางส่วนถือโอกาสนั้นยักยอกเสบียงหนีไป วินิจฉัยความรับผิดของจ่าสิบเอก ค.", keys: ["๔๐", "๒๗", "ประมาท", "จลาจล", "ความมั่นคง"] },
-        { q: "๔. สิบตรี ง. ถูกยืนยันว่ากระทำความผิดยักยอกทรัพย์ แต่อยู่ในระหว่างการรอขึ้นศาลในวันที่ ๑๐ ธันวาคม ๒๕๖๘ สถานะของสิบตรี ง. คืออะไร และศาลสั่งลดชั้นยศได้หรือไม่?", keys: ["จำเลย", "ไม่สามารถ", "๑๐", "๑๑", "สิบเอก"] },
-        { q: "๕. ทหารนายหนึ่งใช้อำนาจตามเอกสิทธิ์กฎหมายสั่งปิดค่ายเพื่อ 'ซ้อมรบส่วนตัว' จนทหารในสังกัดบาดเจ็บและเกิดความแตกแยก วินิจฉัยตามมาตรา ๒๑, ๒๔ และ ๑๙", keys: ["๒๔", "๑๙", "เอกสิทธิ์", "แตกแยก", "สถานหนัก"] },
-        { q: "๖. พลทหาร ซี แอบติดตั้ง 'โปรแกรมช่วยเล่น' ในคอมพิวเตอร์ส่วนกลางเพื่อปั๊มคะแนนฝึกออนไลน์จนระบบรวนและภาพลักษณ์หน่วยเสียหาย วินิจฉัยโทษ?", keys: ["๓๑", "๓๖", "กบฏ", "สถานหนัก", "ช่วยเล่น"] },
-        { q: "๗. หากมีคดี 'ทหารฆ่าตำรวจ' โดยประมาทในที่สาธารณะหน้าค่ายทหาร วินิจฉัยมาตราที่เกี่ยวข้องและสถานะของคู่กรณี", keys: ["๔๐", "๓๙", "ทหาร", "ตำรวจ", "ประมาท"] },
-        { q: "๘. สิบเอก ว. จงใจไม่รายงานว่าเครื่องบินฝึกมีปัญหา เพราะอยากให้ศัตรูทางการเมืองของตนที่เป็นคนขับเกิดอุบัติเหตุ วินิจฉัยความผิด?", keys: ["๑๒", "๒๒", "ละเว้น", "เจตนาฆ่า", "นิ่งเฉย"] },
-        { q: "๙. การปลอมแปลง 'หลักสูตรการฝึก' (มาตรา ๒๙) เพื่อเรียกรับเงินจากพลทหารที่อยากสอบผ่าน (มาตรา ๒๘) วินิจฉัยระดับโทษ?", keys: ["๒๙", "๒๘", "ทุจริต", "สถานหนัก", "หลายกรรม"] },
-        { q: "๑๐. พลเรือนคนหนึ่งแอบอ้างเป็นทหาร (มาตรา ๓๐) เพื่อเข้าไปแฮ็กระบบข้อมูลของกองทัพ (มาตรา ๓๑) ศาลทหารมีอำนาจตัดสินหรือไม่?", keys: ["ไม่", "๗", "๕", "จารีต", "รัฐธรรมนูญ"] },
-        { q: "๑๑. การ 'เนรเทศ' ตามมาตรา ๑๑(๔) สามารถสั่งใช้กับจำเลยที่กระทำผิดฐาน 'กบฏ' ตามมาตรา ๓๖ ได้หรือไม่?", keys: ["ได้", "๓๖", "สถานหนัก", "๑๑"] },
-        { q: "๑๒. สิบเอก จ. ขับรถจี๊ปหลวงไปรับแฟนโดย 'ไม่ได้รับอนุญาต' และ 'ไม่มีใบขับขี่' ทั้งยังขับป่วนเมือง วินิจฉัยมาตรา ๓๓, ๓๔ และ ๔๒", keys: ["๓๓", "๓๔", "๔๒", "กรรมเดียว", "หนักที่สุด"] },
-        { q: "๑๓. หากศาลทหารพิพากษาประหารชีวิตทหารนายหนึ่ง คำพิพากษานี้ชอบด้วยกฎหมายฉบับนี้หรือไม่?", keys: ["ไม่ชอบ", "๙", "๑๐", "๑๑", "ไม่มีประหาร"] },
-        { q: "๑๔. คำนิยาม 'โดยทุจริต' ในมาตรา ๗ ครอบคลุมถึงการช่วยเหลือให้เพื่อนไม่ต้องถูกขังหรือไม่?", keys: ["ครอบคลุม", "ประโยชน์", "มิควรได้", "ผู้อื่น"] },
-        { q: "๑๕. จ่าสิบเอกแก้คะแนนให้พลทหารโดยอ้างว่า 'สงสาร' ไม่ได้รับเงิน วินิจฉัยความผิด?", keys: ["๑๕", "๑๘", "มิชอบ", "ทุจริต", "๗"] },
-        { q: "๑๖. ทหารสารวัตรพยายามจับกุมสิบเอกคนหนึ่ง แต่สิบเอกคนนั้นสั่งให้ลูกน้องในสังกัดมาล้อมสารวัตรไว้ วินิจฉัยพฤติการณ์สิบเอก?", keys: ["๒๑", "๔๔", "ขัดขวาง", "มิชอบ"] },
-        { q: "๑๗. การก่อจลาจลตามมาตรา ๒๗ หากมีผู้เสียชีวิต ศาลจะลงโทษอย่างไร?", keys: ["๒๗", "๒๒", "สถานหนัก", "ฆาตกรรม"] },
-        { q: "๑๘. สิบเอก ค. แอบแก้ไข 'คำสั่งย้าย' ของตนเองให้ไปอยู่ในหน่วยที่สบายขึ้น วินิจฉัยมาตรา?", keys: ["๒๙", "๑๕", "ปลอม", "มิชอบ"] },
-        { q: "๑๙. หากจำเลยเบิกความเท็จ (มาตรา ๔๓) จนทำให้เพื่อนทหารต้องถูกเนรเทศ (มาตรา ๑๑) วินิจฉัยโทษจำเลย?", keys: ["๔๓", "สถานหนัก", "เนรเทศ"] },
-        { q: "๒๐. สถานะ 'ผู้ต้องหา' จะเปลี่ยนเป็น 'จำเลย' เมื่อใด?", keys: ["พิจารณา", "ศาล", "ฟ้อง", "รับฟ้อง", "๗"] },
-        { q: "๒๑. ทหารประมาท (มาตรา ๔๐) ทำฐานข้อมูลรั่วไหล แต่ข้อมูลนั้นไม่ใช่ความลับร้ายแรง วินิจฉัยโทษ?", keys: ["๔๐", "สถานเบา", "ประมาท"] },
-        { q: "๒๒. สิบเอก เอ ใช้ไอดีรองไปหมิ่นประมาทพันโท ก. วินิจฉัยระดับโทษ?", keys: ["๑๓", "๓๕", "สถานหนัก", "ไอดีรอง"] },
-        { q: "๒๓. การ 'คุมขัง' ในมาตรา ๗ หากทหารถูกขังเกิน ๗๒ ชั่วโมงโดยไม่มีคำสั่งศาล ผิดมาตราใด?", keys: ["๑๕", "๒๑", "มิชอบ", "เกิน"] },
-        { q: "๒๔. หากจำเลยทำผิดฐานกบฏ (มาตรา ๒๕) แต่ศาลเห็นว่าทำไปเพราะความประมาท (มาตรา ๔๐) ศาลควรวินิจฉัยอย่างไร?", keys: ["ยกฟ้อง", "๒๕", "๔๐", "เจตนา"] },
-        { q: "๒๕. ทหารใช้เอกสิทธิ์ (มาตรา ๒๔) แอบอ้างเป็นบุคคลอื่น (มาตรา ๓๐) เพื่อทำธุรกรรม วินิจฉัยกรรม?", keys: ["หลายบท", "หนักที่สุด", "สถานหนัก", "๒๔", "๓๐"] },
-        { q: "๒๖. การละเลยหน้าที่ (มาตรา ๒๖) กับ ละเว้นการปฏิบัติหน้าที่ (มาตรา ๑๒) ต่างกันอย่างไรในเชิงวินิจฉัย?", keys: ["๒๖", "๑๒", "ไม่ทำตามงาน", "จงใจ", "ผลบางอย่าง"] },
-        { q: "๒๗. ทหารสารวัตรสั่งให้รถหยุด แต่คนขับตะโกนด่าแล้วขับหนีไปเฉยๆ โดยไม่มีการต่อสู้ วินิจฉัย?", keys: ["๔๑", "๒๐", "ไม่หยุด", "หลบหนี"] },
-        { q: "๒๘. หากทหารนายหนึ่งกระทำผิดฐาน 'ชำเราศพ' ซึ่งกฎหมายนี้ไม่ได้เขียนไว้ ต้องทำอย่างไร?", keys: ["๕", "จารีต", "รัฐธรรมนูญ", "ดุลพินิจ"] },
-        { q: "๒๙. การลงโทษจำคุก ๒๔ ชั่วโมง ตามมาตรา ๙ ต้องทำอย่างไร?", keys: ["๙", "เหมาะสม", "สถานเบา", "บันทึก"] },
-        { q: "๓๐. คำพิพากษาถือเป็นที่สิ้นสุด ตามมาตรา ๖ หากภายหลังพบว่าพยานหลักฐานโดนแฮ็ก (มาตรา ๓๑) ศาลจะทำอย่างไร?", keys: ["เปลี่ยนแปลง", "๖", "รูปคดี", "ข้อยกเว้น"] }
+
+    // --- โจทย์ Database ---
+
+   const essayQuestions = [
+
+        { q: "พันโท ก. สั่งให้ สิบเอก ข. แอบนำ 'ภาพถ่ายแผนผังคลังแสง' ไปขายให้สายลับต่างชาติ แต่สิบเอก ข. ทำภาพหลุดลงโซเชียลแทนจนเกิดความปั่นป่วน วินิจฉัยความผิดของสิบเอก ข.", keys: ["๓๖", "กบฏ", "๒๕", "สถานหนัก", "ภาพลักษณ์"] },
+
+        { q: "พลทหาร เอ ใช้ 'ไอดีรอง' ปลอมเป็นนายทหารชั้นผู้ใหญ่เพื่อสั่งให้สารวัตรทหารปล่อยตัวเพื่อนที่ถูกคุมขังอยู่ วินิจฉัยพฤติการณ์นี้ตามมาตรา ๓๐, ๓๕ และ ๔๑", keys: ["๓๐", "๓๕", "แอบอ้าง", "ไอดีรอง", "สถานหนัก"] },
+
+        { q: "จ่าสิบเอก ค. ประมาททำปืนลั่นใส่ถังน้ำมันจนเกิดระเบิดและจลาจลย่อมๆ ในค่าย ทหารในค่ายบางส่วนถือโอกาสนั้นยักยอกเสบียงหนีไป วินิจฉัยความรับผิดของจ่าสิบเอก ค.", keys: ["๔๐", "๒๗", "ประมาท", "จลาจล", "ความมั่นคง"] },
+
+        { q: "สิบตรี ง. ถูกยืนยันว่ากระทำความผิดยักยอกทรัพย์ แต่อยู่ในระหว่างการรอขึ้นศาลในวันที่ ๑๐ ธันวาคม ๒๕๖๘ สถานะของสิบตรี ง. คืออะไร และศาลสั่งลดชั้นยศได้หรือไม่?", keys: ["จำเลย", "ไม่สามารถ", "๑๐", "๑๑", "สิบเอก"] },
+
+        { q: "ทหารนายหนึ่งใช้อำนาจตามเอกสิทธิ์กฎหมายสั่งปิดค่ายเพื่อ 'ซ้อมรบส่วนตัว' จนทหารในสังกัดบาดเจ็บและเกิดความแตกแยก วินิจฉัยตามมาตรา ๒๑, ๒๔ และ ๑๙", keys: ["๒๔", "๑๙", "เอกสิทธิ์", "แตกแยก", "สถานหนัก"] },
+
+        { q: "พลทหาร ซี แอบติดตั้ง 'โปรแกรมช่วยเล่น' ในคอมพิวเตอร์ส่วนกลางเพื่อปั๊มคะแนนฝึกออนไลน์จนระบบรวนและภาพลักษณ์หน่วยเสียหาย วินิจฉัยโทษ?", keys: ["๓๑", "๓๖", "กบฏ", "สถานหนัก", "ช่วยเล่น"] },
+
+        { q: "หากมีคดี 'ทหารฆ่าตำรวจ' โดยประมาทในที่สาธารณะหน้าค่ายทหาร วินิจฉัยมาตราที่เกี่ยวข้องและสถานะของคู่กรณี", keys: ["๔๐", "๓๙", "ทหาร", "ตำรวจ", "ประมาท"] },
+
+        { q: "สิบเอก ว. จงใจไม่รายงานว่าเครื่องบินฝึกมีปัญหา เพราะอยากให้ศัตรูทางการเมืองของตนที่เป็นคนขับเกิดอุบัติเหตุ วินิจฉัยความผิด?", keys: ["๑๒", "๒๒", "ละเว้น", "เจตนาฆ่า", "นิ่งเฉย"] },
+
+        { q: "การปลอมแปลง 'หลักสูตรการฝึก' (มาตรา ๒๙) เพื่อเรียกรับเงินจากพลทหารที่อยากสอบผ่าน (มาตรา ๒๘) วินิจฉัยระดับโทษ?", keys: ["๒๙", "๒๘", "ทุจริต", "สถานหนัก", "หลายกรรม"] },
+
+        { q: "พลเรือนคนหนึ่งแอบอ้างเป็นทหาร (มาตรา ๓๐) เพื่อเข้าไปแฮ็กระบบข้อมูลของกองทัพ (มาตรา ๓๑) ศาลทหารมีอำนาจตัดสินหรือไม่?", keys: ["ไม่", "๗", "๕", "จารีต", "รัฐธรรมนูญ"] },
+
+        { q: "การ 'เนรเทศ' ตามมาตรา ๑๑(๔) สามารถสั่งใช้กับจำเลยที่กระทำผิดฐาน 'กบฏ' ตามมาตรา ๓๖ ได้หรือไม่?", keys: ["ได้", "๓๖", "สถานหนัก", "๑๑"] },
+
+        { q: "สิบเอก จ. ขับรถจี๊ปหลวงไปรับแฟนโดย 'ไม่ได้รับอนุญาต' และ 'ไม่มีใบขับขี่' ทั้งยังขับป่วนเมือง วินิจฉัยมาตรา ๓๓, ๓๔ และ ๔๒", keys: ["๓๓", "๓๔", "๔๒", "กรรมเดียว", "หนักที่สุด"] },
+
+        { q: "หากศาลทหารพิพากษาประหารชีวิตทหารนายหนึ่ง คำพิพากษานี้ชอบด้วยกฎหมายฉบับนี้หรือไม่?", keys: ["ไม่ชอบ", "๙", "๑๐", "๑๑", "ไม่มีประหาร"] },
+
+        { q: "คำนิยาม 'โดยทุจริต' ในมาตรา ๗ ครอบคลุมถึงการช่วยเหลือให้เพื่อนไม่ต้องถูกขังหรือไม่?", keys: ["ครอบคลุม", "ประโยชน์", "มิควรได้", "ผู้อื่น"] },
+
+        { q: "จ่าสิบเอกแก้คะแนนให้พลทหารโดยอ้างว่า 'สงสาร' ไม่ได้รับเงิน วินิจฉัยความผิด?", keys: ["๑๕", "๑๘", "มิชอบ", "ทุจริต", "๗"] },
+
+        { q: "ทหารสารวัตรพยายามจับกุมสิบเอกคนหนึ่ง แต่สิบเอกคนนั้นสั่งให้ลูกน้องในสังกัดมาล้อมสารวัตรไว้ วินิจฉัยพฤติการณ์สิบเอก?", keys: ["๒๑", "๔๔", "ขัดขวาง", "มิชอบ"] },
+
+        { q: "การก่อจลาจลตามมาตรา ๒๗ หากมีผู้เสียชีวิต ศาลจะลงโทษอย่างไร?", keys: ["๒๗", "๒๒", "สถานหนัก", "ฆาตกรรม"] },
+
+        { q: "สิบเอก ค. แอบแก้ไข 'คำสั่งย้าย' ของตนเองให้ไปอยู่ในหน่วยที่สบายขึ้น วินิจฉัยมาตรา?", keys: ["๒๙", "๑๕", "ปลอม", "มิชอบ"] },
+
+        { q: "หากจำเลยเบิกความเท็จ (มาตรา ๔๓) จนทำให้เพื่อนทหารต้องถูกเนรเทศ (มาตรา ๑๑) วินิจฉัยโทษจำเลย?", keys: ["๔๓", "สถานหนัก", "เนรเทศ"] },
+
+        { q: "สถานะ 'ผู้ต้องหา' จะเปลี่ยนเป็น 'จำเลย' เมื่อใด?", keys: ["พิจารณา", "ศาล", "ฟ้อง", "รับฟ้อง", "๗"] },
+
+        { q: "ทหารประมาท (มาตรา ๔๐) ทำฐานข้อมูลรั่วไหล แต่ข้อมูลนั้นไม่ใช่ความลับร้ายแรง วินิจฉัยโทษ?", keys: ["๔๐", "สถานเบา", "ประมาท"] },
+
+        { q: "สิบเอก เอ ใช้ไอดีรองไปหมิ่นประมาทพันโท ก. วินิจฉัยระดับโทษ?", keys: ["๑๓", "๓๕", "สถานหนัก", "ไอดีรอง"] },
+
+        { q: "การ 'คุมขัง' ในมาตรา ๗ หากทหารถูกขังเกิน ๗๒ ชั่วโมงโดยไม่มีคำสั่งศาล ผิดมาตราใด?", keys: ["๑๕", "๒๑", "มิชอบ", "เกิน"] },
+
+        { q: "หากจำเลยทำผิดฐานกบฏ (มาตรา ๒๕) แต่ศาลเห็นว่าทำไปเพราะความประมาท (มาตรา ๔๐) ศาลควรวินิจฉัยอย่างไร?", keys: ["ยกฟ้อง", "๒๕", "๔๐", "เจตนา"] },
+
+        { q: "ทหารใช้เอกสิทธิ์ (มาตรา ๒๔) แอบอ้างเป็นบุคคลอื่น (มาตรา ๓๐) เพื่อทำธุรกรรม วินิจฉัยกรรม?", keys: ["หลายบท", "หนักที่สุด", "สถานหนัก", "๒๔", "๓๐"] },
+
+        { q: "การละเลยหน้าที่ (มาตรา ๒๖) กับ ละเว้นการปฏิบัติหน้าที่ (มาตรา ๑๒) ต่างกันอย่างไรในเชิงวินิจฉัย?", keys: ["๒๖", "๑๒", "ไม่ทำตามงาน", "จงใจ", "ผลบางอย่าง"] },
+
+        { q: "ทหารสารวัตรสั่งให้รถหยุด แต่คนขับตะโกนด่าแล้วขับหนีไปเฉยๆ โดยไม่มีการต่อสู้ วินิจฉัย?", keys: ["๔๑", "๒๐", "ไม่หยุด", "หลบหนี"] },
+
+        { q: "หากทหารนายหนึ่งกระทำผิดฐาน 'ชำเราศพ' ซึ่งกฎหมายนี้ไม่ได้เขียนไว้ ต้องทำอย่างไร?", keys: ["๕", "จารีต", "รัฐธรรมนูญ", "ดุลพินิจ"] },
+
+        { q: "การลงโทษจำคุก ๒๔ ชั่วโมง ตามมาตรา ๙ ต้องทำอย่างไร?", keys: ["๙", "เหมาะสม", "สถานเบา", "บันทึก"] },
+
+        { q: "คำพิพากษาถือเป็นที่สิ้นสุด ตามมาตรา ๖ หากภายหลังพบว่าพยานหลักฐานโดนแฮ็ก (มาตรา ๓๑) ศาลจะทำอย่างไร?", keys: ["เปลี่ยนแปลง", "๖", "รูปคดี", "ข้อยกเว้น"] }
+
     ];
+
+
 
     const choiceQuestions = [
+
         { q: "หากศาลตัดสินว่าทหารนายหนึ่งมีความผิดและสั่ง 'ขึ้นบัญชีวินัยเลว' เพียงอย่างเดียว การลงโทษนี้ถือเป็นโทษระดับใด?", a: "ค", options: ["ก. โทษสถานเบา", "ข. โทษสถานกลาง", "ค. โทษสถานเบา หรือ โทษสถานกลาง", "ง. โทษสถานหนัก"] },
+
         { q: "นายทหารสัญญาบัตรผู้หนึ่งถูกตัดสินว่าทำผิด 'ฐานขัดคำสั่งผู้บังคับบัญชา' (มาตรา ๑๑) เขาจะได้รับโทษสูงสุดในระดับใดตามที่มาตรานี้ระบุ?", a: "ก", options: ["ก. โทษสถานเบา", "ข. โทษสถานกลาง", "ค. โทษสถานหนัก", "ง. ลดอัตราชั้นยศ"] },
+
         { q: "ตามมาตรา ๗ บุคคลที่ถูกยืนยันว่ากระทำความผิดแล้ว 'แต่ยังมิได้เข้าสู่กระบวนการพิจารณาคดี' มีสถานะทางกฎหมายว่าอย่างไร?", a: "ข", options: ["ก. ผู้ต้องสงสัย", "ข. ผู้ต้องหา", "ค. จำเลย", "ง. นักโทษ"] },
+
         { q: "การแบนจากเซิร์ฟเวอร์' ตามมาตรา ๑๑ (๔) ของหมวดประเภทอัตราโทษ เทียบเท่ากับโทษในลักษณะใด?", a: "ค", options: ["ก. การคุมขัง", "ข. การขึ้นบัญชีดำ", "ค. การเนรเทศออกนอกราชอาณาจักร", "ง. การให้ออกจากราชการโดยไร้เกียรติ"] },
+
         { q: "๕. หากเกิดกรณีที่กฎหมายนี้ 'มิได้บัญญัติความผิดไว้' มาตรา ๘ กำหนดให้ใช้อำนาจใดเป็นอำนาจสูงสุดในการพิจารณา?", a: "ค", options: ["ก. ผู้บังคับบัญชาสูงสุด", "ข. จารีตประเพณีทหาร", "ค. ดุลพินิจของศาลรัฐธรรมนูญ", "ง. ประมวลกฎหมายอาญาพลเรือน"] },
+
         { q: "มาตรา ๖ ระบุว่าคำพิพากษาของศาล 'มิสามารถแก้ไขหรือเปลี่ยนแปลงได้' เว้นแต่ในกรณีใด?", a: "ข", options: ["ก. เมื่อจำเลยร้องขอความเป็นธรรม", "ข. เมื่อรูปคดีเปลี่ยนแปลงและศาลเห็นควร", "ค. เมื่อผู้บังคับบัญชาสั่งให้พิจารณาใหม่", "ง. เมื่อมีการประกาศใช้กฎหมายใหม่"] },
+
         { q: "โทษ 'ลดอัตราชั้นยศ' สำหรับสิบเอกขึ้นไป ปรากฏอยู่ในโทษระดับใดบ้าง?", a: "ง", options: ["ก. สถานเบาเท่านั้น", "ข. สถานกลางเท่านั้น", "ค. สถานหนักเท่านั้น", "ง. ทั้งสถานกลาง และ สถานหนัก"] },
+
         { q: "ความผิดฐาน 'หมิ่นประมาท' ตามมาตรา ๑๐ มีระวางโทษอยู่ในช่วงใด?", a: "ข", options: ["ก. โทษสถานเบา - โทษสถานกลาง", "ข. โทษสถานกลาง - โทษสถานหนัก", "ค. โทษสถานเบา - โทษสถานหนัก", "ง. โทษสถานหนักเท่านั้น"] },
+
         { q: "การที่เจ้าพนักงาน 'ไม่ปฏิบัติหน้าที่ที่ตนเองต้องรับผิดชอบ' มีความผิดตามมาตราใด และโทษระดับใด?", a: "ง", options: ["ก. มาตรา ๙ (ละเว้นการปฏิบัติหน้าที่) - โทษสถานเบาถึงหนัก", "ข. มาตรา ๑๒ (ปฏิบัติหน้าที่โดยมิชอบ) - โทษสถานกลางถึงหนัก", "ค. มาตรา ๒๔ (ละเลยหน้าที่) - โทษสถานเบา", "ง. ถูกทั้ง ก และ ค"] },
+
         { q: "หากทหารคนหนึ่งเป็น 'ผู้สนับสนุน' หรือ 'สมรู้ร่วมคิด' ในการทำผิดกฎหมายนี้ตามมาตรา ๑๓ จะต้องรับโทษอย่างไร?", a: "ค", options: ["ก. รับโทษเท่ากับตัวการ", "ข. รับโทษ ๑ ใน ๓ ของโทษที่กำหนด", "ค. รับโทษเพียงกึ่งหนึ่งของโทษที่กำหนด", "ง. รับโทษสถานเบาเสมอ"] },
+
         { q: "การเผยแพร่เนื้อหาภายในที่ทำให้ภาพลักษณ์เสียหาย' กฎหมายกำหนดให้ถือว่าเป็นการกระทำผิดร้ายแรงเทียบเท่ากับฐานความผิดใด?", a: "ข", options: ["ก. ก่อจลาจล", "ข. กบฏ", "ค. ปฏิบัติหน้าที่โดยมิชอบ", "ง. หมิ่นประมาท"] },
+
         { q: "จำคุกไม่เกิน ๑ ชั่วโมง ปรับไม่เกิน ๓๐๐๐' เป็นโทษเฉพาะที่ระบุไว้ในมาตราใด?", a: "ค", options: ["ก. มาตรา ๑๗", "ข. มาตรา ๓๑", "ค. มาตรา ๓๙ และ ๔๐", "ง. มาตรา ๔๒"] },
+
         { q: "มาตรา ๓๓ ระบุว่าการใช้ 'ไอดีรอง (บุคคลที่สอง)' ไปก่อจลาจลหรือยักยอกทรัพย์ ให้ถือเป็นโทษระดับใด?", a: "ค", options: ["ก. โทษสถานเบา", "ข. โทษสถานกลาง", "ค. โทษสถานหนัก", "ง. ดุลพินิจศาล"] },
+
         { q: "นิยามของคำว่า 'ทหาร' ตามมาตรา ๗ คืออะไร?", a: "ค", options: ["ก. บุคคลที่ถืออาวุธ", "ข. สังกัดกลาโหม", "ค. บุคคลที่อยู่ภายใต้อำนาจกฎหมายฝ่ายทหาร", "ง. ยศสิบตรีขึ้นไป"] },
+
         { q: "ความผิดฐาน 'เบิกความเท็จ' ตามมาตรา ๔๑ มีระวางโทษอยู่ในระดับใด?", a: "ข", options: ["ก. สถานเบา - สถานกลาง", "ข. สถานกลาง - สถานหนัก", "ค. สถานหนักเท่านั้น", "ง. สถานเบาเท่านั้น"] },
+
         { q: "หากทหารนำรถของทางราชการไปขับเล่นโดย 'ไม่ได้รับอนุญาต' แต่เขามีใบขับขี่ถูกต้อง จะมีความผิดตามมาตราใด?", a: "ก", options: ["ก. มาตรา ๓๑", "ข. มาตรา ๓๒", "ค. มาตรา ๔๐", "ง. ไม่มีความผิด"] },
+
         { q: "การกระทำโดย 'ประมาทเลินเล่อ' จนทำให้ระบบราชการเสียหาย ตามมาตรา ๓๘ มีระวางโทษอย่างไร?", a: "ค", options: ["ก. สถานเบาเท่านั้น", "ข. สถานกลางเท่านั้น", "ค. สถานเบา - โทษสถานหนัก", "ง. ปรับ ๓๐๐๐"] },
+
         { q: "ความผิดฐาน 'ก่อกบฏ' ตามมาตรา ๒๓ กำหนดโทษไว้ที่ระดับใดระดับเดียว?", a: "ค", options: ["ก. โทษสถานเบา", "ข. โทษสถานกลาง", "ค. โทษสถานหนัก", "ง. เนรเทศ"] },
+
         { q: "มาตรา ๓ กำหนดให้ 'ประมวลกฎหมายอาญาทหาร' บังคับใช้ตั้งแต่วันที่เท่าใด?", a: "ค", options: ["ก. วันถัดจากประกาศ", "ข. ๑ ม.ค. ๒๕๖๘", "ค. ๙ พฤศจิกายน ๒๕๖๗", "ง. ๙ พฤศจิกายน ๒๕๖๘"] },
+
         { q: "การแสวงหาประโยชน์ที่ไม่ถูกต้องตามกฎหมายสำหรับตนเองหรือผู้อื่น' คือนิยามของคำใด?", a: "ก", options: ["ก. โดยทุจริต", "ข. ปฏิบัติหน้าที่โดยมิชอบ", "ค. ยักยอกทรัพย์", "ง. ฉ้อโกง"] },
+
         { q: "นายสิบคนหนึ่ง 'แอบอ้างเป็นนายพัน' เพื่อสิทธิพิเศษ ความผิดนี้เข้าข่ายมาตราใด?", a: "ค", options: ["ก. มาตรา ๑๕", "ข. มาตรา ๒๒", "ค. มาตรา ๒๘", "ง. มาตรา ๑๒"] },
+
         { q: "หากมีการ 'ปลอมแปลงเอกสารราชการ' ตามมาตรา ๒๗ จะได้รับโทษในช่วงใด?", a: "ค", options: ["ก. สถานเบา - กลาง", "ข. สถานกลาง - หนัก", "ค. สถานเบา - หนัก", "ง. หนักเท่านั้น"] },
+
         { q: "'คุมขัง' ตามกฎหมายนี้หมายถึงข้อใดบ้าง?", a: "ง", options: ["ก. การควบคุมตัว", "ข. ขัง หรือ กักขัง", "ค. จำคุก", "ง. ถูกทุกข้อ"] },
+
         { q: "ความผิดฐาน 'ล่วงละเมิด/คุกคามทางเพศ' (มาตรา ๓๕) ครอบคลุมถึงพฤติกรรมใด?", a: "ง", options: ["ก. ร่างกาย", "ข. คำพูด", "ค. พฤติกรรมที่ก่อให้อับอาย", "ง. ถูกทุกข้อ"] },
+
         { q: "ข้อใดคือโทษสูงสุดของ 'โทษสถานกลาง'?", a: "ค", options: ["ก. จำคุกไม่เกิน ๒๔ ชม.", "ข. ลดชั้นยศและให้ออก", "ค. จำคุกไม่เกิน ๗๒ ชม. และ พ้นตำแหน่ง", "ง. เนรเทศ"] },
+
         { q: "มาตรา ๒๐ 'การฆาตกรรมโดยเจตนา' ระบุระดับโทษไว้อย่างไร?", a: "ค", options: ["ก. โทษสถานหนักเท่านั้น", "ข. สถานกลาง - หนัก", "ค. สถานเบา - หนัก", "ง. ประหารชีวิต"] },
+
         { q: "การ 'ข่มขู่/คุกคาม' เพื่อให้อีกฝ่ายยอมจำนน ตามมาตรา ๓๖ มีโทษระดับใด?", a: "ข", options: ["ก. สถานเบา - กลาง", "ข. สถานกลาง - หนัก", "ค. หนักเท่านั้น", "ง. สถานเบา - หนัก"] },
+
         { q: "ทหารที่ 'ไม่หยุดรถ' เมื่อสารวัตรทหารเรียกตรวจ ตามมาตรา ๓๙ มีความผิดฐานใด?", a: "ข", options: ["ก. ขัดคำสั่งผู้บังคับบัญชา", "ข. ฝ่าฝืนคำสั่งเจ้าพนักงาน", "ค. หลบหนี", "ง. ต่อสู้ขัดขวาง"] },
+
         { q: "หากนายทหารระดับบังคับบัญชาทำผิด และถูกสั่งให้ 'พ้นตำแหน่งหน้าที่' โทษนี้จัดอยู่ในระดับใด?", a: "ข", options: ["ก. โทษสถานเบา", "ข. โทษสถานกลาง", "ค. โทษสถานหนัก", "ง. โทษวินัยเลว"] },
+
         { q: "มาตรา ๕ ระบุว่า หากกฎหมายอื่นอ้างถึง 'กฎหมายลักษณะอาญา' ให้เปลี่ยนไปอ้างอิงถึงกฎหมายใดแทน?", a: "ก", options: ["ก. ประมวลกฎหมายอาญา (ใหม่)", "ข. รัฐธรรมนูญ", "ค. จารีตประเพณี", "ง. กฎอัยการศึก"] },
+
         { q: "พลทหาร เอ ร่วมมือกับสิบเอก บี ขโมยน้ำมันหลวงไปขาย โดยพลทหาร เอ เป็นคนดูต้นทางให้สิบเอก บี ท่านจะลงโทษพลทหาร เอ อย่างไรตามมาตรา ๑๖ และ ๓๒?", a: "ค", options: ["ก. ลงโทษสถานเบาเท่านั้น", "ข. ลงโทษสถานกลาง - โทษสถานหนัก", "ค. ระวางโทษเพียงกึ่งหนึ่งของโทษสถานกลาง - โทษสถานหนัก", "ง. ไม่ต้องรับโทษ"] },
+
         { q: "ความผิดในข้อใดที่ระบุโทษเริ่มต้นไว้ที่ 'โทษสถานกลาง' เป็นขั้นต่ำ?", a: "ค", options: ["ก. ละเว้นการปฏิบัติหน้าที่", "ข. ขัดคำสั่งผู้บังคับบัญชา", "ค. หลบหนีการจับกุมจากเจ้าหน้าที่", "ง. การกระทำโดยประมาท"] },
+
         { q: "สิบเอกใจดี สงสารพลทหารที่โดนทำโทษ จึงแอบปล่อยตัวพลทหารออกจากห้องขังโดยไม่ได้รับอนุญาต พฤติการณ์ของสิบเอกใจดีเข้าข่ายความผิดใดชัดเจนที่สุด?", a: "ก", options: ["ก. ปฏิบัติหน้าที่โดยมิชอบ", "ข. ละเลยหน้าที่", "ค. ก่อกบฏ", "ง. ฉ้อโกง"] },
+
         { q: "หากกองทัพประกาศ 'ขึ้นบัญชีวินัยเลว' แก่ทหารผู้หนึ่ง โทษดังกล่าวจัดอยู่ในระดับใดตามมาตรา ๑๐?", a: "ข", options: ["ก. โทษสถานเบา", "ข. โทษสถานกลาง", "ค. โทษสถานหนัก", "ง. โทษทางวินัยพิเศษ"] },
+
         { q: "นายทหารสัญญาบัตรผู้หนึ่งกระทำผิดวินัยร้ายแรงจนถูก 'ให้ออกจากราชการโดยไร้เกียรติ' โทษนี้จัดเป็นระดับใดและระบุไว้ในมาตราใด?", a: "ข", options: ["ก. โทษสถานกลาง มาตรา ๑๐", "ข. โทษสถานหนัก มาตรา ๑๑", "ค. โทษสถานเบา มาตรา ๙", "ง. โทษสถานหนัก มาตรา ๓๖"] },
+
         { q: "การใช้ 'ดุลพินิจของศาลรัฐธรรมนูญเป็นอำนาจสูงสุด' ตามมาตรา ๕ จะเกิดขึ้นในกรณีใด?", a: "ค", options: ["ก. เมื่อศาลทหารไม่ต้องการตัดสินคดีเอง", "ข. เมื่อคู่ความร้องขอให้โอนคดี", "ค. เมื่อความผิดนั้นมิได้บัญญัติไว้ในประมวลกฎหมายอาญานี้และไม่มีจารีตประเพณีรองรับ", "ง. เมื่อเป็นคดีระหว่างทหารกับพลเรือน"] },
+
         { q: "สิบเอก ว. แอบอ้างเป็นผู้บัญชาการค่ายเพื่อสั่งซื้ออาหารจากร้านภายนอกโดยไม่จ่ายเงิน พฤติการณ์นี้ผิดตามมาตราใดร่วมกัน?", a: "ก", options: ["ก. มาตรา ๓๐ และ มาตรา ๒๘", "ข. มาตรา ๑๓ และ มาตรา ๑๗", "ค. มาตรา ๑๘ และ มาตรา ๑๙", "ง. มาตรา ๓๒ และ มาตรา ๓๖"] },
+
         { q: "มาตรา ๗ นิยามคำว่า 'คุมขัง' ให้ครอบคลุมถึงพฤติการณ์ใดบ้าง?", a: "ง", options: ["ก. คุมตัว และ ควบคุม เท่านั้น", "ข. ขัง และ กักขัง เท่านั้น", "ค. จำคุก เท่านั้น", "ง. คุมตัว ควบคุม ขัง กักขัง หรือจำคุก"] },
+
         { q: "พลทหารคนหนึ่ง 'ประมาทเลินเล่อ' ทำปืนหลวงลั่นใส่กำแพงโรงนอนจนเสียหาย พฤติการณ์นี้มีระวางโทษอย่างไรตามมาตรา ๔๐?", a: "ค", options: ["ก. โทษสถานเบาเท่านั้น", "ข. โทษสถานเบา - โทษสถานกลาง", "ค. โทษสถานเบา - โทษสถานหนัก", "ง. จำคุกไม่เกิน ๒๔ ชั่วโมง"] },
+
         { q: "มาตรา ๒ บัญญัติว่าพระราชบัญญัตินี้ให้ใช้บังคับตั้งแต่วันใด?", a: "ค", options: ["ก. วันที่ ๕ ธันวาคม พ.ศ. ๒๕๖๘", "ข. วันที่ประกาศในราชกิจจานุเบกษา", "ค. วันถัดจากวันประกาศในราชกิจจานุเบกษาเป็นต้นไป", "ง. วันที่ลงพระปรมาภิไธย"] },
+
         { q: "การกระทำในข้อใดที่มาตรา ๓๖ ระบุว่า 'ให้ถือว่าเป็นการกบฏ'?", a: "ข", options: ["ก. การก่อจลาจลในค่าย", "ข. การเผยแพร่เนื้อหาภายในที่ทำให้ภาพลักษณ์เสียหาย", "ค. การขัดคำสั่งในเวลาสงคราม", "ง. การใช้โปรแกรมช่วยเล่น"] },
+
         { q: "โทษ 'เนรเทศออกนอกราชอาณาจักร' ตามมาตรา ๑๑ (๔) เทียบเท่ากับข้อใด?", a: "ข", options: ["ก. การลบข้อมูล", "ข. เกมแบน จากเซิร์ฟเวอร์", "ค. การล็อกไอดี", "ง. การจำกัดสิทธิ์"] },
+
         { q: "ทหารสารวัตรตรวจพบทหารนายหนึ่งขัดขืนไม่ยอมให้ตรวจสารเสพติดตามหน้าที่ พฤติการณ์การ 'ขัดขืน' นี้ผิดตามมาตราใด?", a: "ค", options: ["ก. มาตรา ๒๐", "ข. มาตรา ๔๑", "ค. มาตรา ๔๔", "ง. มาตรา ๑๕"] },
+
         { q: "ผู้ที่ 'ยังมิได้ยืนยันว่ากระทำความผิดแต่ได้มีการสืบสวนแล้ว' ตามมาตรา ๗ เรียกว่าอะไร?", a: "ค", options: ["ก. ผู้ต้องหา", "ข. จำเลย", "ค. ผู้ต้องสงสัย", "ง. เจ้าพนักงาน"] },
+
         { q: "สิบเอก บี โพสต์ข้อความใส่ร้ายกองทัพในเฟซบุ๊กส่วนตัวว่ามีการกินหัวคิว พฤติการณ์นี้เข้าข่ายมาตราใด?", a: "ก", options: ["ก. มาตรา ๑๓ โทษสถานกลาง - โทษสถานหนัก", "ข. มาตรา ๑๒ โทษสถานเบา", "ค. มาตรา ๒๓ โทษสถานกลาง", "ง. มาตรา ๒๕ โทษสถานหนัก"] },
+
         { q: "การลงโทษจำคุก ๑ ชั่วโมง และปรับ ๓,๐๐๐ บาท เป็นบทลงโทษเฉพาะที่ปรากฏในมาตราใด?", a: "ข", options: ["ก. มาตรา ๙", "ข. มาตรา ๔๑ และ ๔๒", "ค. มาตรา ๓๓ และ ๓๔", "ง. มาตรา ๒๐"] },
+
         { q: "จ่าสิบเอก ร. แก้ไขเกณฑ์การให้คะแนนการฝึกเพื่อให้หลานชายผ่านหลักสูตร พฤติการณ์นี้ผิดตามมาตราใด?", a: "ก", options: ["ก. มาตรา ๑๕ และ มาตรา ๑๘", "ข. มาตรา ๒๑ และ มาตรา ๒๒", "ค. มาตรา ๓๐ และ มาตรา ๓๑", "ง. มาตรา ๓๙ และ มาตรา ๔๐"] },
+
         { q: "คำนิยามของ 'ตำรวจ' ตามประมวลกฎหมายนี้คือข้อใด?", a: "ข", options: ["ก. มียศพลตำรวจขึ้นไป", "ข. บุคคลที่อยู่ในอำนาจกฎหมายฝ่ายตำรวจ", "ค. สังกัด สตช.", "ง. เจ้าพนักงานจับกุมพลเรือน"] },
-        { q: "การก่อจลาจลเป็นวงกว้างตามมาตรา ๒๗ มีระวางโทษอย่างไร?", a: "ง", options: ["ก. โทษสถานหนักเท่านั้น", "ข. โทษสถานกลางเท่านั้น", "ค. โทษสถานเบา - โทษสถานกลาง", "ง. โทษสถานกลาง - หนัก"] },
+
+        { q: "การก่อจลาจลเป็นวงกว้างตามมาตรา ๒๗ มีระวางโทษอย่างไร?", a: "ง", options: ["ก. โทษสถานหนักเท่านั้น", "ข. โทษสถานกลางเท่านั้น", "ค. โทษสถานเบา - โทษสถานกลาง", "ง. โทษสถานกลาง - โทษสถานหนัก"] },
+
         { q: "หากศาลตัดสินว่าทหารนายหนึ่งกระทำผิดตามมาตรา ๓๑ ฐานใช้โปรแกรมช่วยเล่น โทษขั้นสูงคืออะไร?", a: "ข", options: ["ก. จำคุก ๗๒ ชั่วโมง", "ข. เกมแบน จากเซิร์ฟเวอร์", "ค. บันทึกตักเตือน", "ง. ลดอัตราชั้นยศ"] },
+
         { q: "มาตรา ๖ เปิดช่องให้มีการแก้ไขคำพิพากษาได้ในกรณีใด?", a: "ค", options: ["ก. ผู้บังคับบัญชาต้องการ", "ข. จำเลยสารภาพภายหลัง", "ค. ศาลเห็นควรในกรณีที่รูปคดีเปลี่ยนแปลง", "ง. คดีเกิน ๑๐ ปี"] },
+
         { q: "แสดงข้อความเท็จ หรือปกปิดความจริงที่ควรแจ้ง' เป็นองค์ประกอบความผิดของมาตราใด?", a: "ก", options: ["ก. มาตรา ๑๗", "ข. มาตรา ๒๘", "ค. มาตรา ๔๓", "ง. มาตรา ๒๙"] },
+
         { q: "โทษ 'สูญเสียการบังคับบัญชา' ตามมาตรา ๙ (๑) ระบุไว้สำหรับทหารระดับใด?", a: "ข", options: ["ก. นายทหารชั้นประทวน", "ข. นายทหารระดับบังคับบัญชา", "ค. ทหารกองประจำการ", "ง. เจ้าพนักงาน"] },
+
         { q: "การล่วงละเมิดหรือคุกคามทางเพศตามมาตรา ๓๗ ครอบคลุมพฤติกรรมใด?", a: "ง", options: ["ก. ทางร่างกาย", "ข. ทางคำพูด", "ค. พฤติกรรมอับอาย/หวาดกลัว", "ง. ถูกทุกข้อ"] },
+
         { q: "พลทหาร ซี แอบนำรถจี๊ปหลวงไปเที่ยวโดยมีใบขับขี่ทหารถูกต้อง ผิดตามมาตราใด?", a: "ก", options: ["ก. มาตรา ๓๓", "ข. มาตรา ๓๔", "ค. มาตรา ๔๒", "ง. มาตรา ๑๕"] },
+
         { q: "โทษสถานเบาประเภท 'จำคุกไม่เกิน ๒๔ ชั่วโมง' ระบุไว้ในมาตราใด?", a: "ข", options: ["ก. มาตรา ๘", "ข. มาตรา ๙", "ค. มาตรา ๑๐", "ง. มาตรา ๑๑"] },
-        { q: "การทำความผิดตามมาตรา ๒๗ และ ๓๒ โดยใช้ไอดีรอง ตามมาตรา ๓๕ จะรับโทษระดับใด?", a: "ค", options: ["ก. โทษสถานกลาง", "ข. โth โทษสถานเบา", "ค. โทษสถานหนัก", "ง. พ้นตำแหน่งหน้าที่"] },
+
+        { q: "การทำความผิดตามมาตรา ๒๗ และ ๓๒ โดยใช้ไอดีรอง ตามมาตรา ๓๕ จะรับโทษระดับใด?", a: "ค", options: ["ก. โทษสถานกลาง", "ข. โทษสถานเบา", "ค. โทษสถานหนัก", "ง. พ้นตำแหน่งหน้าที่"] },
+
         { q: "สิบเอก เอ ใช้กำลังชกต่อยกับสารวัตรทหารในที่สาธารณะ ผิดตามมาตราใดร่วมกัน?", a: "ก", options: ["ก. มาตรา ๓๙ และ มาตรา ๔๔", "ข. มาตรา ๑๓ และ มาตรา ๑๔", "ค. มาตรา ๒๐ และ มาตรา ๒๑", "ง. มาตรา ๒๕ และ มาตรา ๒๗"] },
+
         { q: "การใช้อำนาจโดยมิชอบต่อผู้ใต้บังคับบัญชาตามมาตรา ๒๑ มีระวางโทษอย่างไร?", a: "ข", options: ["ก. โทษสถานเบาเท่านั้น", "ข. โทษสถานเบา - โทษสถานกลาง", "ค. โทษสถานกลาง - โทษสถานหนัก", "ง. โทษสถานหนักเท่านั้น"] },
+
         { q: "ประมวลกฎหมายอาญาทหาร พ.ศ. ๒๕๖๘ นี้ มีฐานะเป็นอะไรตามมาตรา ๓?", a: "ข", options: ["ก. กฎหมายลูกบท", "ข. ประมวลกฎหมายท้ายพระราชบัญญัติ", "ค. ระเบียบกองทัพ", "ง. จารีตประเพณีทหาร"] },
+
         { q: "พันโท เอ เพิกเฉยต่อความวุ่นวายจนค่ายเสียหาย จัดเป็นความผิดตามมาตราใด?", a: "ก", options: ["ก. มาตรา ๑๒ โทษสถานเบา - โทษสถานหนัก", "ข. มาตรา ๑๔ โทษสถานเบา", "ค. มาตรา ๒๖ โทษสถานเบา", "ง. มาตรา ๔๐"] },
+
         { q: "'บุคคลที่อยู่ในอำนาจกฎหมายฝ่ายทหาร' ตามมาตรา ๗ หมายถึงใคร?", a: "ค", options: ["ก. เจ้าพนักงาน", "ข. ประชาชน", "ค. ทหาร", "ง. ผู้ต้องหา"] },
+
         { q: "สิบเอก ข. ถูกฟ้องในคดีฆาตกรรมและอยู่ในขั้นตอนการไต่สวน สถานะคือข้อใด?", a: "ค", options: ["ก. ผู้ต้องสงสัย", "ข. ผู้ต้องหา", "ค. จำเลย", "ง. นักโทษ"] },
+
         { q: "การลงโทษ 'ลดอัตราชั้นยศ' พร้อมกับ 'ขึ้นบัญชีดำ' ตามมาตรา ๑๑ ถือเป็นระดับใด?", a: "ค", options: ["ก. โทษสถานเบา", "ข. โทษสถานกลาง", "ค. โทษสถานหนัก", "ง. โทษรุนแรงพิเศษ"] },
+
         { q: "การใส่ความองค์กรที่ทำให้เสียชื่อเสียง ตามมาตรา ๑๓ มีระวางโทษขั้นต่ำสุดคือข้อใด?", a: "ค", options: ["ก. บันทึกตักเตือน", "ข. จำคุกไม่เกิน ๒๔ ชม.", "ค. ลดอัตราชั้นยศ สำหรับสิบเอกขึ้นไป", "ง. ให้ออกจากราชการ"] },
+
         { q: "มาตรา ๕ ระบุให้ดุลพินิจของหน่วยงานใดเป็น 'อำนาจสูงสุด' กรณีที่กฎหมายมิได้บัญญัติไว้?", a: "ข", options: ["ก. ศาลทหารสูงสุด", "ข. ศาลรัฐธรรมนูญ", "ค. บก.ทท.", "ง. คณะกรรมการวินัย"] },
+
         { q: "พลทหาร ต. แอบหลับจนอาวุธหายไป พฤติการณ์นี้ผิดตามมาตราใด?", a: "ง", options: ["ก. มาตรา ๒๖", "ข. มาตรา ๔๐", "ค. มาตรา ๑๒", "ง. ถูกทั้ง ก. และ ข."] },
+
         { q: "ข้อใดคือความหมายของ 'โดยทุจริต' ที่ถูกต้องที่สุดตามมาตรา ๗?", a: "ข", options: ["ก. ทำผิดโดยเจตนา", "ข. แสวงหาประโยชน์ที่มิควรได้โดยชอบสำหรับตนเองหรือผู้อื่น", "ค. รับสินบน", "ง. ปลอมเอกสาร"] },
+
         { q: "การกระทำที่ส่งผลกระทบต่อ 'การเกณฑ์หรือแต่งตั้งโดยมิชอบ' มีระวางโทษอย่างไร?", a: "ค", options: ["ก. โทษสถานเบา - กลาง", "ข. โทษสถานกลาง - หนัก", "ค. โทษสถานเบา - หนัก", "ง. โทษสถานหนักเท่านั้น"] },
+
         { q: "สิบโท ค. ใช้ถ้อยคำลามกแชทกับเพื่อนร่วมงานหญิง พฤติการณ์นี้ผิดตามมาตราใด?", a: "ข", options: ["ก. มาตรา ๑๓", "ข. มาตรา ๓๗", "ค. มาตรา ๓๘", "ง. มาตรา ๒๓"] },
+
         { q: "โทษ 'พ้นตำแหน่งหน้าที่' ถูกจัดอยู่ในกลุ่มอัตราโทษระดับใด?", a: "ข", options: ["ก. โทษสถานเบา", "ข. โทษสถานกลาง", "ค. โทษสถานหนัก", "ง. โทษวินัยเลว"] },
+
         { q: "กรณีทหารไม่ยอมแสดงใบขับขี่ต่อทหารสารวัตรตามมาตรา ๔๑ มีโทษปรับสูงสุดเท่าใด?", a: "ค", options: ["ก. ๑,๐๐๐ บาท", "ข. ๒,๐๐๐ บาท", "ค. ๓,๐๐๐ บาท", "ง. ๕,๐๐๐ บาท"] },
+
         { q: "ความผิดฐาน 'กบฏ' ตามมาตรา ๒๕ ระบุบทลงโทษไว้ระดับใด?", a: "ข", options: ["ก. โทษสถานกลาง", "ข. โทษสถานหนัก", "ค. โทษสถานเบา - หนัก", "ง. ให้ออกจากราชการ"] },
+
         { q: "พลทหาร ข. ร่วมมือกับ พลทหาร ก. หนีออกจากค่าย ข. จะรับโทษอย่างไร?", a: "ข", options: ["ก. รับโทษเต็มเท่า ก.", "ข. ระวางโทษกึ่งหนึ่งของโทษที่กำหนด", "ค. โทษสถานเบาเท่านั้น", "ง. ไม่ต้องรับโทษ"] },
+
         { q: "มาตรา ๔๒ ระบุความผิดเกี่ยวกับการใช้ยานพาหนะในลักษณะใด?", a: "ค", options: ["ก. ไม่มีใบอนุญาต", "ข. ไม่ได้รับอนุญาต", "ค. ก่อความวุ่นวาย ปั่นป่วน รบกวนความสงบ", "ง. ออกนอกเขตพื้นที่"] },
+
         { q: "'ข้าราชการผู้ซึ่งมีสังกัดขึ้นตรงต่อหน่วยต่างๆ' คือนิยามของคำใดในมาตรา ๗?", a: "ค", options: ["ก. ทหาร", "ข. ตำรวจ", "ค. เจ้าพนักงาน", "ง. ประชาชน"] },
+
         { q: "หากมีการปลอมแปลง 'หลักสูตรการฝึก' จะมีความผิดตามมาตราใด?", a: "ก", options: ["ก. มาตรา ๒๙", "ข. มาตรา ๓๑", "ค. มาตรา ๑๕", "ง. มาตรา ๑๘"] },
+
         { q: "การใช้อำนาจบังคับข่มขู่เพื่อให้ผู้อื่น 'ยอมจำนน' ตามมาตรา ๓๘ มีระวางโทษอย่างไร?", a: "ข", options: ["ก. โทษสถานเบา - กลาง", "ข. โทษสถานกลาง - หนัก", "ค. โทษสถานหนักเท่านั้น", "ง. จำคุก ๗๒ ชม."] },
+
         { q: "มาตรา ๔ บัญญัติเรื่องกฎหมายเก่าไว้อย่างไร?", a: "ค", options: ["ก. ให้ใช้ควบคู่", "ข. ให้ปรับปรุง", "ค. ให้ยกเลิก", "ง. ให้เก็บไว้"] },
+
         { q: "โทษสถานเบาข้อใดที่ใช้สำหรับ 'นายทหารระดับบังคับบัญชา' เท่านั้น?", a: "ค", options: ["ก. จำคุก ๒๔ ชม.", "ข. บันทึกตักเตือน", "ค. สูญเสียการบังคับบัญชา", "ง. ลดอัตราชั้นยศ"] },
+
         { q: "นาย จ. เป็นพลเรือนรับจ้างซ่อมบำรุงในค่าย ตามมาตรา ๗ มีสถานะอย่างไร?", a: "ค", options: ["ก. ทหาร", "ข. เจ้าพนักงาน", "ค. ประชาชน หรือพลเรือน", "ง. ผู้ต้องหา"] },
+
         { q: "การ 'แฮ็ก' ระบบกองทัพจนเกิดความเสียหาย ตามมาตรา ๓๑ มีระวางโทษระดับใด?", a: "ข", options: ["ก. โทษสถานเบา - กลาง", "ข. โทษสถานกลาง - หนัก", "ค. โทษสถานหนักเท่านั้น", "ง. เกมแบน"] },
+
         { q: "สิบเอก ส. นำอาวุธปืนราชการไปจำนำ ผิดมาตราใดชัดเจนที่สุด?", a: "ข", options: ["ก. มาตรา ๒๘", "ข. มาตรา ๓๒", "ค. มาตรา ๑๗", "ง. มาตรา ๔๐"] },
+
         { q: "'คำพิพากษาของศาลให้ถือเป็นที่สิ้นสุด' ปรากฏในมาตราใด?", a: "ง", options: ["ก. มาตรา ๑", "ข. มาตรา ๓", "ค. มาตรา ๕", "ง. มาตรา ๖"] },
+
         { q: "พลทหาร ล. ตะโกนด่าทอและยุยงเพื่อนทหารให้แตกแยก ผิดมาตราใด?", a: "ข", options: ["ก. มาตรา ๑๓", "ข. มาตรา ๒๓", "ค. มาตรา ๒๗", "ง. มาตรา ๓๙"] },
+
         { q: "บทลงโทษ 'เนรเทศ' จัดเป็นโทษประเภทใด?", a: "ค", options: ["ก. โทษสถานเบา", "ข. โทษสถานกลาง", "ค. โทษสถานหนัก", "ง. โทษสูงสุด"] },
+
         { q: "สิบเอก น. จงใจละเว้นการจับกุมเพื่อนที่เสพยา ผิดมาตราใด?", a: "ก", options: ["ก. มาตรา ๑๒", "ข. มาตรา ๑๕", "ค. มาตรา ๒๖", "ง. มาตรา ๔๔"] },
+
         { q: "พฤติกรรมที่ทำให้ 'ภาพลักษณ์เสียหาย' ตามมาตรา ๓๖ เทียบเท่าข้อใด?", a: "ค", options: ["ก. ฆาตกรรม", "ข. จลาจล", "ค. กบฏ", "ง. ฉ้อโกง"] },
+
         { q: "โทษจำคุกในระดับ 'โทษสถานกลาง' ตามมาตรา ๑๐ มีระยะเวลาเท่าใด?", a: "ค", options: ["ก. ไม่เกิน ๒๔ ชม.", "ข. ไม่เกิน ๔๘ ชม.", "ค. ไม่เกิน ๗๒ ชม.", "ง. ไม่เกิน ๑ สัปดาห์"] },
+
         { q: "พระราชบัญญัตินี้เริ่มใช้บังคับ 'วันถัดจากวันประกาศ' ตามมาตราใด?", a: "ข", options: ["ก. มาตรา ๑", "ข. มาตรา ๒", "ค. มาตรา ๓", "ง. มาตรา ๔"] },
+
         { q: "สิบเอกชกต่อยกับพลเรือนในที่สาธารณะ ผิดมาตราใด?", a: "ก", options: ["ก. มาตรา ๓๙ โทษสถานเบา - หนัก", "ข. มาตรา ๒๒", "ค. มาตรา ๒๓", "ง. มาตรา ๓๗"] },
+
         { q: "มาตรา ๘ ระบุเรื่องกฎหมายลักษณะอาญาเดิมให้อ้างถึงข้อใด?", a: "ข", options: ["ก. กฎหมายพลเรือน", "ข. ประมวลกฎหมายอาญาทหาร ๒๕๖๘", "ค. จารีตทหาร", "ง. ข้อบังคับกลาโหม"] },
+
         { q: "ผู้ที่ยืนยันว่าผิดแต่ยังไม่เข้าสู่การพิจารณาคดี นิยามตามมาตรา ๗ คือ?", a: "ข", options: ["ก. ผู้ต้องสงสัย", "ข. ผู้ต้องหา", "ค. จำเลย", "ง. เจ้าพนักงาน"] },
+
         { q: "พลทหาร ร. ลบประวัติวินัยเลวของตนเองในระบบ ผิดมาตราใด?", a: "ก", options: ["ก. มาตรา ๒๙ และ มาตรา ๓๑", "ข. มาตรา ๑๗ และ ๒๐", "ค. มาตรา ๑๒ และ ๑๕", "ง. มาตรา ๒๕ และ ๒๗"] },
+
         { q: "โทษ 'ลดอัตราชั้นยศ' ปรากฏในระดับโทษใดบ้าง?", a: "ข", options: ["ก. สถานเบา และ กลาง", "ข. สถานกลาง และ หนัก", "ค. สถานหนักเท่านั้น", "ง. ทุกระดับ"] },
+
         { q: "การกระทำผิดตามมาตรา ๑๗ (ฉ้อโกง) ศาลลงโทษสูงสุดระดับใด?", a: "ข", options: ["ก. โทษสถานเบา", "ข. โทษสถานกลาง", "ค. โทษสถานหนัก", "ง. เนรเทศ"] },
+
         { q: "การกระทำที่ 'นอกเหนือหน้าที่' ตามมาตรา ๑๕ ชื่อฐานความผิดคือ?", a: "ข", options: ["ก. ละเว้นหน้าที่", "ข. ปฏิบัติหน้าที่โดยมิชอบ", "ค. ใช้อำนาจโดยมิชอบ", "ง. ละเลยหน้าที่"] },
+
         { q: "จ่าสิบตรีใช้ความรุนแรงกับพลทหารจนบาดเจ็บ ผิดมาตราใดร่วมกัน?", a: "ก", options: ["ก. มาตรา ๒๑ และ มาตรา ๓๙", "ข. มาตรา ๑๔ และ ๒๖", "ค. มาตรา ๑๒ และ ๑๓", "ง. มาตรา ๓๓ และ ๓๔"] },
+
         { q: "มาตรา ๓๕ กำหนดให้การใช้ไอดีรองทำผิดมาตราใดบ้างรับโทษหนัก?", a: "ข", options: ["ก. มาตรา ๒๐-๒๑", "ก. มาตรา ๒๗ และ ๓๒", "ก. มาตรา ๓๖-๓๗", "ก. มาตรา ๔๓-๔๔"] },
+
         { q: "ชื่อประมวลกฎหมายนี้คือ พ.ศ. ใด?", a: "ง", options: ["ก. ๒๕๖๕", "ข. ๒๕๖๖", "ค. ๒๕๖๗", "ง. ๒๕๖๘"] }
+
     ];
 
+
+
+
+
+    particlesJS("particles-js", { "particles": { "number": { "value": 60 }, "color": { "value": "#D4AF37" }, "move": { "enable": true, "speed": 0.8, "direction": "top" } } });
+
 </script>
+
 </body>
+
 </html>
+
